@@ -1,0 +1,189 @@
+/* style.css - Main stylesheet (CSS variables, base styles) */
+/* Design Aesthetic: Light & Peaceful (Nordic Islamic) */
+
+:root {
+  /* Colors */
+  --color-primary: #2C4C3B; /* Deep Sage Green */
+  --color-secondary: #D4AF37; /* Warm Gold */
+  --color-accent: #3A6B52; /* Lighter shade of primary */
+  --color-bg: #FDFBF7; /* Soft Cream */
+  --color-bg-alt: #FFFFFF; /* White */
+  --color-bg-dark: #1F2937; /* Dark slate for footer/accents */
+  --color-text: #2D3748; /* Dark Charcoal Main text */
+  --color-text-muted: #4A5568; /* Secondary text */
+  --color-text-light: #FDFBF7; /* On dark backgrounds */
+  --color-border: #E2E8F0; /* Subtle borders */
+  --color-success: #2e7d32;
+  --color-overlay: rgba(44, 76, 59, 0.85); /* Deep green overlay */
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', serif; /* English heading font */
+  --font-arabic: 'Amiri', serif; /* Arabic font */
+  --font-body: 'Nunito', sans-serif; /* Body font */
+
+  /* Spacing */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --space-xl: 96px;
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
+  --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 24px;
+  --radius-pill: 9999px;
+  
+  /* Layout */
+  --max-width: 1280px;
+  --header-height: 80px;
+}
+
+/* Base Reset & Box Sizing */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background-color: var(--color-bg);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Typography Base Elements */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  color: var(--color-primary);
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+h1 { font-size: 3.5rem; margin-bottom: var(--space-md); }
+h2 { font-size: 2.5rem; margin-bottom: var(--space-md); }
+h3 { font-size: 1.75rem; margin-bottom: var(--space-sm); }
+h4 { font-size: 1.25rem; margin-bottom: var(--space-xs); }
+p { margin-bottom: var(--space-sm); }
+a { color: var(--color-primary); text-decoration: none; transition: all 0.3s ease; }
+a:hover { color: var(--color-secondary); }
+ul, ol { padding-left: var(--space-md); margin-bottom: var(--space-sm); }
+li { margin-bottom: 4px; }
+img { max-width: 100%; height: auto; display: block; }
+
+/* Arabic Text Typography */
+.arabic-text {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  text-align: right;
+  line-height: 2.2;
+  font-size: 1.4em;
+  color: var(--color-primary);
+}
+
+.bismillah {
+  font-family: var(--font-arabic);
+  font-size: 2rem;
+  text-align: center;
+  color: var(--color-primary);
+  margin-bottom: var(--space-md);
+}
+
+/* Layout Core Classes */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.section {
+  padding: var(--space-xl) 0;
+}
+
+.section-alt {
+  background-color: var(--color-bg-alt);
+}
+
+.section-dark {
+  background-color: var(--color-bg-dark);
+  color: var(--color-text-light);
+}
+
+.section-dark h2, .section-dark h3 {
+  color: var(--color-secondary);
+}
+
+.text-center { text-align: center; }
+.text-muted { color: var(--color-text-muted); }
+
+/* Accessible hidden content */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Islamic Patterns & Accents */
+.islamic-pattern-bg {
+  position: relative;
+}
+.islamic-pattern-bg::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  /* Placeholder for an actual SVG pattern if needed */
+  background-image: radial-gradient(var(--color-primary) 1px, transparent 1px);
+  background-size: 20px 20px;
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.content-relative {
+  position: relative;
+  z-index: 1;
+}
+
+/* Divider */
+.islamic-divider {
+  display: block;
+  margin: var(--space-lg) auto;
+  width: 100px;
+  height: 2px;
+  background: var(--color-secondary);
+  position: relative;
+}
+.islamic-divider::before {
+  content: '♦';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--color-secondary);
+  font-size: 12px;
+  background-color: var(--color-bg);
+  padding: 0 4px;
+}
+.section-alt .islamic-divider::before {
+  background-color: var(--color-bg-alt);
+}

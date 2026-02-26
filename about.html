@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Masjid Sunnah Helsinki</title>
+    <meta name="description"
+        content="Learn about the history, mission, leadership, and facilities of Masjid Sunnah Helsinki.">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@400;600;700&family=Nunito:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        .value-card {
+            text-align: center;
+            padding: var(--space-md);
+            background: var(--color-bg-alt);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s;
+        }
+
+        .value-card:hover {
+            border-color: var(--color-secondary);
+            transform: translateY(-5px);
+        }
+
+        .value-icon {
+            font-size: 2.5rem;
+            color: var(--color-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .timeline {
+            position: relative;
+            padding: var(--space-lg) 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: var(--color-border);
+            transform: translateX(-50%);
+        }
+
+        .timeline-item {
+            position: relative;
+            width: 50%;
+            padding: var(--space-md) 40px;
+            box-sizing: border-box;
+        }
+
+        .timeline-item:nth-child(odd) {
+            left: 0;
+            text-align: right;
+        }
+
+        .timeline-item:nth-child(even) {
+            left: 50%;
+            text-align: left;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: var(--space-md);
+            width: 20px;
+            height: 20px;
+            background: var(--color-secondary);
+            border-radius: 50%;
+            z-index: 10;
+        }
+
+        .timeline-item:nth-child(odd) .timeline-dot {
+            right: -10px;
+        }
+
+        .timeline-item:nth-child(even) .timeline-dot {
+            left: -10px;
+        }
+
+        .facilities-list {
+            list-style: none;
+            padding: 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-md);
+        }
+
+        .facilities-list li {
+            background: var(--color-bg-alt);
+            padding: var(--space-md);
+            border-radius: var(--radius-sm);
+            border-left: 4px solid var(--color-primary);
+        }
+
+        @media (max-width: 768px) {
+            .timeline::before {
+                left: 20px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 60px;
+                padding-right: 0;
+                left: 0 !important;
+                text-align: left !important;
+            }
+
+            .timeline-dot {
+                left: 10px !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-mosque"></i> Masjid Sunnah
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="prayer-times.html">Prayer Times</a></li>
+                <li><a href="programs.html">Programs</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="about.html" style="color: var(--color-secondary);">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+            </ul>
+            <button class="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu">
+        <button class="mobile-menu-close" aria-label="Close Navigation"><i class="fas fa-times"></i></button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="prayer-times.html">Prayer Times</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+        </ul>
+    </div>
+
+    <main id="main-content" style="padding-top: var(--header-height);">
+        <!-- Inner Hero -->
+        <section class="section section-dark text-center"
+            style="background-image: linear-gradient(var(--color-overlay), var(--color-overlay)), url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=1200&auto=format&q=80'); background-size: cover; background-position: center; padding: var(--space-xl) 0;">
+            <div class="container fade-in">
+                <h1 style="color: white; margin-bottom: 0;">Our Story & Mission</h1>
+                <p style="color: var(--color-secondary); font-size: 1.2rem; margin-top: 10px;">عن المسجد</p>
+                <p>Establishing the community upon the methodology of the Salaf.</p>
+            </div>
+        </section>
+
+        <!-- Our Story -->
+        <section class="section islamic-pattern-bg">
+            <div class="container grid grid-2" style="align-items: center; gap: var(--space-xl);">
+                <div data-aos="fade-right">
+                    <div class="bismillah" style="text-align: left;">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+                    <h2 style="margin-bottom: var(--space-md);">Our Journey in Helsinki</h2>
+                    <p>Alhamdulillah, Masjid Sunnah (مسجد أهل السنّة والجماعة) was established to serve the growing
+                        Muslim population in Helsinki, providing a place of worship centrally located in Ylä-Malmi.</p>
+                    <p>What began as a small gathering of families seeking to establish the daily prayers has blossomed
+                        into a full-service Islamic center. We operate firmly upon the Quran and the Sunnah, according
+                        to the understanding of the righteous predecessors (Ahl Al-Sunnah Wal-Jama`ah).</p>
+                    <p>Our goal is to preserve the Islamic identity of our families while being positive, contributing
+                        members to the wider Finnish society. We emphasize authentic Islamic education, community
+                        welfare, and pure monotheism (Tawheed).</p>
+                </div>
+                <div data-aos="fade-left">
+                    <img src="https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=800&auto=format&q=80"
+                        alt="Masjid Interior"
+                        style="border-radius: var(--radius-md); box-shadow: var(--shadow-md); border: 2px solid var(--color-secondary);">
+                </div>
+            </div>
+        </section>
+
+        <!-- Mission, Vision, Values -->
+        <section class="section section-alt text-center container">
+            <div data-aos="fade-up">
+                <h2>Mission & Vision</h2>
+                <div style="max-width: 800px; margin: 0 auto var(--space-lg);">
+                    <p><strong>Our Mission:</strong> To provide a welcoming, educational, and spiritual environment for
+                        Muslims in Helsinki, anchored in the authentic teachings of Islam, while fostering strong
+                        community bonds.</p>
+                    <p><strong>Our Vision:</strong> To be a model Islamic center in Scandinavia, producing a generation
+                        of Muslims who are steadfast in their faith, educated in their religion, and exemplary in their
+                        character.</p>
+                </div>
+            </div>
+
+            <div class="grid grid-4" style="text-align: left;" data-aos="fade-up" data-aos-delay="100">
+                <div class="value-card">
+                    <i class="fas fa-book-open value-icon"></i>
+                    <h4>Faith (Iman)</h4>
+                    <p class="text-muted" style="font-size: 0.9rem;">Building our lives around Tawheed and the Sunnah.
+                    </p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-hands-helping value-icon"></i>
+                    <h4>Service (Khidmah)</h4>
+                    <p class="text-muted" style="font-size: 0.9rem;">Supporting the needy and aiding our neighbors.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-graduation-cap value-icon"></i>
+                    <h4>Education (Ilm)</h4>
+                    <p class="text-muted" style="font-size: 0.9rem;">Pursuing authentic knowledge from reliable
+                        scholars.</p>
+                </div>
+                <div class="value-card">
+                    <i class="fas fa-users value-icon"></i>
+                    <h4>Unity (Ukhuwwah)</h4>
+                    <p class="text-muted" style="font-size: 0.9rem;">Fostering brotherhood and sisterhood across
+                        cultures.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Meet the Imam & Shura -->
+        <section class="section container">
+            <div class="text-center" style="margin-bottom: var(--space-lg);" data-aos="fade-up">
+                <h2>Leadership</h2>
+                <span class="islamic-divider"></span>
+            </div>
+
+            <div class="grid grid-2" style="align-items: center; gap: var(--space-xl); margin-bottom: var(--space-xl);">
+                <div data-aos="fade-right" style="position: relative;">
+                    <!-- Placeholder Imam Image -->
+                    <div
+                        style="aspect-ratio: 1; background-color: var(--color-bg-alt); border-radius: var(--radius-lg); border: 1px solid var(--color-border); display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-user-tie fa-5x text-muted" style="opacity: 0.5;"></i>
+                    </div>
+                </div>
+                <div data-aos="fade-left">
+                    <span class="badge" style="background: var(--color-primary); margin-bottom: 10px;">Resident
+                        Imam</span>
+                    <h3 style="margin-bottom: 5px;">Imam [Name]</h3>
+                    <p class="text-muted" style="font-size: 0.95rem; margin-bottom: var(--space-sm);"><em>BA in Islamic
+                            Theology</em></p>
+                    <p>Imam [Name] serves to lead the prayers, deliver the Friday Khutbahs, and guide the community. He
+                        has dedicated years to seeking knowledge under the supervision of prominent scholars.</p>
+                    <p>He is available for Islamic counseling, answering Fiqh questions, marriage officiation, and new
+                        Muslim guidance.</p>
+                    <a href="contact.html" class="btn btn-outline" style="margin-top: var(--space-sm);">Request
+                        Appointment</a>
+                </div>
+            </div>
+
+            <!-- Shura Board placeholder -->
+            <div data-aos="fade-up">
+                <h3 class="text-center" style="margin-bottom: var(--space-md);">Masjid Administration (Shura)</h3>
+                <div class="grid grid-3 text-center">
+                    <div class="card">
+                        <div class="card-body"><strong>[Name Placeholder]</strong><br><span
+                                class="text-muted">President</span></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body"><strong>[Name Placeholder]</strong><br><span
+                                class="text-muted">Secretary</span></div>
+                    </div>
+                    <div class="card">
+                        <div class="card-body"><strong>[Name Placeholder]</strong><br><span
+                                class="text-muted">Treasurer</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Facilities -->
+        <section class="section section-alt">
+            <div class="container" data-aos="fade-up">
+                <div class="text-center" style="margin-bottom: var(--space-lg);">
+                    <h2>Our Facilities</h2>
+                    <p class="text-muted">Located at Ylä-Malmin tori 6b, our center is equipped to serve the community.
+                    </p>
+                </div>
+                <ul class="facilities-list">
+                    <li><i class="fas fa-pray" style="margin-right: 10px; color: var(--color-secondary);"></i> Men's
+                        Prayer Hall (Capacity: 300)</li>
+                    <li><i class="fas fa-female" style="margin-right: 10px; color: var(--color-secondary);"></i>
+                        Dedicated Sisters' Section</li>
+                    <li><i class="fas fa-water" style="margin-right: 10px; color: var(--color-secondary);"></i> Modern
+                        Wudu Facilities</li>
+                    <li><i class="fas fa-chalkboard" style="margin-right: 10px; color: var(--color-secondary);"></i> 3
+                        Classrooms</li>
+                    <li><i class="fas fa-book" style="margin-right: 10px; color: var(--color-secondary);"></i> Islamic
+                        Library</li>
+                    <li><i class="fas fa-parking" style="margin-right: 10px; color: var(--color-secondary);"></i> Nearby
+                        Parking Available</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section class="section container">
+            <div class="text-center" style="margin-bottom: var(--space-lg);" data-aos="fade-up">
+                <h2>Our Milestone History</h2>
+            </div>
+            <div class="timeline" data-aos="fade-up">
+                <!-- Example points -->
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h4 style="color: var(--color-primary); margin-bottom: 5px;">Establishment</h4>
+                    <p class="text-muted" style="font-size: 0.9rem;">The initial gathering of families mapping out the
+                        need for a dedicated Masjid upon the Sunnah in Helsinki.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h4 style="color: var(--color-primary); margin-bottom: 5px;">Moving to Ylä-Malmi</h4>
+                    <p class="text-muted" style="font-size: 0.9rem;">Securing the lease at Ylä-Malmin tori 6b and
+                        completing the initial renovations for the prayer halls.</p>
+                </div>
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <h4 style="color: var(--color-primary); margin-bottom: 5px;">Launching Educational Programs</h4>
+                    <p class="text-muted" style="font-size: 0.9rem;">Starting the weekend Quran school and the regular
+                        weekly adult halaqat.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interfaith / Community relations snippet -->
+        <section class="section section-dark text-center">
+            <div class="container" data-aos="zoom-in">
+                <h2>Open Doors Policy</h2>
+                <p style="max-width: 600px; margin: 0 auto var(--space-md);">Masjid Sunnah welcomes visitors of all
+                    backgrounds. If you are a student, researcher, neighbor, or just curious about Islam, you are
+                    welcome to visit our center, observe the prayers, and ask questions.</p>
+                <a href="contact.html" class="btn btn-primary">Plan a Visit</a>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Reused Footer Component -->
+        <div class="container">
+            <div class="footer-top">
+                <div>
+                    <div class="logo" style="margin-bottom: var(--space-sm);">
+                        <a href="index.html" style="color: var(--color-bg);"><i class="fas fa-mosque"></i> Masjid
+                            Sunnah</a>
+                    </div>
+                    <p style="color: #94A3B8; margin-bottom: var(--space-md);">A place of worship, learning, and
+                        community operating upon the methodology of Ahl Al-Sunnah Wal-Jama`ah in Helsinki.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="prayer-times.html">Prayer Times</a></li>
+                        <li><a href="programs.html">Library & Programs</a></li>
+                        <li><a href="events.html">Events & News</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="donate.html">Zakat & Sadaqah</a></li>
+                        <li><a href="contact.html#marriage">Marriage Services</a></li>
+                        <li><a href="contact.html#funeral">Janazah Services</a></li>
+                        <li><a href="contact.html#new-muslim">New Muslim Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Newsletter</h4>
+                    <p style="color: #94A3B8; font-size: 0.9rem; margin-bottom: var(--space-sm);">Stay updated with the
+                        latest events and classes.</p>
+                    <form style="display: flex; gap: 5px;">
+                        <input type="email" placeholder="Your email address"
+                            style="padding: 10px; border-radius: var(--radius-sm); border: none; width: 100%;" required>
+                        <button type="submit" class="btn btn-secondary" style="padding: 10px 15px;"><i
+                                class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
+                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                    وَبِحَمْدِهِ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init({ once: true, duration: 800 });</script>
+</body>
+
+</html>

@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Masjid Sunnah Helsinki</title>
+    <meta name="description"
+        content="View photos of Masjid Sunnah Helsinki's facilities, events, and community gatherings.">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@400;600;700&family=Nunito:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- Lightbox CSS (Using simple custom implementation or lightweight library later. Writing custom modal here for zero-dependencies) -->
+    <style>
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: var(--space-xl);
+        }
+
+        .filter-btn {
+            background: var(--color-bg-alt);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Masonry Grid Setup */
+        .gallery-grid {
+            display: column;
+            columns: 1;
+            /* Mobile */
+            column-gap: var(--space-md);
+        }
+
+        @media (min-width: 600px) {
+            .gallery-grid {
+                columns: 2;
+            }
+        }
+
+        @media (min-width: 900px) {
+            .gallery-grid {
+                columns: 3;
+            }
+        }
+
+        .gallery-item {
+            break-inside: avoid;
+            margin-bottom: var(--space-md);
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(44, 76, 59, 0.8);
+            /* Primary color w/ opacity */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .gallery-overlay i {
+            color: var(--color-secondary);
+            font-size: 2rem;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+
+        .gallery-item:hover .gallery-overlay i {
+            transform: translateY(0);
+        }
+
+        /* Lightbox Modal */
+        .lightbox {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            padding: var(--space-md);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .lightbox-close:hover {
+            color: var(--color-secondary);
+        }
+
+        .lightbox-content {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border: 2px solid var(--color-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: 20px;
+            color: white;
+            text-align: center;
+            width: 100%;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-mosque"></i> Masjid Sunnah
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="prayer-times.html">Prayer Times</a></li>
+                <li><a href="programs.html">Programs</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+            </ul>
+            <button class="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu">
+        <button class="mobile-menu-close" aria-label="Close Navigation"><i class="fas fa-times"></i></button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="prayer-times.html">Prayer Times</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+        </ul>
+    </div>
+
+    <main id="main-content" style="padding-top: var(--header-height);">
+        <!-- Inner Hero -->
+        <section class="section section-dark text-center"
+            style="background-image: linear-gradient(var(--color-overlay), var(--color-overlay)), url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=1200&auto=format&q=80'); background-size: cover; background-position: center; padding: var(--space-xl) 0;">
+            <div class="container fade-in">
+                <h1 style="color: white; margin-bottom: 0;">Media Gallery</h1>
+                <p style="color: var(--color-secondary); font-size: 1.2rem; margin-top: 10px;">معرض الصور</p>
+                <p>Glimpses of our vibrant community and facilities.</p>
+            </div>
+        </section>
+
+        <!-- Gallery Section -->
+        <section class="section islamic-pattern-bg">
+            <div class="container">
+
+                <!-- Filters -->
+                <div class="filter-tabs" data-aos="fade-up">
+                    <button class="filter-btn active" onclick="filterGallery('all')">All</button>
+                    <button class="filter-btn" onclick="filterGallery('facilities')">Facilities</button>
+                    <button class="filter-btn" onclick="filterGallery('events')">Events & Community</button>
+                    <button class="filter-btn" onclick="filterGallery('ramadan')">Ramadan</button>
+                </div>
+
+                <!-- Masonry Gallery -->
+                <div class="gallery-grid" id="gallery-container">
+
+                    <!-- Photos (Using Unsplash placeholders related to Islam/Architecture/Community) -->
+                    <div class="gallery-item" data-category="facilities events" data-aos="zoom-in" data-aos-delay="0"
+                        onclick="openLightbox(this)">
+                        <img src="https://images.unsplash.com/photo-1564121211835-e88c852648ab?w=600&auto=format&q=80"
+                            alt="Masjid Interior Architecture">
+                        <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+                        <div class="caption-data" style="display:none;">Main Prayer Hall</div>
+                    </div>
+
+                    <div class="gallery-item" data-category="events ramadan" data-aos="zoom-in" data-aos-delay="50"
+                        onclick="openLightbox(this)">
+                        <img src="https://images.unsplash.com/photo-1579979354226-7bc6eb5fbe14?w=600&auto=format&q=80"
+                            alt="Iftar Gathering">
+                        <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+                        <div class="caption-data" style="display:none;">Community Iftar Gathering</div>
+                    </div>
+
+                    <div class="gallery-item" data-category="facilities" data-aos="zoom-in" data-aos-delay="100"
+                        onclick="openLightbox(this)">
+                        <img src="https://images.unsplash.com/photo-1584033100693-02e08e3ee316?w=600&auto=format&q=80"
+                            alt="Quran on stand">
+                        <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+                        <div class="caption-data" style="display:none;">Copies of the Noble Quran available in various
+                            translations</div>
+                    </div>
+
+                    <div class="gallery-item" data-category="facilities" data-aos="zoom-in" data-aos-delay="150"
+                        onclick="openLightbox(this)">
+                        <img src="https://images.unsplash.com/photo-1596484552834-6a58f840ca87?w=600&auto=format&q=80"
+                            alt="Mihrab details">
+                        <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+                        <div class="caption-data" style="display:none;">Details of the Mihrab</div>
+                    </div>
+
+                    <div class="gallery-item" data-category="events" data-aos="zoom-in" data-aos-delay="200"
+                        onclick="openLightbox(this)">
+                        <img src="https://images.unsplash.com/photo-1628173434190-7c2d2cb29ea1?w=600&auto=format&q=80"
+                            alt="People gathering">
+                        <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+                        <div class="caption-data" style="display:none;">Friday Khutbah Attendance</div>
+                    </div>
+
+                    <div class="gallery-item" data-category="ramadan events" data-aos="zoom-in" data-aos-delay="250"
+                        onclick="openLightbox(this)">
+                        <img src="https://images.unsplash.com/photo-1616850383794-6725206f0b48?w=600&auto=format&q=80"
+                            alt="Dates and Lantern for Ramadan">
+                        <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+                        <div class="caption-data" style="display:none;">Ramadan Preparations</div>
+                    </div>
+
+                    <div class="gallery-item" data-category="facilities" data-aos="zoom-in" data-aos-delay="300"
+                        onclick="openLightbox(this)">
+                        <img src="https://images.unsplash.com/photo-1601002347318-6da1342616f7?w=600&auto=format&q=80"
+                            alt="Islamic Calligraphy">
+                        <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
+                        <div class="caption-data" style="display:none;">Calligraphy Decor</div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
+        <img class="lightbox-content" id="lightbox-img">
+        <div class="lightbox-caption" id="lightbox-caption"></div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Reused Footer Component -->
+        <div class="container">
+            <div class="footer-top">
+                <div>
+                    <div class="logo" style="margin-bottom: var(--space-sm);">
+                        <a href="index.html" style="color: var(--color-bg);"><i class="fas fa-mosque"></i> Masjid
+                            Sunnah</a>
+                    </div>
+                    <p style="color: #94A3B8; margin-bottom: var(--space-md);">A place of worship, learning, and
+                        community operating upon the methodology of Ahl Al-Sunnah Wal-Jama`ah in Helsinki.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="prayer-times.html">Prayer Times</a></li>
+                        <li><a href="programs.html">Library & Programs</a></li>
+                        <li><a href="events.html">Events & News</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="donate.html">Zakat & Sadaqah</a></li>
+                        <li><a href="contact.html#marriage">Marriage Services</a></li>
+                        <li><a href="contact.html#funeral">Janazah Services</a></li>
+                        <li><a href="contact.html#new-muslim">New Muslim Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Newsletter</h4>
+                    <p style="color: #94A3B8; font-size: 0.9rem; margin-bottom: var(--space-sm);">Stay updated with the
+                        latest events and classes.</p>
+                    <form style="display: flex; gap: 5px;">
+                        <input type="email" placeholder="Your email address"
+                            style="padding: 10px; border-radius: var(--radius-sm); border: none; width: 100%;" required>
+                        <button type="submit" class="btn btn-secondary" style="padding: 10px 15px;"><i
+                                class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
+                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                    وَبِحَمْدِهِ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800 });
+
+        // Gallery Filtering
+        function filterGallery(category) {
+            // Update active button
+            const btns = document.querySelectorAll('.filter-btn');
+            btns.forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter items
+            const items = document.querySelectorAll('.gallery-item');
+            items.forEach(item => {
+                const itemCategories = item.dataset.category || "";
+                if (category === 'all' || itemCategories.includes(category)) {
+                    item.style.display = 'block';
+                    // Re-instantiate AOS or simple fade for filtered items
+                    item.style.animation = 'fadeIn 0.5s ease forwards';
+                } else {
+                    item.style.display = 'none';
+                    item.style.animation = 'none';
+                }
+            });
+        }
+
+        // Lightbox Logic
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxCaption = document.getElementById('lightbox-caption');
+
+        function openLightbox(element) {
+            const img = element.querySelector('img');
+            const caption = element.querySelector('.caption-data').innerText;
+
+            lightboxImg.src = img.src;
+            lightboxCaption.innerText = caption;
+            lightbox.classList.add('active');
+
+            // Prevent body scroll
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close lightbox on clicking outside image
+        lightbox.addEventListener('click', function (e) {
+            if (e.target !== lightboxImg) {
+                closeLightbox();
+            }
+        });
+
+        // Close on ESC key
+        document.addEventListener('keydown', function (e) {
+            if (e.key === "Escape" && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events & Announcements | Masjid Sunnah Helsinki</title>
+    <meta name="description"
+        content="Stay updated with upcoming events, community gatherings, and announcements at Masjid Sunnah Helsinki.">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@400;600;700&family=Nunito:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .filter-btn {
+            background: var(--color-bg-alt);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .event-card {
+            display: flex;
+            flex-direction: column;
+            background: var(--color-bg-alt);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--color-border);
+            transition: transform 0.3s ease;
+        }
+
+        .event-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .event-date-block {
+            background: var(--color-primary);
+            color: var(--color-bg);
+            text-align: center;
+            padding: 15px;
+            min-width: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .event-day {
+            font-size: 2rem;
+            font-weight: 700;
+            line-height: 1;
+            font-family: var(--font-display);
+        }
+
+        .event-month {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        @media(min-width: 768px) {
+            .event-list-view .event-card {
+                flex-direction: row;
+            }
+
+            .event-list-view .event-body {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+
+            .event-list-view .event-actions {
+                display: flex;
+                align-items: center;
+                padding-right: var(--space-md);
+            }
+        }
+
+        .event-body {
+            padding: var(--space-md);
+        }
+
+        /* Layout Toggle */
+        .layout-toggle {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: var(--space-md);
+            gap: 10px;
+        }
+
+        .layout-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-text-muted);
+            cursor: pointer;
+        }
+
+        .layout-btn.active {
+            color: var(--color-primary);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-mosque"></i> Masjid Sunnah
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="prayer-times.html">Prayer Times</a></li>
+                <li><a href="programs.html">Programs</a></li>
+                <li><a href="events.html" style="color: var(--color-secondary);">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+            </ul>
+            <button class="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu">
+        <button class="mobile-menu-close" aria-label="Close Navigation"><i class="fas fa-times"></i></button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="prayer-times.html">Prayer Times</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+        </ul>
+    </div>
+
+    <main id="main-content" style="padding-top: var(--header-height);">
+        <!-- Inner Hero -->
+        <section class="section section-dark text-center"
+            style="background-image: linear-gradient(var(--color-overlay), var(--color-overlay)), url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=1200&auto=format&q=80'); background-size: cover; background-position: center; padding: var(--space-xl) 0;">
+            <div class="container fade-in">
+                <h1 style="color: white; margin-bottom: 0;">Events & Announcements</h1>
+                <p style="color: var(--color-secondary); font-size: 1.2rem; margin-top: 10px;">الفعاليات والإعلانات</p>
+                <p>Gathering the community for the sake of Allah.</p>
+            </div>
+        </section>
+
+        <!-- Featured Event Banner -->
+        <section
+            style="background-color: var(--color-secondary); color: var(--color-bg-dark); padding: var(--space-md) 0;">
+            <div class="container grid grid-2" style="align-items: center; gap: var(--space-md);">
+                <div>
+                    <span class="badge"
+                        style="background: var(--color-bg-dark); color: var(--color-secondary); margin-bottom: 10px;">Featured
+                        Event</span>
+                    <h3 style="margin-bottom: 5px; color: var(--color-bg-dark);">Annual Community Iftar</h3>
+                    <p style="margin-bottom: 0;">Join us for breaking the fast together, followed by congregational
+                        Maghrib prayer. Open to all families and individuals.</p>
+                </div>
+                <div style="text-align: right;">
+                    <strong style="display: block; font-size: 1.2rem;"><i class="far fa-calendar-alt"></i> Saturday,
+                        March 15th</strong>
+                    <span style="display: block; margin-bottom: 15px;"><i class="far fa-clock"></i> 5:30 PM
+                        (Maghrib)</span>
+                    <button class="btn btn-primary"
+                        style="background-color: var(--color-bg-dark); color: var(--color-secondary);">RSVP
+                        Required</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="section islamic-pattern-bg">
+            <div class="container">
+
+                <!-- Filters and Layout Toggle -->
+                <div
+                    style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
+                    <div class="filter-tabs" style="margin-bottom: 0;">
+                        <button class="filter-btn active" onclick="filterEvents('all')">All Events</button>
+                        <button class="filter-btn" onclick="filterEvents('upcoming')">Upcoming</button>
+                        <button class="filter-btn" onclick="filterEvents('educational')">Educational</button>
+                        <button class="filter-btn" onclick="filterEvents('community')">Community</button>
+                    </div>
+
+                    <div class="layout-toggle">
+                        <button class="layout-btn active" id="btn-list" onclick="setLayout('list')" title="List View"><i
+                                class="fas fa-list"></i></button>
+                        <button class="layout-btn" id="btn-grid" onclick="setLayout('grid')" title="Grid View"><i
+                                class="fas fa-th-large"></i></button>
+                    </div>
+                </div>
+
+                <!-- Events Container -->
+                <div id="events-container" class="grid event-list-view" style="gap: var(--space-md);"
+                    data-aos="fade-up">
+
+                    <!-- Event 1 -->
+                    <div class="event-card" data-category="educational upcoming">
+                        <div class="event-date-block">
+                            <span class="event-day">12</span>
+                            <span class="event-month">April</span>
+                        </div>
+                        <div class="event-body">
+                            <span class="badge"
+                                style="background-color: var(--color-border); color: var(--color-text); margin-bottom: 5px;">Educational</span>
+                            <h4 style="margin-bottom: 5px; color: var(--color-primary);">Seminar: Journey of the Soul
+                            </h4>
+                            <p class="text-muted" style="margin-bottom: 10px; font-size: 0.95rem;">A comprehensive
+                                seminar covering the reality of the soul, what happens after death, and the minor signs
+                                of the Day of Judgment.</p>
+                            <div style="display: flex; gap: 15px; color: var(--color-text-muted); font-size: 0.85rem;">
+                                <span><i class="fas fa-map-marker-alt"></i> Main Prayer Hall</span>
+                                <span><i class="far fa-clock"></i> 2:00 PM - 5:00 PM</span>
+                            </div>
+                        </div>
+                        <div class="event-actions" style="padding: var(--space-md);">
+                            <a href="#" class="btn btn-outline" style="white-space: nowrap;"><i
+                                    class="far fa-calendar-plus"></i> Add to Calendar</a>
+                        </div>
+                    </div>
+
+                    <!-- Event 2 -->
+                    <div class="event-card" data-category="community upcoming">
+                        <div class="event-date-block"
+                            style="background-color: var(--color-secondary); color: var(--color-bg-dark);">
+                            <span class="event-day">19</span>
+                            <span class="event-month">April</span>
+                        </div>
+                        <div class="event-body">
+                            <span class="badge"
+                                style="background-color: var(--color-border); color: var(--color-text); margin-bottom: 5px;">Community</span>
+                            <h4 style="margin-bottom: 5px; color: var(--color-primary);">Neighborhood Clean-up Drive
+                            </h4>
+                            <p class="text-muted" style="margin-bottom: 10px; font-size: 0.95rem;">Volunteering activity
+                                organized by the youth group to clean up the local parks around Ylä-Malmi. Supplies
+                                provided.</p>
+                            <div style="display: flex; gap: 15px; color: var(--color-text-muted); font-size: 0.85rem;">
+                                <span><i class="fas fa-map-marker-alt"></i> Meet at Masjid Entrance</span>
+                                <span><i class="far fa-clock"></i> 10:00 AM - 12:00 PM</span>
+                            </div>
+                        </div>
+                        <div class="event-actions" style="padding: var(--space-md);">
+                            <a href="#" class="btn btn-outline" style="white-space: nowrap;"><i
+                                    class="far fa-calendar-plus"></i> Add to Calendar</a>
+                        </div>
+                    </div>
+
+                    <!-- Event 3 -->
+                    <div class="event-card" data-category="educational">
+                        <div class="event-date-block" style="background-color: var(--color-accent);">
+                            <span class="event-day">26</span>
+                            <span class="event-month">April</span>
+                        </div>
+                        <div class="event-body">
+                            <span class="badge"
+                                style="background-color: var(--color-border); color: var(--color-text); margin-bottom: 5px;">Educational</span>
+                            <h4 style="margin-bottom: 5px; color: var(--color-primary);">Fiqh of Zakat Workshop</h4>
+                            <p class="text-muted" style="margin-bottom: 10px; font-size: 0.95rem;">Learn how to
+                                accurately calculate your Zakat on wealth, gold, and business inventory before Ramadan.
+                            </p>
+                            <div style="display: flex; gap: 15px; color: var(--color-text-muted); font-size: 0.85rem;">
+                                <span><i class="fas fa-map-marker-alt"></i> Classroom 2</span>
+                                <span><i class="far fa-clock"></i> After Maghrib</span>
+                            </div>
+                        </div>
+                        <div class="event-actions" style="padding: var(--space-md);">
+                            <a href="#" class="btn btn-outline" style="white-space: nowrap;"><i
+                                    class="far fa-calendar-plus"></i> Add to Calendar</a>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="text-center" style="margin-top: var(--space-xl);">
+                    <button class="btn btn-secondary" onclick="alert('Loading past archive...')">View Past Events
+                        Archive</button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <span class="islamic-divider"></span>
+
+        <!-- Event Submission Form -->
+        <section class="section" style="background: var(--color-bg-alt); padding-top: 0;">
+            <div class="container grid grid-2" style="align-items: center; gap: var(--space-xl);">
+                <div data-aos="fade-right">
+                    <h2>Host an Event</h2>
+                    <p class="text-muted" style="margin-bottom: var(--space-md);">Are you part of an Islamic
+                        organization or community group and looking for a venue? Submit an event request to the Masjid
+                        administration.</p>
+                    <ul style="list-style: none; padding: 0;">
+                        <li style="margin-bottom: 10px;"><i class="fas fa-check"
+                                style="color: var(--color-secondary); margin-right: 10px;"></i> Suitable for educational
+                            workshops</li>
+                        <li style="margin-bottom: 10px;"><i class="fas fa-check"
+                                style="color: var(--color-secondary); margin-right: 10px;"></i> Community halaqas and
+                            meetings</li>
+                        <li style="margin-bottom: 10px;"><i class="fas fa-check"
+                                style="color: var(--color-secondary); margin-right: 10px;"></i> Must adhere to Islamic
+                            guidelines and modesty</li>
+                    </ul>
+                </div>
+
+                <div class="card" data-aos="fade-left">
+                    <div class="card-body">
+                        <form
+                            onsubmit="event.preventDefault(); alert('Request submitted! Administration will review it soon.'); this.reset();">
+                            <div class="form-group">
+                                <label class="form-label">Organization / Group Name</label>
+                                <input type="text" class="form-control" required>
+                            </div>
+                            <div class="grid grid-2" style="gap: var(--space-sm); margin-bottom: var(--space-sm);">
+                                <div>
+                                    <label class="form-label">Contact Email</label>
+                                    <input type="email" class="form-control" required>
+                                </div>
+                                <div>
+                                    <label class="form-label">Proposed Date</label>
+                                    <input type="date" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Event Description & Requirements</label>
+                                <textarea class="form-control" rows="4" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%;">Submit Request</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Reused Footer Component -->
+        <div class="container">
+            <div class="footer-top">
+                <div>
+                    <div class="logo" style="margin-bottom: var(--space-sm);">
+                        <a href="index.html" style="color: var(--color-bg);"><i class="fas fa-mosque"></i> Masjid
+                            Sunnah</a>
+                    </div>
+                    <p style="color: #94A3B8; margin-bottom: var(--space-md);">A place of worship, learning, and
+                        community operating upon the methodology of Ahl Al-Sunnah Wal-Jama`ah in Helsinki.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="prayer-times.html">Prayer Times</a></li>
+                        <li><a href="programs.html">Library & Programs</a></li>
+                        <li><a href="events.html">Events & News</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="donate.html">Zakat & Sadaqah</a></li>
+                        <li><a href="contact.html#marriage">Marriage Services</a></li>
+                        <li><a href="contact.html#funeral">Janazah Services</a></li>
+                        <li><a href="contact.html#new-muslim">New Muslim Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Newsletter</h4>
+                    <p style="color: #94A3B8; font-size: 0.9rem; margin-bottom: var(--space-sm);">Stay updated with the
+                        latest events and classes.</p>
+                    <form style="display: flex; gap: 5px;">
+                        <input type="email" placeholder="Your email address"
+                            style="padding: 10px; border-radius: var(--radius-sm); border: none; width: 100%;" required>
+                        <button type="submit" class="btn btn-secondary" style="padding: 10px 15px;"><i
+                                class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
+                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                    وَبِحَمْدِهِ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800 });
+
+        // Filter Logic
+        function filterEvents(category) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const cards = document.querySelectorAll('.event-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category.includes(category)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Layout Toggle Logic
+        function setLayout(style) {
+            const container = document.getElementById('events-container');
+            const btns = document.querySelectorAll('.layout-btn');
+
+            btns.forEach(btn => btn.classList.remove('active'));
+
+            if (style === 'grid') {
+                document.getElementById('btn-grid').classList.add('active');
+                container.classList.remove('event-list-view');
+                container.classList.add('grid-3'); // Uses standard grid styling component
+            } else {
+                document.getElementById('btn-list').classList.add('active');
+                container.classList.add('event-list-view');
+                container.classList.remove('grid-3');
+            }
+        }
+    </script>
+</body>
+
+</html>

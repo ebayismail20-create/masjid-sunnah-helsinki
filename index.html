@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Masjid Sunnah Helsinki | Islamic Center</title>
+    <meta name="description" content="Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة) — Islamic center serving Helsinki, Finland. Prayer times, programs, events, and community services.">
+    <meta property="og:title" content="Masjid Sunnah Helsinki">
+    <meta property="og:image" content="images/og-masjid.jpg">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@400;600;700&family=Nunito:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js" defer></script>
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "MosqueOrTemple",
+      "name": "Masjid Sunnah Helsinki",
+      "alternateName": "مسجد أهل السنّة والجماعة",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "Ylä-Malmin tori 6b",
+        "addressLocality": "Helsinki",
+        "postalCode": "00700",
+        "addressCountry": "FI"
+      },
+      "openingHours": "Mo-Su 00:00-23:59"
+    }
+    </script>
+</head>
+<body>
+
+    <!-- Skip to Content Link for Accessibility -->
+    <a href="#main-content" class="sr-only">Skip to main content</a>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-mosque"></i> Masjid Sunnah
+                </a>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="prayer-times.html">Prayer Times</a></li>
+                <li><a href="programs.html">Programs</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+            </ul>
+
+            <button class="hamburger" aria-label="Toggle Navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu">
+        <button class="mobile-menu-close" aria-label="Close Navigation">
+            <i class="fas fa-times"></i>
+        </button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="prayer-times.html">Prayer Times</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+        </ul>
+    </div>
+
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero" style="background-image: url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=1200&auto=format&q=80');">
+            <div class="hero-overlay"></div>
+            <div class="container hero-content fade-in">
+                <span class="hero-greeting"><span lang="ar" dir="rtl">السَّلَامُ عَلَيْكُمْ</span></span>
+                <h1 class="hero-title">Masjid Sunnah Helsinki</h1>
+                <p class="hero-subtitle">A Place of Worship, Learning & Community in Finland</p>
+                <div class="hero-buttons">
+                    <a href="#prayer-times" class="btn btn-primary">View Prayer Times</a>
+                    <a href="about.html" class="btn btn-outline-light">Get Involved</a>
+                </div>
+            </div>
+            <a href="#prayer-times" class="scroll-indicator" aria-label="Scroll Down">
+                <i class="fas fa-chevron-down fa-2x"></i>
+            </a>
+        </section>
+
+        <!-- Prayer Times Widget Section -->
+        <section id="prayer-times" class="section section-alt islamic-pattern-bg content-relative">
+            <div class="container">
+                <div class="grid grid-2" data-aos="fade-up">
+                    <div style="background: var(--color-bg); padding: var(--space-lg); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border-top: 5px solid var(--color-secondary);">
+                        <div class="text-center" style="margin-bottom: var(--space-md);">
+                            <h2 style="margin-bottom: 5px;">Today's Prayer Times</h2>
+                            <p class="text-muted" style="margin-bottom: 0;" id="gregorian-date-display">Loading...</p>
+                            <p class="arabic-text" style="color: var(--color-secondary); font-size: 1.25rem; line-height: 1.5; margin-bottom: 0;" id="hijri-date-display">Loading...</p>
+                        </div>
+                        
+                        <div id="prayer-times-container">
+                            <p class="text-center">Loading prayer times...</p>
+                        </div>
+                        
+                        <div class="text-center" style="margin-top: var(--space-md);">
+                            <p>Next Prayer: <strong id="next-prayer-name" style="color: var(--color-secondary);">--</strong> in <span id="prayer-countdown" style="font-family: monospace; font-size: 1.2rem;">--:--:--</span></p>
+                            <a href="prayer-times.html" style="font-weight: 600;">Full Prayer Schedule &rarr;</a>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; flex-direction: column; justify-content: center; padding: 0 var(--space-md);">
+                        <div class="bismillah">بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ</div>
+                        <h2 style="font-size: 2.5rem; margin-bottom: var(--space-md);">Welcome to Masjid Sunnah</h2>
+                        <p>Established as a central hub for Muslims in Helsinki, Masjid Sunnah operates upon the authentic methodology of Ahl Al-Sunnah Wal-Jama`ah. We offer a welcoming space for spiritual growth, classical Islamic education, and active community service.</p>
+                        <ul style="list-style: none; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-sm); margin-top: var(--space-md);">
+                            <li><i class="fas fa-check-circle" style="color: var(--color-secondary);"></i> 5 Daily Prayers</li>
+                            <li><i class="fas fa-check-circle" style="color: var(--color-secondary);"></i> Jumu'ah Services</li>
+                            <li><i class="fas fa-check-circle" style="color: var(--color-secondary);"></i> Weekly Halaqat</li>
+                            <li><i class="fas fa-check-circle" style="color: var(--color-secondary);"></i> Youth Programs</li>
+                        </ul>
+                        <a href="about.html" class="btn btn-outline" style="align-self: flex-start; margin-top: var(--space-md);">Learn Our Story &rarr;</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Divider -->
+        <span class="islamic-divider"></span>
+
+        <!-- Events & Programs Overview -->
+        <section class="section container content-relative">
+            <div class="text-center" data-aos="fade-up">
+                <h2>Community Life</h2>
+                <p class="text-muted">Join our ongoing programs and upcoming gatherings.</p>
+            </div>
+            
+            <div class="grid grid-3" style="margin-top: var(--space-lg);" data-aos="fade-up" data-aos-delay="100">
+                
+                <!-- Event 1 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800&auto=format&q=80" alt="Islamic Study Session" class="card-image">
+                    <div class="card-body">
+                        <span class="badge" style="margin-bottom: var(--space-xs);">Weekly</span>
+                        <h4>Sunday Tafsir Class</h4>
+                        <p class="text-muted" style="font-size: 0.9rem;">Join us every Sunday morning after Fajr for an in-depth study of the Quranic meanings.</p>
+                        <div style="margin-top: auto;">
+                            <small class="text-muted"><i class="far fa-clock"></i> Sundays, Post-Fajr</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 2 -->
+                <div class="card">
+                    <div style="height: 200px; background: var(--color-primary); display: flex; align-items: center; justify-content: center; color: var(--color-secondary);">
+                        <i class="fas fa-users fa-4x"></i>
+                    </div>
+                    <div class="card-body">
+                        <span class="badge" style="background-color: var(--color-secondary); color: var(--color-bg-dark); margin-bottom: var(--space-xs);">Upcoming</span>
+                        <h4>Youth Potluck & Qiyam</h4>
+                        <p class="text-muted" style="font-size: 0.9rem;">A monthly gathering for the youth including dinner, reminders, and late-night prayer.</p>
+                        <div style="margin-top: auto;">
+                            <small class="text-muted"><i class="far fa-calendar"></i> Last Friday of Month</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event 3 -->
+                <div class="card">
+                    <img src="https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?w=800&auto=format&q=80" alt="Arabic Class" class="card-image">
+                    <div class="card-body">
+                        <span class="badge" style="margin-bottom: var(--space-xs);">Registration Open</span>
+                        <h4>Arabic Language Basics</h4>
+                        <p class="text-muted" style="font-size: 0.9rem;">A 10-week foundational course designed to help beginners access and read the Quran in its original language.</p>
+                        <div style="margin-top: auto;">
+                            <small class="text-muted"><i class="fas fa-chalkboard-teacher"></i> Wed & Fri Evenings</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center" style="margin-top: var(--space-xl);">
+                <a href="programs.html" class="btn btn-outline" style="margin-right: 10px;">All Programs</a>
+                <a href="events.html" class="btn btn-primary">Upcoming Events</a>
+            </div>
+        </section>
+
+        <!-- Dynamic Donation CTA -->
+        <section class="section section-dark text-center content-relative" style="background-image: linear-gradient(rgba(31, 41, 55, 0.9), rgba(31, 41, 55, 0.9)), url('https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?w=1200&auto=format&q=80'); background-size: cover; background-position: center; background-attachment: fixed;">
+            <div class="container" data-aos="zoom-in">
+                <span class="arabic-text" style="color: var(--color-secondary); display: block; margin-bottom: var(--space-md); font-size: 1.8rem;">
+                    مَّثَلُ الَّذِينَ يُنفِقُونَ أَمْوَالَهُمْ فِي سَبِيلِ اللَّهِ كَمَثَلِ حَبَّةٍ أَنبَتَتْ سَبْعَ سَنَابِلَ
+                </span>
+                <p style="font-size: 1.1rem; max-width: 800px; margin: 0 auto var(--space-md); font-style: italic;">
+                    "The example of those who spend their wealth in the way of Allah is like a seed of grain which grows seven spikes..." (Quran 2:261)
+                </p>
+                <h2 style="color: white; margin-bottom: var(--space-sm);">Support Your Masjid</h2>
+                <p style="margin-bottom: var(--space-lg); max-width: 600px; margin-inline: auto;">
+                    Masjid Sunnah relies completely on the generous donations of the community. Your contributions help maintain the house of Allah and sustain our education programs.
+                </p>
+                
+                <div style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); padding: var(--space-md); border-radius: var(--radius-lg); display: inline-flex; gap: var(--space-sm); flex-wrap: wrap; justify-content: center; backdrop-filter: blur(5px);">
+                    <a href="donate.html?amount=20" class="btn btn-outline-light">€20</a>
+                    <a href="donate.html?amount=50" class="btn btn-outline-light">€50</a>
+                    <a href="donate.html?amount=100" class="btn btn-primary">€100</a>
+                    <a href="donate.html?amount=custom" class="btn btn-outline-light">Custom</a>
+                </div>
+                
+                <div style="margin-top: var(--space-md);">
+                    <a href="donate.html" style="color: var(--color-secondary); font-weight: 600;">More giving options (Zakat, Monthly) &rarr;</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Imam / Quran Verse -->
+        <section class="section container">
+            <div class="grid grid-2" style="align-items: center; gap: var(--space-xl);">
+                <div data-aos="fade-right">
+                    <span class="badge" style="margin-bottom: var(--space-sm); background: var(--color-border); color: var(--color-text);">A Message From Leadership</span>
+                    <h3 style="font-size: 2rem;">Cultivating Righteous Knowledge</h3>
+                    <p>At Masjid Sunnah, we strive to anchor our community upon the authentic teachings of the Messenger ﷺ and his companions. Our doors are open to everyone seeking the truth and wanting to develop a profound connection with their Creator. We invite you to be part of our growing family.</p>
+                    <div style="margin-top: var(--space-md); display: flex; gap: 15px; align-items: center;">
+                        <div style="width: 60px; height: 60px; border-radius: 50%; background-color: var(--color-border); display: flex; align-items: center; justify-content: center;">
+                            <i class="fas fa-user-tie fa-2x text-muted"></i>
+                        </div>
+                        <div>
+                            <strong style="display: block;">Masjid Administration</strong>
+                            <span class="text-muted" style="font-size: 0.9rem;">Helsinki, Finland</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div data-aos="fade-left" style="background: var(--color-bg-alt); padding: var(--space-xl) var(--space-md); border-radius: var(--radius-lg); text-align: center; border: 1px solid var(--color-border); position: relative;">
+                    <!-- Decorative corner accents -->
+                    <div style="position: absolute; top: 15px; left: 15px; width: 30px; height: 30px; border-top: 2px solid var(--color-secondary); border-left: 2px solid var(--color-secondary);"></div>
+                    <div style="position: absolute; bottom: 15px; right: 15px; width: 30px; height: 30px; border-bottom: 2px solid var(--color-secondary); border-right: 2px solid var(--color-secondary);"></div>
+                    
+                    <span class="arabic-text" style="display: block; font-size: 2.2rem; color: var(--color-primary); margin-bottom: var(--space-md); line-height: 1.6;">
+                        وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ
+                    </span>
+                    <p style="font-style: italic; font-size: 1.1rem; margin-bottom: var(--space-xs);">
+                        "And We have not sent you, [O Muhammad], except as a mercy to the worlds."
+                    </p>
+                    <span class="text-muted" style="font-size: 0.9rem;">Surah Al-Anbya [21:107]</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Location & Contact Ribbon -->
+        <section style="background-color: var(--color-bg-alt); border-top: 1px solid var(--color-border); padding: var(--space-md) 0;">
+            <div class="container" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
+                <div style="display: flex; gap: var(--space-md); align-items: center;">
+                    <i class="fas fa-map-marker-alt fa-2x" style="color: var(--color-secondary);"></i>
+                    <div>
+                        <strong>Ylä-Malmin tori 6b</strong>
+                        <div class="text-muted">00700 Helsinki, Finland</div>
+                    </div>
+                </div>
+                <div style="display: flex; gap: var(--space-md); align-items: center;">
+                    <i class="fas fa-envelope fa-2x" style="color: var(--color-secondary);"></i>
+                    <div>
+                        <strong>Contact Us</strong>
+                        <div class="text-muted">info@masjidsunnah.fi (Placeholder)</div>
+                    </div>
+                </div>
+                <a href="contact.html" class="btn btn-outline">Directions & Contact</a>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div>
+                    <div class="logo" style="margin-bottom: var(--space-sm);">
+                        <a href="index.html" style="color: var(--color-bg);">
+                            <i class="fas fa-mosque"></i> Masjid Sunnah
+                        </a>
+                    </div>
+                    <p style="color: #94A3B8; margin-bottom: var(--space-md);">
+                        A place of worship, learning, and community operating upon the methodology of Ahl Al-Sunnah Wal-Jama`ah in Helsinki.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="prayer-times.html">Prayer Times</a></li>
+                        <li><a href="programs.html">Library & Programs</a></li>
+                        <li><a href="events.html">Events & News</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="donate.html">Zakat & Sadaqah</a></li>
+                        <li><a href="contact.html#marriage">Marriage Services</a></li>
+                        <li><a href="contact.html#funeral">Janazah Services</a></li>
+                        <li><a href="contact.html#new-muslim">New Muslim Support</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="footer-title">Newsletter</h4>
+                    <p style="color: #94A3B8; font-size: 0.9rem; margin-bottom: var(--space-sm);">Stay updated with the latest events and classes.</p>
+                    <form style="display: flex; gap: 5px;">
+                        <input type="email" placeholder="Your email address" style="padding: 10px; border-radius: var(--radius-sm); border: none; width: 100%;" required>
+                        <button type="submit" class="btn btn-secondary" style="padding: 10px 15px;"><i class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
+                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ وَبِحَمْدِهِ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script>
+        // Inline code to hook up the prayer logic to the specific elements on the homepage
+        // Note: The heavy lifting is done in js/prayer-times.js; we just need to ensure the variables align.
+        // We will include prayer-times.js specifically 
+    </script>
+    <script src="js/prayer-times.js"></script>
+</body>
+</html>

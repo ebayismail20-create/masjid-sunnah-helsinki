@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs & Classes | Masjid Sunnah Helsinki</title>
+    <meta name="description"
+        content="Discover Islamic classes, educational programs, and community initiatives at Masjid Sunnah Helsinki.">
+
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cormorant+Garamond:wght@400;600;700&family=Nunito:wght@300;400;500;600&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <link rel="stylesheet" href="css/responsive.css">
+
+    <!-- AOS Animations -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        .filter-tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: var(--space-lg);
+        }
+
+        .filter-btn {
+            background: var(--color-bg-alt);
+            border: 1px solid var(--color-border);
+            color: var(--color-text-muted);
+            padding: 8px 16px;
+            border-radius: var(--radius-pill);
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        /* Simple Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-box {
+            background: var(--color-bg-alt);
+            width: 90%;
+            max-width: 500px;
+            border-radius: var(--radius-md);
+            padding: var(--space-md);
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: translateY(0);
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--color-text-muted);
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container nav-container">
+            <div class="logo">
+                <a href="index.html">
+                    <i class="fas fa-mosque"></i> Masjid Sunnah
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="prayer-times.html">Prayer Times</a></li>
+                <li><a href="programs.html" style="color: var(--color-secondary);">Programs</a></li>
+                <li><a href="events.html">Events</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+            </ul>
+            <button class="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu-overlay"></div>
+    <div class="mobile-menu">
+        <button class="mobile-menu-close" aria-label="Close Navigation"><i class="fas fa-times"></i></button>
+        <ul class="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="prayer-times.html">Prayer Times</a></li>
+            <li><a href="programs.html">Programs</a></li>
+            <li><a href="events.html">Events</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+        </ul>
+    </div>
+
+    <!-- Modal Form -->
+    <div class="modal-overlay" id="registration-modal">
+        <div class="modal-box">
+            <button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+            <h3 style="margin-bottom: var(--space-xs);">Program Registration</h3>
+            <p class="text-muted" style="margin-bottom: var(--space-md); font-size: 0.9rem;">Register for <span
+                    id="modal-program-name" style="font-weight: bold; color: var(--color-primary);">Selected
+                    Program</span></p>
+
+            <form id="reg-form"
+                onsubmit="event.preventDefault(); alert('Registration sent. Jazakallahu Khairan!'); closeModal();">
+                <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Email Address</label>
+                    <input type="email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Phone Number</label>
+                    <input type="tel" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Participant Age Bracket</label>
+                    <select class="form-control">
+                        <option>Child (5-12)</option>
+                        <option>Teen (13-18)</option>
+                        <option>Adult (19+)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Any notes or questions?</label>
+                    <textarea class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Submit
+                    Registration</button>
+            </form>
+        </div>
+    </div>
+
+    <main id="main-content" style="padding-top: var(--header-height);">
+        <!-- Inner Hero -->
+        <section class="section section-dark text-center"
+            style="background-image: linear-gradient(var(--color-overlay), var(--color-overlay)), url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=1200&auto=format&q=80'); background-size: cover; background-position: center; padding: var(--space-xl) 0;">
+            <div class="container fade-in">
+                <h1 style="color: white; margin-bottom: 0;">Programs & Classes</h1>
+                <p style="color: var(--color-secondary); font-size: 1.2rem; margin-top: 10px;">البرامج الإسلامية</p>
+                <p>Seek knowledge from the cradle to the grave.</p>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="section islamic-pattern-bg">
+            <div class="container">
+
+                <!-- Filters -->
+                <div class="filter-tabs" data-aos="fade-up">
+                    <button class="filter-btn active" onclick="filterPrograms('all')">All</button>
+                    <button class="filter-btn" onclick="filterPrograms('youth')">Youth & Kids</button>
+                    <button class="filter-btn" onclick="filterPrograms('adults')">Adults</button>
+                    <button class="filter-btn" onclick="filterPrograms('sisters')">Sisters</button>
+                    <button class="filter-btn" onclick="filterPrograms('new-muslims')">New Muslims</button>
+                </div>
+
+                <!-- Programs Grid -->
+                <div class="grid grid-3" id="programs-grid" data-aos="fade-up" data-aos-delay="100">
+
+                    <!-- Program 1 -->
+                    <div class="card program-card" data-category="youth">
+                        <div
+                            style="height: 180px; background: url('https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&w=600') center/cover; position: relative;">
+                            <span class="badge" style="position: absolute; top: 15px; left: 15px;">Youth & Kids</span>
+                        </div>
+                        <div class="card-body">
+                            <h4 style="margin-bottom: 5px;">Sunday Quran School</h4>
+                            <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 10px;">
+                                <span><i class="far fa-clock"></i> Sundays 10:00 AM - 1:00 PM</span><br>
+                                <span><i class="fas fa-user-graduate"></i> Ages 5-15</span>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.95rem;">Comprehensive Islamic studies, Arabic
+                                alphabet reading (Qaida), and basic Quranic memorization tailored for children growing
+                                up in the West.</p>
+                            <div style="margin-top: auto; padding-top: 15px;">
+                                <button class="btn btn-outline" style="width: 100%;"
+                                    onclick="openModal('Sunday Quran School')">Register &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program 2 -->
+                    <div class="card program-card" data-category="adults">
+                        <div
+                            style="height: 180px; background: var(--color-primary); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <span class="badge"
+                                style="position: absolute; top: 15px; left: 15px; background: var(--color-secondary); color: var(--color-bg-dark);">Adults</span>
+                            <i class="fas fa-book-open fa-4x text-light" style="color: rgba(255,255,255,0.8);"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 style="margin-bottom: 5px;">Aqeedah Essentials</h4>
+                            <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 10px;">
+                                <span><i class="far fa-clock"></i> Tuesdays after Maghrib</span><br>
+                                <span><i class="fas fa-chalkboard-teacher"></i> Shaykh Abdullah</span>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.95rem;">An in-depth study of authentic Islamic
+                                belief (Aqeedah), equipping adults with certainty and clarity regarding the pillars of
+                                faith.</p>
+                            <div style="margin-top: auto; padding-top: 15px;">
+                                <button class="btn btn-outline" style="width: 100%;"
+                                    onclick="openModal('Aqeedah Essentials')">Register &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program 3 -->
+                    <div class="card program-card" data-category="sisters">
+                        <div
+                            style="height: 180px; background: url('https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?auto=format&w=600') center/cover; position: relative;">
+                            <span class="badge" style="position: absolute; top: 15px; left: 15px;">Sisters Only</span>
+                        </div>
+                        <div class="card-body">
+                            <h4 style="margin-bottom: 5px;">Sisters' Weekly Halaqa</h4>
+                            <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 10px;">
+                                <span><i class="far fa-clock"></i> Saturdays 2:00 PM</span><br>
+                                <span><i class="fas fa-user-friends"></i> Women 16+</span>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.95rem;">A supportive environment for sisters to
+                                discuss Fiqh, Seerah, and contemporary challenges while building strong bonds of
+                                sisterhood.</p>
+                            <div style="margin-top: auto; padding-top: 15px;">
+                                <button class="btn btn-outline" style="width: 100%;"
+                                    onclick="openModal('Sisters Weekly Halaqa')">Register &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program 4 -->
+                    <div class="card program-card" data-category="youth">
+                        <div
+                            style="height: 180px; background: var(--color-primary); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <span class="badge"
+                                style="position: absolute; top: 15px; left: 15px; background: var(--color-secondary); color: var(--color-bg-dark);">Youth</span>
+                            <i class="fas fa-basketball-ball fa-4x text-light"
+                                style="color: rgba(255,255,255,0.8);"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 style="margin-bottom: 5px;">Youth Hub Program</h4>
+                            <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 10px;">
+                                <span><i class="far fa-clock"></i> Fridays 6:00 PM - 9:00 PM</span><br>
+                                <span><i class="fas fa-users"></i> Boys & Girls (Separate spaces), 13-18</span>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.95rem;">A safe space for Muslim teenagers.
+                                Combines a short spiritual reminder with sports, activities, and mentorship.</p>
+                            <div style="margin-top: auto; padding-top: 15px;">
+                                <button class="btn btn-outline" style="width: 100%;"
+                                    onclick="openModal('Youth Hub Program')">Register &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program 5 -->
+                    <div class="card program-card" data-category="new-muslims">
+                        <div
+                            style="height: 180px; background: url('https://images.unsplash.com/photo-1585776245991-cf89dd7fc73a?auto=format&w=600') center/cover; position: relative;">
+                            <span class="badge" style="position: absolute; top: 15px; left: 15px;">New Muslims</span>
+                        </div>
+                        <div class="card-body">
+                            <h4 style="margin-bottom: 5px;">Foundations (New Muslim Support)</h4>
+                            <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 10px;">
+                                <span><i class="far fa-clock"></i> 1-on-1 Mentorship (Flexible)</span><br>
+                                <span><i class="fas fa-heart"></i> For reverts/converts</span>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.95rem;">A supportive course guiding new brothers
+                                and sisters on how to pray, basic beliefs, and integrating into the community.</p>
+                            <div style="margin-top: auto; padding-top: 15px;">
+                                <button class="btn btn-outline" style="width: 100%;"
+                                    onclick="openModal('Foundations New Muslim Support')">Request Info &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Program 6 -->
+                    <div class="card program-card" data-category="adults">
+                        <div
+                            style="height: 180px; background: var(--color-primary); display: flex; align-items: center; justify-content: center; position: relative;">
+                            <span class="badge"
+                                style="position: absolute; top: 15px; left: 15px; background: var(--color-secondary); color: var(--color-bg-dark);">Reading/Hifz</span>
+                            <i class="fas fa-quran fa-4x text-light" style="color: rgba(255,255,255,0.8);"></i>
+                        </div>
+                        <div class="card-body">
+                            <h4 style="margin-bottom: 5px;">Hifz Program</h4>
+                            <div class="text-muted" style="font-size: 0.85rem; margin-bottom: 10px;">
+                                <span><i class="far fa-clock"></i> Mon-Thu, Post-Asr</span><br>
+                                <span><i class="fas fa-microphone"></i> Select Students</span>
+                            </div>
+                            <p class="text-muted" style="font-size: 0.95rem;">Intensive Quran memorization program
+                                focusing on exact Tajweed and retention.</p>
+                            <div style="margin-top: auto; padding-top: 15px;">
+                                <button class="btn btn-outline" style="width: 100%;"
+                                    onclick="openModal('Hifz Program')">Enrollment Inquiry &rarr;</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <!-- Footer logic ... omitted to avoid redundancy if possible, but the prompt says complete files, so let's include it. -->
+        <div class="container">
+            <div class="footer-top">
+                <div>
+                    <div class="logo" style="margin-bottom: var(--space-sm);">
+                        <a href="index.html" style="color: var(--color-bg);"><i class="fas fa-mosque"></i> Masjid
+                            Sunnah</a>
+                    </div>
+                    <p style="color: #94A3B8; margin-bottom: var(--space-md);">A place of worship, learning, and
+                        community operating upon the methodology of Ahl Al-Sunnah Wal-Jama`ah in Helsinki.</p>
+                    <div class="social-links">
+                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="footer-title">Quick Links</h4>
+                    <ul class="footer-links">
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="prayer-times.html">Prayer Times</a></li>
+                        <li><a href="programs.html">Library & Programs</a></li>
+                        <li><a href="events.html">Events & News</a></li>
+                        <li><a href="contact.html">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Services</h4>
+                    <ul class="footer-links">
+                        <li><a href="donate.html">Zakat & Sadaqah</a></li>
+                        <li><a href="contact.html#marriage">Marriage Services</a></li>
+                        <li><a href="contact.html#funeral">Janazah Services</a></li>
+                        <li><a href="contact.html#new-muslim">New Muslim Support</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h4 class="footer-title">Newsletter</h4>
+                    <p style="color: #94A3B8; font-size: 0.9rem; margin-bottom: var(--space-sm);">Stay updated with the
+                        latest events and classes.</p>
+                    <form style="display: flex; gap: 5px;">
+                        <input type="email" placeholder="Your email address"
+                            style="padding: 10px; border-radius: var(--radius-sm); border: none; width: 100%;" required>
+                        <button type="submit" class="btn btn-secondary" style="padding: 10px 15px;"><i
+                                class="fas fa-paper-plane"></i></button>
+                    </form>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
+                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                    وَبِحَمْدِهِ</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true, duration: 800 });
+
+        // Filtering Logic
+        function filterPrograms(category) {
+            // Update buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            // Filter cards
+            const cards = document.querySelectorAll('.program-card');
+            cards.forEach(card => {
+                if (category === 'all' || card.dataset.category === category) {
+                    card.style.display = 'flex'; // our cards use display:flex
+                    // reset animation
+                    card.style.animation = 'none';
+                    card.offsetHeight; /* trigger reflow */
+                    card.style.animation = null;
+                    card.classList.add('fade-in');
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        // Modal Logic
+        const modal = document.getElementById('registration-modal');
+        const modalProgName = document.getElementById('modal-program-name');
+
+        function openModal(programName) {
+            modalProgName.textContent = programName;
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    </script>
+</body>
+
+</html>

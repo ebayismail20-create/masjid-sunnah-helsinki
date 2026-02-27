@@ -28,12 +28,12 @@
   /* Deep green overlay */
 
   /* Typography */
-  --font-display: 'Cormorant Garamond', serif;
-  /* English heading font */
+  --font-display: 'Playfair Display', 'Cormorant Garamond', serif;
+  /* Premium heading font */
   --font-arabic: 'Amiri', serif;
   /* Arabic font */
-  --font-body: 'Nunito', sans-serif;
-  /* Body font */
+  --font-body: 'Inter', 'Nunito', sans-serif;
+  /* Modern body font */
 
   /* Spacing */
   --space-xs: 8px;
@@ -77,10 +77,11 @@ body {
   font-family: var(--font-body);
   color: var(--color-text);
   background-color: var(--color-bg);
-  line-height: 1.6;
+  line-height: 1.7;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  letter-spacing: 0.01em;
 }
 
 /* Typography Base Elements */
@@ -93,7 +94,8 @@ h6 {
   font-family: var(--font-display);
   color: var(--color-primary);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
 }
 
 h1 {

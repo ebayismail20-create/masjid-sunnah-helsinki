@@ -1,6 +1,18 @@
-/* responsive.css - Media queries based on specifications */
+/* responsive.css - Comprehensive Mobile-First Media Queries */
 
-/* Laptop / Smaller Desktops */
+/* =====================
+   LARGE DESKTOPS (1200px+)
+   ===================== */
+@media (min-width: 1200px) {
+    .container {
+        padding-left: var(--space-xl);
+        padding-right: var(--space-xl);
+    }
+}
+
+/* =====================
+   LAPTOP / SMALLER DESKTOPS (max 1024px)
+   ===================== */
 @media (max-width: 1024px) {
     .footer-top {
         grid-template-columns: 1fr 1fr;
@@ -10,15 +22,20 @@
     .hero-title {
         font-size: 3.5rem;
     }
+
+    .container {
+        padding-left: var(--space-lg);
+        padding-right: var(--space-lg);
+    }
 }
 
-/* Tablets */
+/* =====================
+   TABLETS (max 768px)
+   ===================== */
 @media (max-width: 768px) {
 
-    .grid-2 {
-        grid-template-columns: 1fr;
-    }
-
+    /* Grids collapse to single column */
+    .grid-2,
     .grid-3 {
         grid-template-columns: 1fr;
     }
@@ -27,82 +44,296 @@
         grid-template-columns: repeat(2, 1fr);
     }
 
+    /* Footer: Quick Links and Services side-by-side, rest full-width */
     .footer-top {
         grid-template-columns: 1fr 1fr;
     }
 
-    .footer-top>div:first-child,
-    .footer-top>div:last-child {
+    .footer-top > div:first-child,
+    .footer-top > div:last-child {
         grid-column: 1 / -1;
     }
 
+    /* Navigation */
     .navbar .nav-links {
         display: none;
-        /* Hide standard links, use hamburger */
     }
 
     .hamburger {
         display: block;
     }
 
+    /* Hero */
     .hero-title {
-        font-size: 3rem;
+        font-size: clamp(2rem, 8vw, 3rem);
     }
 
+    .hero-greeting {
+        font-size: clamp(1.4rem, 5vw, 2rem);
+    }
+
+    .bismillah {
+        font-size: clamp(1.4rem, 5vw, 2rem);
+    }
+
+    .hero-buttons {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--space-sm);
+    }
+
+    /* Section spacing */
     .section {
         padding: var(--space-lg) 0;
     }
 
-    /* Make Arabic slightly smaller to fit better */
+    /* Container padding */
+    .container {
+        padding-left: var(--space-md);
+        padding-right: var(--space-md);
+    }
+
+    /* Typography */
+    h1 {
+        font-size: clamp(1.8rem, 6vw, 2.8rem);
+    }
+
+    h2 {
+        font-size: clamp(1.5rem, 5vw, 2.2rem);
+    }
+
+    h3 {
+        font-size: clamp(1.15rem, 4vw, 1.6rem);
+    }
+
+    /* Arabic text */
     .arabic-text {
-        font-size: 1.25em;
+        font-size: clamp(1rem, 4vw, 1.3em);
+    }
+
+    /* Section headers */
+    .section-header {
+        margin-bottom: var(--space-md);
+    }
+
+    /* Prayer cards: wrap on tablet */
+    .prayer-cards {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .prayer-card {
+        min-width: 130px;
+        flex: 1 1 130px;
+    }
+
+    /* Navbar */
+    .navbar {
+        padding: 0 var(--space-md);
+    }
+
+    /* Announcement banner */
+    .announcement-banner {
+        font-size: 0.9rem;
+        padding: 8px var(--space-md);
     }
 }
 
-/* Mobile Devices */
+/* =====================
+   MOBILE DEVICES (max 480px)
+   ===================== */
 @media (max-width: 480px) {
-    .grid-4 {
-        grid-template-columns: 1fr;
-    }
 
-
-
+    /* Grids: everything single column */
+    .grid-2,
+    .grid-3,
+    .grid-4,
     .donate-cards {
         grid-template-columns: 1fr;
     }
 
-    /* Ensure prayer widget doesn't cause overflow */
-    .prayer-table {
-        font-size: 0.9rem;
+    /* Container padding */
+    .container {
+        padding-left: var(--space-sm);
+        padding-right: var(--space-sm);
     }
 
-    .prayer-table th,
-    .prayer-table td {
-        padding: 10px 4px;
-    }
-
+    /* Hero text */
     .hero-title {
-        font-size: 2.2rem;
+        font-size: clamp(1.7rem, 7vw, 2.2rem);
+        line-height: 1.2;
     }
 
     .hero-greeting {
-        font-size: 1.8rem;
+        font-size: clamp(1.2rem, 5vw, 1.8rem);
     }
 
     .bismillah {
-        font-size: 1.5rem;
+        font-size: clamp(1.2rem, 5vw, 1.5rem);
     }
 
+    .hero-subtitle {
+        font-size: clamp(0.95rem, 3vw, 1.1rem);
+    }
+
+    /* All buttons full-width on small mobile */
     .hero-buttons {
         flex-direction: column;
         width: 100%;
     }
 
-    .btn {
+    .hero-buttons .btn {
         width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+
+    /* Typography scale down */
+    h1 {
+        font-size: clamp(1.6rem, 7vw, 2rem);
+        margin-bottom: var(--space-sm);
+    }
+
+    h2 {
+        font-size: clamp(1.3rem, 6vw, 1.8rem);
+        margin-bottom: var(--space-sm);
+    }
+
+    h3 {
+        font-size: clamp(1.05rem, 4vw, 1.35rem);
+        margin-bottom: var(--space-xs);
+    }
+
+    /* Prayer table */
+    .prayer-table {
+        font-size: 0.85rem;
+    }
+
+    .prayer-table th,
+    .prayer-table td {
+        padding: 8px 4px;
+    }
+
+    /* Prayer cards: 2 per row on phone */
+    .prayer-cards {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-sm);
+    }
+
+    .prayer-card {
+        min-width: unset;
+        width: 100%;
+    }
+
+    /* Section spacing tighter */
+    .section {
+        padding: var(--space-md) 0;
+    }
+
+    /* Cards */
+    .card-body {
+        padding: var(--space-sm);
+    }
+
+    .donate-card {
+        padding: var(--space-md);
+    }
+
+    /* arabic */
+    .arabic-text {
+        font-size: 1.1em;
+        line-height: 1.9;
+    }
+
+    /* Footer */
+    .footer-top {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-top > div:first-child,
+    .footer-top > div:last-child {
+        grid-column: 1 / -1;
+    }
+
+    .footer-title {
+        font-size: 1rem;
+        margin-bottom: var(--space-sm);
+    }
+
+    .footer-links li {
+        margin-bottom: 6px;
+    }
+
+    .footer-links a {
+        font-size: 0.9rem;
+    }
+
+    /* Social icons */
+    .social-links {
+        justify-content: center;
+    }
+
+    /* Announcement */
+    .announcement-banner {
+        font-size: 0.82rem;
+        padding: 6px var(--space-sm);
+    }
+
+    .announcement-banner marquee,
+    .announcement-banner span {
+        font-size: 0.82rem;
+    }
+
+    /* Navbar */
+    .navbar {
+        padding: 0 var(--space-sm);
+        height: 66px;
+    }
+
+    .logo {
+        font-size: 1rem;
+    }
+
+    /* Section heading */
+    .section-label {
+        font-size: 0.75rem;
+        letter-spacing: 1.5px;
+    }
+
+    /* Buttons general */
+    .btn {
+        font-size: 0.9rem;
+        padding: 12px 20px;
     }
 }
 
+/* =====================
+   VERY SMALL PHONES (max 360px)
+   ===================== */
+@media (max-width: 360px) {
+    .hero-title {
+        font-size: 1.5rem;
+    }
+
+    .container {
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+
+    .prayer-cards {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+    }
+
+    .prayer-card {
+        padding: var(--space-sm) 8px;
+    }
+}
+
+/* =====================
+   TOUCH DEVICES - Disable hover effects
+   ===================== */
 @media (hover: none) and (pointer: coarse) {
 
     .card:hover,
@@ -124,8 +355,24 @@
         opacity: 0;
     }
 
-    /* Show gallery overlay on actual tap instead */
     .gallery-item:active .gallery-overlay {
         opacity: 1;
+    }
+}
+
+/* =====================
+   LANDSCAPE PHONES
+   ===================== */
+@media (max-width: 768px) and (orientation: landscape) {
+    .hero {
+        min-height: 100vh;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+    }
+
+    .section {
+        padding: var(--space-md) 0;
     }
 }

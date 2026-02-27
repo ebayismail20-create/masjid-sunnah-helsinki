@@ -61,7 +61,12 @@
     }
 
     .footer-top {
-        grid-template-columns: 1fr;
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .footer-top>div:first-child,
+    .footer-top>div:last-child {
+        grid-column: 1 / -1;
     }
 
     .donate-cards {

@@ -119,6 +119,40 @@
     grid-template-columns: repeat(4, 1fr);
 }
 
+/* Progress Bar */
+.progress-bar {
+    width: 100%;
+    background-color: var(--color-border);
+    border-radius: var(--radius-pill);
+    height: 14px;
+    overflow: hidden;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+    border-radius: var(--radius-pill);
+    transition: width 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    to {
+        left: 100%;
+    }
+}
+
 /* Navigation */
 .navbar {
     position: fixed;
@@ -180,11 +214,22 @@
 
 .hamburger {
     display: none;
+    min-width: 48px;
+    min-height: 48px;
+    padding: 12px;
+    align-items: center;
+    justify-content: center;
     background: none;
     border: none;
     color: var(--color-bg);
     font-size: 1.5rem;
     cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: flex;
+    }
 }
 
 .navbar.scrolled .hamburger {
@@ -213,8 +258,8 @@
 .mobile-menu {
     position: fixed;
     top: 0;
-    right: -300px;
-    width: 300px;
+    right: min(-300px, -85vw);
+    width: min(300px, 85vw);
     height: 100vh;
     background-color: var(--color-bg-alt);
     z-index: 1001;
@@ -263,7 +308,12 @@
     color: var(--color-bg);
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+}
+
+@supports not (-webkit-overflow-scrolling: touch) {
+    .hero {
+        background-attachment: fixed;
+    }
 }
 
 .hero-overlay {
@@ -336,6 +386,7 @@
 
 .form-control {
     width: 100%;
+    min-height: 48px;
     padding: 12px 16px;
     border: 1px solid var(--color-border);
     border-radius: var(--radius-sm);
@@ -349,6 +400,26 @@
     outline: none;
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px rgba(44, 76, 59, 0.1);
+}
+
+.form-control:valid:not(:placeholder-shown) {
+    border-color: var(--color-success);
+}
+
+.form-control:invalid:not(:placeholder-shown) {
+    border-color: #C0392B;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-sm);
+}
+
+@media (max-width: 600px) {
+    .form-row {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* Footer Element Components */
@@ -428,4 +499,77 @@
     color: white;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: linear-gradient(90deg, #EEE 25%, #E0E0E0 50%, #EEE 75%);
+    background-size: 200% 100%;
+    animation: sk 1.5s infinite;
+    border-radius: 6px;
+    height: 44px;
+    margin-bottom: 8px;
+}
+
+@keyframes sk {
+    to {
+        background-position: -200% 0;
+    }
+}
+
+/* Accordion */
+.accordion {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
+
+.accordion-item {
+    border-bottom: 1px solid var(--color-border);
+}
+
+.accordion-item:last-child {
+    border-bottom: none;
+}
+
+.accordion-btn {
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    padding: 18px 20px;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--color-primary);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background .2s;
+}
+
+.accordion-btn:hover {
+    background: var(--color-bg-alt);
+}
+
+.accordion-btn i {
+    transition: transform .3s;
+}
+
+.accordion-btn[aria-expanded="true"] i {
+    transform: rotate(180deg);
+}
+
+.accordion-panel {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s cubic-bezier(.4, 0, .2, 1);
+    padding: 0 20px;
+    color: var(--color-text-muted);
+    font-size: .95rem;
+}
+
+.accordion-panel.open {
+    max-height: 400px;
+    padding: 16px 20px;
 }

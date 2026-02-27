@@ -101,6 +101,11 @@
             cursor: pointer;
         }
     </style>
+
+    <!-- Low Priority SEO Tags Added -->
+    <meta name="theme-color" content="#2c4c3b">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Masjid Sunnah Helsinki">
 </head>
 
 <body>
@@ -401,7 +406,7 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
-                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
                     وَبِحَمْدِهِ</p>
             </div>
         </div>
@@ -450,6 +455,16 @@
             document.body.style.overflow = '';
         }
     </script>
+
+    <button id="back-to-top" aria-label="Back to top"
+        style="position:fixed;bottom:28px;right:22px;z-index:999;
+        width:48px;height:48px;border-radius:50%;border:none;
+        background:var(--color-primary);color:var(--color-secondary);
+        font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;
+        transition:opacity .3s,transform .3s;box-shadow:var(--shadow-md);
+        display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 </body>
 
 </html>

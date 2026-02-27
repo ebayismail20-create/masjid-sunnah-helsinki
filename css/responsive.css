@@ -15,8 +15,19 @@
 /* Tablets */
 @media (max-width: 768px) {
 
-    .grid-3,
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+
+    .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
     .grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .footer-top {
         grid-template-columns: repeat(2, 1fr);
     }
 
@@ -45,7 +56,15 @@
 
 /* Mobile Devices */
 @media (max-width: 480px) {
-    .grid-2 {
+    .grid-4 {
+        grid-template-columns: 1fr;
+    }
+
+    .footer-top {
+        grid-template-columns: 1fr;
+    }
+
+    .donate-cards {
         grid-template-columns: 1fr;
     }
 
@@ -71,10 +90,6 @@
         font-size: 1.5rem;
     }
 
-    .footer-top {
-        grid-template-columns: 1fr;
-    }
-
     .hero-buttons {
         flex-direction: column;
         width: 100%;
@@ -82,5 +97,32 @@
 
     .btn {
         width: 100%;
+    }
+}
+
+@media (hover: none) and (pointer: coarse) {
+
+    .card:hover,
+    .value-card:hover,
+    .donate-card:hover {
+        transform: none;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .btn:hover {
+        transform: none;
+    }
+
+    .gallery-item:hover img {
+        transform: none;
+    }
+
+    .gallery-item:hover .gallery-overlay {
+        opacity: 0;
+    }
+
+    /* Show gallery overlay on actual tap instead */
+    .gallery-item:active .gallery-overlay {
+        opacity: 1;
     }
 }

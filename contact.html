@@ -119,6 +119,11 @@
             font-size: 0.95rem;
         }
     </style>
+
+    <!-- Low Priority SEO Tags Added -->
+    <meta name="theme-color" content="#2c4c3b">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Masjid Sunnah Helsinki">
 </head>
 
 <body>
@@ -216,7 +221,7 @@
                         <h3 style="margin-bottom: var(--space-md);">Send a Message</h3>
                         <form
                             onsubmit="event.preventDefault(); alert('Message sent successfully! Insha\'Allah we will reply soon.'); this.reset();">
-                            <div class="grid grid-2" style="gap: var(--space-sm); margin-bottom: var(--space-sm);">
+                            <div class="form-row" style="margin-bottom: var(--space-sm);">
                                 <div>
                                     <label class="form-label">Full Name</label>
                                     <input type="text" class="form-control" required>
@@ -260,6 +265,111 @@
                         allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
                         title="Masjid Sunnah Helsinki Location">
                     </iframe>
+                </div>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="section" id="faq">
+            <div class="container" data-aos="fade-up">
+                <div class="text-center" style="margin-bottom: var(--space-lg);">
+                    <h2>Frequently Asked Questions</h2>
+                    <span class="islamic-divider"></span>
+                </div>
+
+                <div class="accordion" style="max-width: 800px; margin: 0 auto;">
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>Can non-Muslims visit the Masjid?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            Yes, absolutely. We welcome visitors of all faiths to observe our prayers, learn about
+                            Islam, and take a tour of the facility. Please dress modestly.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>How do I arrange a Janazah (Funeral)?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            Please contact our emergency number immediately. We assist with Ghusl, Kafan, Janazah
+                            prayer, and work with local Muslim burial societies for cemetery arrangements in Helsinki.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>How can I take my Shahadah?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            Taking the Shahadah is simple and we are here to support you. You can take it privately with
+                            the Imam or publicly after a prayer. Please contact us via email or using the form above to
+                            arrange a meeting.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>Are there wudu (ablution) facilities available?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            Yes, we have dedicated wudu facilities for both brothers and sisters within the Masjid
+                            premises.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>Is there a separated prayer area for sisters?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            Yes, we provide a private, comfortable, and well-equipped prayer area exclusively for
+                            sisters, including their own entrance and wudu facilities.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>Do you offer weekend classes for children?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            Yes, we have a Sunday Quran School for children ages 5-15, focusing on Arabic alphabet
+                            reading, basic Quranic memorization, and Islamic studies.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>Is there parking available near the Masjid?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            Yes, there is public parking available near Ylä-Malmin tori. However, it can get busy during
+                            Jumu'ah prayers, so we advise arriving early or using public transport.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>Where does my Zakat/Sadaqah donation go?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            Donations are strictly used for Masjid maintenance, educational programs, Dawah activities,
+                            and community outreach. Zakat is distributed to eligible recipients locally.
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <button class="accordion-btn" aria-expanded="false">
+                            <span>How can I volunteer at the Masjid?</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="accordion-panel">
+                            We always welcome volunteers! Opportunities include event setup, cleaning, security during
+                            Jumu'ah, and administrative help. Please use the contact form and select "Administration /
+                            Feedback" to express your interest.
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -432,7 +542,7 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
-                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
                     وَبِحَمْدِهِ</p>
             </div>
         </div>
@@ -442,6 +552,15 @@
     <script src="js/main.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init({ once: true, duration: 800 });</script>
+
+    <button id="back-to-top" aria-label="Back to top" style="position:fixed;bottom:28px;right:22px;z-index:999;
+        width:48px;height:48px;border-radius:50%;border:none;
+        background:var(--color-primary);color:var(--color-secondary);
+        font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;
+        transition:opacity .3s,transform .3s;box-shadow:var(--shadow-md);
+        display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 </body>
 
 </html>

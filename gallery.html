@@ -173,6 +173,11 @@
             font-size: 1.2rem;
         }
     </style>
+
+    <!-- Low Priority SEO Tags Added -->
+    <meta name="theme-color" content="#2c4c3b">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Masjid Sunnah Helsinki">
 </head>
 
 <body>
@@ -243,7 +248,7 @@
                     <div class="gallery-item" data-category="facilities events" data-aos="zoom-in" data-aos-delay="0"
                         onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1564121211835-e88c852648ab?w=600&auto=format&q=80"
-                            alt="Masjid Interior Architecture">
+                            alt="Masjid Interior Architecture" loading="lazy" width="600" height="400" style="aspect-ratio: 3/2; object-fit: cover;">
                         <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
                         <div class="caption-data" style="display:none;">Main Prayer Hall</div>
                     </div>
@@ -251,7 +256,7 @@
                     <div class="gallery-item" data-category="events ramadan" data-aos="zoom-in" data-aos-delay="50"
                         onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1579979354226-7bc6eb5fbe14?w=600&auto=format&q=80"
-                            alt="Iftar Gathering">
+                            alt="Iftar Gathering" loading="lazy" width="600" height="400" style="aspect-ratio: 3/2; object-fit: cover;">
                         <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
                         <div class="caption-data" style="display:none;">Community Iftar Gathering</div>
                     </div>
@@ -259,7 +264,7 @@
                     <div class="gallery-item" data-category="facilities" data-aos="zoom-in" data-aos-delay="100"
                         onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1584033100693-02e08e3ee316?w=600&auto=format&q=80"
-                            alt="Quran on stand">
+                            alt="Quran on stand" loading="lazy" width="600" height="400" style="aspect-ratio: 3/2; object-fit: cover;">
                         <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
                         <div class="caption-data" style="display:none;">Copies of the Noble Quran available in various
                             translations</div>
@@ -268,7 +273,7 @@
                     <div class="gallery-item" data-category="facilities" data-aos="zoom-in" data-aos-delay="150"
                         onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1596484552834-6a58f840ca87?w=600&auto=format&q=80"
-                            alt="Mihrab details">
+                            alt="Mihrab details" loading="lazy" width="600" height="400" style="aspect-ratio: 3/2; object-fit: cover;">
                         <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
                         <div class="caption-data" style="display:none;">Details of the Mihrab</div>
                     </div>
@@ -276,7 +281,7 @@
                     <div class="gallery-item" data-category="events" data-aos="zoom-in" data-aos-delay="200"
                         onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1628173434190-7c2d2cb29ea1?w=600&auto=format&q=80"
-                            alt="People gathering">
+                            alt="People gathering" loading="lazy" width="600" height="400" style="aspect-ratio: 3/2; object-fit: cover;">
                         <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
                         <div class="caption-data" style="display:none;">Friday Khutbah Attendance</div>
                     </div>
@@ -284,7 +289,7 @@
                     <div class="gallery-item" data-category="ramadan events" data-aos="zoom-in" data-aos-delay="250"
                         onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1616850383794-6725206f0b48?w=600&auto=format&q=80"
-                            alt="Dates and Lantern for Ramadan">
+                            alt="Dates and Lantern for Ramadan" loading="lazy" width="600" height="400" style="aspect-ratio: 3/2; object-fit: cover;">
                         <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
                         <div class="caption-data" style="display:none;">Ramadan Preparations</div>
                     </div>
@@ -292,7 +297,7 @@
                     <div class="gallery-item" data-category="facilities" data-aos="zoom-in" data-aos-delay="300"
                         onclick="openLightbox(this)">
                         <img src="https://images.unsplash.com/photo-1601002347318-6da1342616f7?w=600&auto=format&q=80"
-                            alt="Islamic Calligraphy">
+                            alt="Islamic Calligraphy" loading="lazy" width="600" height="400" style="aspect-ratio: 3/2; object-fit: cover;">
                         <div class="gallery-overlay"><i class="fas fa-search-plus"></i></div>
                         <div class="caption-data" style="display:none;">Calligraphy Decor</div>
                     </div>
@@ -305,7 +310,7 @@
     <!-- Lightbox Modal -->
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close" onclick="closeLightbox()">&times;</span>
-        <img class="lightbox-content" id="lightbox-img">
+        <img loading="lazy" class="lightbox-content" id="lightbox-img">
         <div class="lightbox-caption" id="lightbox-caption"></div>
     </div>
 
@@ -360,7 +365,7 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
-                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
                     وَبِحَمْدِهِ</p>
             </div>
         </div>
@@ -430,6 +435,16 @@
             }
         });
     </script>
+
+    <button id="back-to-top" aria-label="Back to top"
+        style="position:fixed;bottom:28px;right:22px;z-index:999;
+        width:48px;height:48px;border-radius:50%;border:none;
+        background:var(--color-primary);color:var(--color-secondary);
+        font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;
+        transition:opacity .3s,transform .3s;box-shadow:var(--shadow-md);
+        display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 </body>
 
 </html>

@@ -117,6 +117,11 @@
             max-width: 800px;
         }
     </style>
+
+    <!-- Low Priority SEO Tags Added -->
+    <meta name="theme-color" content="#2c4c3b">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Masjid Sunnah Helsinki">
 </head>
 
 <body>
@@ -161,10 +166,10 @@
 
     <main id="main-content" style="padding-top: var(--header-height);">
         <!-- Inner Hero -->
-        <section class="section section-dark text-center"
+        <section class="section section-dark inner-hero text-center"
             style="background-image: linear-gradient(var(--color-overlay), var(--color-overlay)), url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=1200&auto=format&q=80'); background-size: cover; background-position: center; padding: var(--space-xl) 0;">
             <div class="container fade-in">
-                <h1 style="color: white; margin-bottom: 0;">Support the Masjid</h1>
+                <h1 style="margin-bottom: 0;">Support the Masjid</h1>
                 <p style="color: var(--color-secondary); font-size: 1.2rem; margin-top: 10px;">التبرعات والصدقات</p>
                 <p>Invest in your Akhirah by supporting the house of Allah.</p>
             </div>
@@ -209,7 +214,7 @@
         <!-- Donation Methods Grid -->
         <section class="section islamic-pattern-bg" style="padding-top: 0;">
             <div class="container">
-                <div class="grid grid-3" style="gap: var(--space-lg);">
+                <div class="grid grid-3 donate-cards" style="gap: var(--space-lg);">
 
                     <!-- General Sadaqah -->
                     <div class="donate-card" data-aos="fade-up" data-aos-delay="0">
@@ -400,7 +405,7 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
-                <p class="arabic-text" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
                     وَبِحَمْدِهِ</p>
             </div>
         </div>
@@ -439,6 +444,16 @@
             }, 3000);
         }
     </script>
+
+    <button id="back-to-top" aria-label="Back to top"
+        style="position:fixed;bottom:28px;right:22px;z-index:999;
+        width:48px;height:48px;border-radius:50%;border:none;
+        background:var(--color-primary);color:var(--color-secondary);
+        font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;
+        transition:opacity .3s,transform .3s;box-shadow:var(--shadow-md);
+        display:flex;align-items:center;justify-content:center;">
+        <i class="fas fa-chevron-up"></i>
+    </button>
 </body>
 
 </html>

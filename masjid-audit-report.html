@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masjid Sunnah — Deep Code Audit</title>
+<style>
+:root{--green:#2C4C3B;--gold:#D4AF37;--red:#C0392B;--orange:#E67E22;--blue:#2980B9;--teal:#16A085;--bg:#F8F9FA;--card:#FFF;--text:#2D3748;--muted:#6C757D;--border:#E2E8F0;--code:#1E2A38;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.7;}
+.hdr{background:linear-gradient(135deg,var(--green),#1a2f24);color:#fff;padding:60px 40px;text-align:center;position:relative;overflow:hidden;}
+.hdr::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(212,175,55,.15) 1px,transparent 1px);background-size:24px 24px;}
+.hdr h1{font-size:2.4rem;margin-bottom:10px;position:relative;}
+.hdr p{color:rgba(255,255,255,.75);font-size:1.1rem;position:relative;}
+.gold{color:var(--gold);}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px 60px;}
+.toc{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:28px;margin:28px 0;}
+.toc h2{color:var(--green);margin-bottom:14px;font-size:1rem;text-transform:uppercase;letter-spacing:1px;}
+.toc ol{padding-left:20px;}
+.toc li{margin-bottom:5px;}
+.toc a{color:var(--green);font-weight:600;text-decoration:none;}
+.toc a:hover{color:var(--gold);}
+.sec{margin-bottom:44px;}
+.sec-hdr{display:flex;align-items:center;gap:12px;padding:16px 22px;border-radius:10px 10px 0 0;font-size:1.15rem;font-weight:700;border-left:5px solid;}
+.sec-hdr.cr{background:#FDF0EF;border-color:var(--red);color:var(--red);}
+.sec-hdr.hi{background:#FEF5E7;border-color:var(--orange);color:var(--orange);}
+.sec-hdr.md{background:#EAF4FB;border-color:var(--blue);color:var(--blue);}
+.sec-hdr.lo{background:#EAFAF1;border-color:var(--teal);color:var(--teal);}
+.sec-body{background:var(--card);border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;padding:26px;}
+.issue{border:1px solid var(--border);border-radius:8px;margin-bottom:18px;overflow:hidden;}
+.ih{padding:13px 17px;display:flex;align-items:flex-start;gap:11px;}
+.ih.bug{background:#FDF0EF;}.ih.warn{background:#FEF5E7;}.ih.info{background:#EAF4FB;}
+.badge{font-size:.7rem;font-weight:800;padding:3px 9px;border-radius:99px;text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;margin-top:2px;}
+.badge.bug{background:var(--red);color:#fff;}.badge.warn{background:var(--orange);color:#fff;}.badge.info{background:var(--blue);color:#fff;}
+.it{font-weight:700;font-size:1rem;}
+.id{color:var(--muted);font-size:.91rem;margin-top:4px;}
+.ib{padding:15px 17px;border-top:1px solid var(--border);}
+.ft{display:inline-block;font-size:.77rem;background:#F1F3F5;border:1px solid #DEE2E6;border-radius:4px;padding:2px 7px;font-family:monospace;color:#495057;margin:0 3px 8px 0;}
+pre{background:var(--code);color:#A8D8EA;padding:16px 18px;border-radius:8px;overflow-x:auto;font-size:.83rem;line-height:1.6;margin:8px 0;}
+code{font-family:'Consolas',monospace;}
+.cm{color:#7F8C8D;}
+.fl{font-size:.77rem;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.5px;margin:12px 0 5px;}
+.pl{font-size:.77rem;font-weight:700;color:var(--red);text-transform:uppercase;letter-spacing:.5px;margin:12px 0 5px;}
+.callout{border-radius:8px;padding:14px 18px;margin:12px 0;display:flex;gap:13px;align-items:flex-start;}
+.callout.d{background:#FDF0EF;border-left:4px solid var(--red);}
+.callout.t{background:#EAFAF1;border-left:4px solid var(--teal);}
+.callout.n{background:#EAF4FB;border-left:4px solid var(--blue);}
+.ci{font-size:1.3rem;flex-shrink:0;}
+table{width:100%;border-collapse:collapse;margin:10px 0;font-size:.87rem;}
+th{background:var(--green);color:#fff;padding:10px 13px;text-align:left;}
+td{padding:9px 13px;border-bottom:1px solid var(--border);vertical-align:top;}
+tr:nth-child(even) td{background:#FAFAFA;}
+tr:last-child td{border-bottom:none;}
+.dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;}
+.dot.r{background:var(--red);}.dot.o{background:var(--orange);}.dot.b{background:var(--blue);}.dot.g{background:var(--teal);}
+h3{color:var(--green);margin:14px 0 7px;font-size:.98rem;}
+p{margin-bottom:9px;}
+hr{border:none;border-top:1px solid var(--border);margin:20px 0;}
+.ftr{background:var(--green);color:rgba(255,255,255,.7);text-align:center;padding:28px;font-size:.9rem;margin-top:40px;}
+.ftr .ar{font-family:Georgia,serif;font-size:1.4rem;color:var(--gold);margin-bottom:8px;direction:rtl;}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+<h1>🕌 Masjid Sunnah — <span class="gold">Deep Code Audit</span></h1>
+<p>UI improvements &amp; Mobile responsiveness — 25 issues found with full code fixes</p>
+</div>
+
+<div class="wrap">
+<div class="toc">
+<h2>📋 Table of Contents</h2>
+<ol>
+<li><a href="#s1">🔴 CRITICAL — Missing CSS Classes (.progress-bar, .section-dark h1)</a></li>
+<li><a href="#s2">🔴 CRITICAL — iOS Safari background-attachment Bug (hero blank on iPhone)</a></li>
+<li><a href="#s3">🔴 CRITICAL — Grid Responsive Collapse Failures (grid-2 at wrong breakpoint)</a></li>
+<li><a href="#s4">🟠 HIGH — Typography Not Fluid (fixed rem sizes, no clamp)</a></li>
+<li><a href="#s5">🟠 HIGH — Forms Don't Stack on Mobile + No Validation Styles</a></li>
+<li><a href="#s6">🟠 HIGH — Prayer Times JS Bugs (memory leak, no skeleton, iqamah labeling)</a></li>
+<li><a href="#s7">🟠 HIGH — Missing Features (back-to-top, FAQ accordion, anchor offset)</a></li>
+<li><a href="#s8">🔵 MEDIUM — Navigation &amp; Mobile Menu Issues</a></li>
+<li><a href="#s9">🔵 MEDIUM — UI Gaps (focus-visible, divider artifact, touch hover)</a></li>
+<li><a href="#s10">🔵 MEDIUM — Gallery &amp; Events Mobile Layout Issues</a></li>
+<li><a href="#s11">🟢 LOW — Accessibility &amp; Polish (lazy load, lang="ar", OG tags, theme-color)</a></li>
+<li><a href="#s12">📊 Full Priority Summary Table (25 issues)</a></li>
+</ol>
+</div>
+
+<!-- ====== S1 ====== -->
+<div class="sec" id="s1">
+<div class="sec-hdr cr">🔴 SECTION 1 — CRITICAL: Missing CSS Classes</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih bug"><span class="badge bug">Bug</span>
+<div><div class="it">.progress-bar and .progress-fill are used in donate.html but defined in ZERO CSS files</div>
+<div class="id">The donation campaign progress bar (showing "45% Funded") renders as an invisible zero-height div. Searched all 4 CSS files — these classes do not exist anywhere.</div></div></div>
+<div class="ib">
+<span class="ft">donate.html</span><span class="ft">css/components.css — ADD HERE</span>
+<div class="pl">❌ Referenced in HTML, never defined in CSS:</div>
+<pre><code>&lt;div class="progress-bar"&gt;
+  &lt;div class="progress-fill" style="width: 45%;"&gt;&lt;/div&gt;
+&lt;/div&gt;  <span class="cm">/* Renders invisible — height: 0, no styles */</span></code></pre>
+<div class="fl">✅ Add to css/components.css:</div>
+<pre><code>.progress-bar {
+  width: 100%;
+  background-color: var(--color-border);
+  border-radius: var(--radius-pill);
+  height: 14px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-primary), var(--color-secondary));
+  border-radius: var(--radius-pill);
+  transition: width 1.8s cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+}
+.progress-fill::after {
+  content: '';
+  position: absolute; top: 0; left: -100%; right: 0; bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer { to { left: 100%; } }</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih bug"><span class="badge bug">Visual Bug</span>
+<div><div class="it">Inner page hero &lt;h1&gt; renders dark green — invisible against dark hero background</div>
+<div class="id">.section-dark overrides h2 and h3 to gold/secondary color but NOT h1. All 6 inner pages (Prayer Times, Programs, Events, About, Donate, Contact, Gallery) use h1 inside the hero — it renders as dark green text on a dark image background.</div></div></div>
+<div class="ib">
+<span class="ft">css/style.css</span>
+<div class="pl">❌ h1 excluded from .section-dark override:</div>
+<pre><code>.section-dark h2, .section-dark h3 {
+  color: var(--color-secondary);  <span class="cm">/* gold — but h1 is still --color-primary (dark green) */</span>
+}</code></pre>
+<div class="fl">✅ Fix — include h1 and override inner heroes to white:</div>
+<pre><code>.section-dark h1,
+.section-dark h2,
+.section-dark h3 { color: var(--color-secondary); }
+
+<span class="cm">/* Inner page heroes: h1 should be white, not gold */</span>
+.inner-hero h1 { color: white; }
+
+<span class="cm">/* Add class="inner-hero" to each inner page hero section:
+   prayer-times, programs, events, about, donate, contact, gallery */</span></code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S2 ====== -->
+<div class="sec" id="s2">
+<div class="sec-hdr cr">🔴 SECTION 2 — CRITICAL: iOS Safari background-attachment Bug</div>
+<div class="sec-body">
+<div class="callout d"><span class="ci">🚨</span>
+<div><strong>Breaks the homepage hero on ALL iPhones and iPads.</strong> iOS Safari does not support <code>background-attachment: fixed</code>. The hero background image disappears entirely, leaving a blank green gradient. Since mosque communities skew heavily toward iPhone users, this is extremely high impact.</div></div>
+
+<div class="issue">
+<div class="ih bug"><span class="badge bug">iOS Bug</span>
+<div><div class="it">background-attachment: fixed in .hero class AND inline style in index.html donation CTA</div>
+<div class="id">Two places use this unsupported iOS property. The hero image vanishes and the donation section background breaks on every Apple device.</div></div></div>
+<div class="ib">
+<span class="ft">css/components.css — .hero</span><span class="ft">index.html — donation CTA inline style</span>
+<div class="pl">❌ Both locations broken on iOS:</div>
+<pre><code><span class="cm">/* components.css */</span>
+.hero { background-attachment: fixed; }  <span class="cm">/* Hero image invisible on iPhone */</span>
+
+<span class="cm">/* index.html inline style on donation section: */</span>
+style="... background-attachment: fixed;"  <span class="cm">/* Same problem */</span></code></pre>
+<div class="fl">✅ Remove from both locations — minimal visual difference, huge reliability gain:</div>
+<pre><code><span class="cm">/* components.css — .hero */</span>
+.hero {
+  background-size: cover;
+  background-position: center;
+  <span class="cm">/* REMOVE: background-attachment: fixed; */</span>
+}
+
+<span class="cm">/* Optional: progressive enhancement for non-iOS only */</span>
+@supports not (-webkit-overflow-scrolling: touch) {
+  .hero { background-attachment: fixed; }
+}
+
+<span class="cm">/* index.html — remove background-attachment from donation CTA inline style */</span></code></pre>
+</div></div>
+</div></div>
+
+<!-- ====== S3 ====== -->
+<div class="sec" id="s3">
+<div class="sec-hdr cr">🔴 SECTION 3 — CRITICAL: Grid Responsive Collapse Failures</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih bug"><span class="badge bug">Mobile Bug</span>
+<div><div class="it">.grid-2 only collapses at 480px — stays 2-column on tablets (768px) where it's far too narrow</div>
+<div class="id">Affected layouts: Welcome section (index), Prayer widget + about text (index), About story image+text, Contact form+info panel, Prayer times split layout. All remain cramped 2-columns on iPad and large phones.</div></div></div>
+<div class="ib">
+<span class="ft">css/responsive.css</span>
+<div class="pl">❌ Current — collapses 288px too late:</div>
+<pre><code>@media (max-width: 480px) {
+  .grid-2 { grid-template-columns: 1fr; }  <span class="cm">/* Should be 768px */</span>
+}</code></pre>
+<div class="fl">✅ Complete responsive grid fix — replace grid section in responsive.css:</div>
+<pre><code>@media (max-width: 768px) {
+  .grid-2  { grid-template-columns: 1fr; }
+  .grid-3  { grid-template-columns: 1fr; }
+  .grid-4  { grid-template-columns: repeat(2, 1fr); }
+  .footer-top { grid-template-columns: repeat(2, 1fr); }
+
+  <span class="cm">/* Reduce excessive section padding on mobile */</span>
+  .section { padding: 48px 0; }
+}
+
+@media (max-width: 480px) {
+  .grid-4     { grid-template-columns: 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .donate-cards { grid-template-columns: 1fr; }  <span class="cm">/* See next issue */</span>
+}</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih bug"><span class="badge bug">Mobile Bug</span>
+<div><div class="it">Donate page: 3 bank-detail cards stay 2-col at 480px — IBAN numbers unreadable on iPhone</div>
+<div class="id">After the grid-3 fix above collapses to 1-col at 768px, the 480px rule collapses grid-4. But the donate grid-3 will still go 2-col at 480px via the intermediate responsive rules. IBAN numbers (FI12 3456 7890...) need single-column width to display correctly on phones.</div></div></div>
+<div class="ib">
+<span class="ft">donate.html</span><span class="ft">css/responsive.css</span>
+<div class="fl">✅ Add class to donate.html grid + CSS rule:</div>
+<pre><code><span class="cm">&lt;!-- donate.html: add class to the 3-card grid --&gt;</span>
+&lt;div class="grid grid-3 donate-cards" style="gap: var(--space-lg);"&gt;
+
+<span class="cm">/* responsive.css @media 480px block — already added above */</span>
+.donate-cards { grid-template-columns: 1fr; }</code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S4 ====== -->
+<div class="sec" id="s4">
+<div class="sec-hdr hi">🟠 SECTION 4 — HIGH: Typography Not Fluid</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih warn"><span class="badge warn">Mobile</span>
+<div><div class="it">h1 = 3.5rem fixed, h2 = 2.5rem fixed — overflow and layout breaks on phones</div>
+<div class="id">Only .hero-title uses clamp(). Every other heading uses fixed rem values. On a 375px iPhone, h1 is ~56px — it overflows narrow containers and creates uncomfortable reading. Section headings across all pages are affected.</div></div></div>
+<div class="ib">
+<span class="ft">css/style.css</span>
+<div class="pl">❌ Fixed sizes:</div>
+<pre><code>h1 { font-size: 3.5rem; }  <span class="cm">/* 56px — too large on mobile */</span>
+h2 { font-size: 2.5rem; }  <span class="cm">/* 40px — still large */</span>
+h3 { font-size: 1.75rem; }</code></pre>
+<div class="fl">✅ Replace with fluid clamp() typography:</div>
+<pre><code>h1 { font-size: clamp(2rem, 5vw, 3.5rem); }
+<span class="cm">/* 32px on small screens → scales → 56px max on desktop */</span>
+
+h2 { font-size: clamp(1.6rem, 4vw, 2.5rem); }
+<span class="cm">/* 26px → 40px */</span>
+
+h3 { font-size: clamp(1.25rem, 3vw, 1.75rem); }
+<span class="cm">/* 20px → 28px */</span>
+
+<span class="cm">/* Also make spacing fluid */</span>
+:root {
+  --space-xl: clamp(48px, 8vw, 96px);
+  --space-lg: clamp(28px, 5vw, 48px);
+}</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih warn"><span class="badge warn">Mobile</span>
+<div><div class="it">Arabic text fixed at 1.4em with line-height 2.2 — causes unexpected section height blowout</div>
+<div class="id">Multi-line Arabic passages with these fixed values create very tall blocks on small screens, pushing content far below expectations. Bismillah at 2rem can also overflow on tiny screens.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Make Arabic text responsive:</div>
+<pre><code>.arabic-text {
+  font-size: clamp(1.1rem, 3vw, 1.4em);
+  line-height: 2.2;
+}
+.bismillah {
+  font-size: clamp(1.4rem, 5vw, 2rem);
+}
+@media (max-width: 480px) {
+  .arabic-text { line-height: 1.9; }  <span class="cm">/* Reduce on small screens */</span>
+}</code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S5 ====== -->
+<div class="sec" id="s5">
+<div class="sec-hdr hi">🟠 SECTION 5 — HIGH: Forms Don't Stack on Mobile</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih warn"><span class="badge warn">Mobile Bug</span>
+<div><div class="it">Name+Email and Email+Date inline grid rows stay 2-column — inputs too narrow on mobile</div>
+<div class="id">After the Section 3 grid-2 fix, these will resolve automatically — but two additional issues remain: no form validation feedback styles (no error/success colors), and inputs have no minimum 48px height for comfortable touch targets.</div></div></div>
+<div class="ib">
+<span class="ft">contact.html</span><span class="ft">events.html</span><span class="ft">programs.html modal</span>
+<div class="fl">✅ Replace grid-2 with .form-row + add validation styles in components.css:</div>
+<pre><code><span class="cm">&lt;!-- Replace class="grid grid-2" on form rows: --&gt;</span>
+&lt;div class="form-row"&gt;...&lt;/div&gt;
+
+<span class="cm">/* components.css */</span>
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--space-sm);
+}
+@media (max-width: 600px) {
+  .form-row { grid-template-columns: 1fr; }
+}
+
+.form-control {
+  min-height: 48px;  <span class="cm">/* WCAG touch target minimum */</span>
+}
+
+<span class="cm">/* Validation feedback */</span>
+.form-control:valid:not(:placeholder-shown) {
+  border-color: var(--color-success);
+}
+.form-control:invalid:not(:placeholder-shown) {
+  border-color: #C0392B;
+}</code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S6 ====== -->
+<div class="sec" id="s6">
+<div class="sec-hdr hi">🟠 SECTION 6 — HIGH: Prayer Times JS Bugs</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih bug"><span class="badge bug">Memory Leak</span>
+<div><div class="it">setInterval() never cleared — accumulates on long sessions, doesn't detect day change</div>
+<div class="id">The 1-second countdown interval ID is never stored or cleared. After midnight, it continues showing wrong prayer times (previous day's data) until the user manually refreshes. On long visits, multiple intervals could stack.</div></div></div>
+<div class="ib">
+<span class="ft">js/prayer-times.js</span>
+<div class="pl">❌ Current — no cleanup, no day detection:</div>
+<pre><code>function startCountdownTracker(timings) {
+  setInterval(() => { ... }, 1000);  <span class="cm">/* ID discarded, never cleared */</span>
+}</code></pre>
+<div class="fl">✅ Fix with proper interval management + midnight reset:</div>
+<pre><code>let countdownInterval = null;
+
+function startCountdownTracker(timings) {
+  if (countdownInterval) clearInterval(countdownInterval);  <span class="cm">// Clear old</span>
+
+  countdownInterval = setInterval(() => {
+    const now = new Date();
+
+    <span class="cm">// Auto-reset if day has changed</span>
+    const todayStr = now.toISOString().split('T')[0];
+    if (localStorage.getItem('prayer_date') !== todayStr) {
+      clearInterval(countdownInterval);
+      fetchPrayerTimes();  <span class="cm">// Re-fetch for new day</span>
+      return;
+    }
+    localStorage.setItem('prayer_date', todayStr);
+
+    <span class="cm">// ... rest of countdown logic unchanged ...</span>
+  }, 1000);
+}
+
+window.addEventListener('beforeunload', () => {
+  if (countdownInterval) clearInterval(countdownInterval);
+});</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih warn"><span class="badge warn">UX</span>
+<div><div class="it">Prayer times show raw "Loading prayer times..." text — no loading skeleton</div>
+<div class="id">The most prominent homepage section shows plain loading text during the API call. On slow mobile connections (common in mosque settings with many concurrent users), this can last 2-4 seconds.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Skeleton loader — add CSS + update JS:</div>
+<pre><code><span class="cm">/* Add to css/components.css */</span>
+.skeleton {
+  background: linear-gradient(90deg,#EEE 25%,#E0E0E0 50%,#EEE 75%);
+  background-size: 200% 100%;
+  animation: sk 1.5s infinite;
+  border-radius: 6px; height: 44px; margin-bottom: 8px;
+}
+@keyframes sk { to { background-position: -200% 0; } }
+
+<span class="cm">// In prayer-times.js — replace initial innerHTML:</span>
+if (tableContainer) {
+  tableContainer.innerHTML = Array(5).fill(
+    '&lt;div class="skeleton"&gt;&lt;/div&gt;'
+  ).join('');
+}</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih warn"><span class="badge warn">Safety</span>
+<div><div class="it">Iqamah times are hardcoded estimates (Adhan +20min) displayed as fact — community could miss prayer</div>
+<div class="id">The JS calculates Iqamah by adding 20 minutes to Adhan (5 for Maghrib). These are arbitrary guesses presented as the actual Masjid schedule. If a community member arrives based on this, they may find prayer has started or not yet begun.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Add clear asterisk and disclaimer:</div>
+<pre><code><span class="cm">// Change table header in renderTable():</span>
+&lt;th&gt;Iqamah *&lt;/th&gt;
+
+<span class="cm">// Append after table closing tag:</span>
+html += `
+  &lt;p style="font-size:0.8rem;color:var(--color-text-muted);margin-top:8px;"&gt;
+    * Iqamah times are approximate. Please confirm with the Masjid for exact times.
+  &lt;/p&gt;
+`;</code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S7 ====== -->
+<div class="sec" id="s7">
+<div class="sec-hdr hi">🟠 SECTION 7 — HIGH: Missing Features</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih warn"><span class="badge warn">Missing</span>
+<div><div class="it">Back-to-top button: specified in main.js requirements but not implemented in any file</div>
+<div class="id">AGENT.md explicitly requires "Back-to-top button (show after 300px scroll)" in main.js. It's absent from all 10 HTML pages. On long mobile pages like Programs, About, and Donate, users must manually scroll to top.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Add HTML snippet to every page + JS to main.js:</div>
+<pre><code><span class="cm">&lt;!-- Add before &lt;/body&gt; in every HTML file --&gt;</span>
+&lt;button id="back-to-top" aria-label="Back to top"
+  style="position:fixed;bottom:28px;right:22px;z-index:999;
+    width:48px;height:48px;border-radius:50%;border:none;
+    background:var(--color-primary);color:var(--color-secondary);
+    font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;
+    transition:opacity .3s,transform .3s;box-shadow:var(--shadow-md);
+    display:flex;align-items:center;justify-content:center;"&gt;
+  &lt;i class="fas fa-chevron-up"&gt;&lt;/i&gt;
+&lt;/button&gt;
+
+<span class="cm">// Add in main.js DOMContentLoaded:</span>
+const btt = document.getElementById('back-to-top');
+if (btt) {
+  window.addEventListener('scroll', () => {
+    const show = window.scrollY > 300;
+    btt.style.opacity = show ? '1' : '0';
+    btt.style.pointerEvents = show ? 'auto' : 'none';
+    btt.style.transform = show ? 'translateY(0)' : 'translateY(10px)';
+  });
+  btt.addEventListener('click', () => window.scrollTo({top:0, behavior:'smooth'}));
+}</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih warn"><span class="badge warn">Missing</span>
+<div><div class="it">FAQ Accordion: completely absent from contact.html despite being specified</div>
+<div class="id">AGENT.md specifies 9 FAQ items: Can non-Muslims visit? How to arrange Janazah? How to take Shahada? Where are wudu facilities? etc. The entire section is missing from contact.html. This reduces direct inquiry load on the Imam significantly.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Accordion CSS for components.css + JS for main.js:</div>
+<pre><code><span class="cm">/* css/components.css */</span>
+.accordion { border:1px solid var(--color-border); border-radius:var(--radius-md); overflow:hidden; }
+.accordion-item { border-bottom:1px solid var(--color-border); }
+.accordion-item:last-child { border-bottom:none; }
+.accordion-btn {
+  width:100%; text-align:left; background:none; border:none;
+  padding:18px 20px; font-size:1rem; font-weight:600;
+  color:var(--color-primary); cursor:pointer;
+  display:flex; justify-content:space-between; align-items:center;
+  transition:background .2s;
+}
+.accordion-btn:hover { background:var(--color-bg-alt); }
+.accordion-btn i { transition:transform .3s; }
+.accordion-btn[aria-expanded="true"] i { transform:rotate(180deg); }
+.accordion-panel {
+  max-height:0; overflow:hidden;
+  transition:max-height .35s cubic-bezier(.4,0,.2,1);
+  padding:0 20px; color:var(--color-text-muted); font-size:.95rem;
+}
+.accordion-panel.open { max-height:400px; padding:16px 20px; }
+
+<span class="cm">// js/main.js — add in DOMContentLoaded:</span>
+document.querySelectorAll('.accordion-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const panel = btn.nextElementSibling;
+    const isOpen = btn.getAttribute('aria-expanded') === 'true';
+    document.querySelectorAll('.accordion-btn').forEach(b => {
+      b.setAttribute('aria-expanded','false');
+      b.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      btn.setAttribute('aria-expanded','true');
+      panel.classList.add('open');
+    }
+  });
+});</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih warn"><span class="badge warn">UX</span>
+<div><div class="it">Anchor links scroll target 80px under the fixed navbar — content hidden</div>
+<div class="id">Clicking "View Prayer Times" (href="#prayer-times") scrolls the section under the sticky navbar. scroll-behavior:smooth doesn't account for fixed header height. Affects every in-page anchor link.</div></div></div>
+<div class="ib">
+<div class="fl">✅ One-line CSS fix — add to style.css:</div>
+<pre><code><span class="cm">/* Offsets ALL anchor targets by navbar height — no JS required */</span>
+[id] {
+  scroll-margin-top: calc(var(--header-height) + 16px);
+}</code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S8 ====== -->
+<div class="sec" id="s8">
+<div class="sec-hdr md">🔵 SECTION 8 — MEDIUM: Navigation &amp; Mobile Menu</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih info"><span class="badge info">Mobile</span>
+<div><div class="it">Mobile menu fixed at 300px — on 320px phones only 20px gap remains</div>
+<div class="id">Small Android phones and older iPhones can be 320px wide. A 300px menu leaves 20px visible on screen, feeling broken. Additionally, tapping a nav link inside the open menu doesn't close it — users must tap the X button separately.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Fix width + add auto-close on link click:</div>
+<pre><code><span class="cm">/* css/components.css */</span>
+.mobile-menu {
+  width: min(300px, 85vw);  <span class="cm">/* Never exceeds 85% of viewport */</span>
+  right: min(-300px, -85vw);
+}
+.mobile-menu.active { right: 0; }
+
+<span class="cm">// js/main.js — in toggleMenu setup block:</span>
+document.querySelectorAll('.mobile-menu .nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    mobileMenu.classList.remove('active');
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  });
+});</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih info"><span class="badge info">A11y</span>
+<div><div class="it">Hamburger button has no padding — touch target is under 48px, fails WCAG 2.5.5</div>
+<div class="id">The hamburger renders a bare Font Awesome icon with no padding. Real tap area is ~24px. On mobile, many users accidentally miss it or find it frustrating to tap, especially users with motor impairments.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Fix in components.css:</div>
+<pre><code>.hamburger {
+  display: none;
+  min-width: 48px;
+  min-height: 48px;
+  padding: 12px;  <span class="cm">/* Comfortable tap area */</span>
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+}</code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S9 ====== -->
+<div class="sec" id="s9">
+<div class="sec-hdr md">🔵 SECTION 9 — MEDIUM: UI Gaps</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih info"><span class="badge info">A11y</span>
+<div><div class="it">Zero :focus-visible styles across all CSS files — keyboard navigation completely invisible</div>
+<div class="id">Searching all 4 CSS files finds no :focus-visible or :focus rules whatsoever. Keyboard-only users (screen reader users, motor-impaired individuals) cannot see which interactive element has focus. Fails WCAG 2.4.7 (Level AA).</div></div></div>
+<div class="ib">
+<div class="fl">✅ Add to css/style.css:</div>
+<pre><code>:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+:focus:not(:focus-visible) { outline: none; }
+
+<span class="cm">/* Make the skip-to-content link visible on focus */</span>
+.sr-only:focus {
+  position: fixed; top: 16px; left: 50%;
+  transform: translateX(-50%);
+  clip: auto; width: auto; height: auto; overflow: visible;
+  background: var(--color-primary); color: white;
+  padding: 12px 24px; border-radius: var(--radius-pill);
+  z-index: 9999; font-weight: 700; white-space: nowrap;
+}</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih info"><span class="badge info">Visual Bug</span>
+<div><div class="it">Islamic divider diamond shows cream background square on white (.section-alt) sections</div>
+<div class="id">.islamic-divider::before has background-color: var(--color-bg) = cream (#FDFBF7). On .section-alt sections (white #FFF), the diamond has a visibly different cream square behind it — a clear CSS artifact on multiple pages.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Use inherit — matches parent automatically:</div>
+<pre><code>.islamic-divider::before {
+  content: '✦';
+  background-color: inherit;  <span class="cm">/* Auto-matches cream or white parent */</span>
+  <span class="cm">/* Remove the .section-alt .islamic-divider::before override — no longer needed */</span>
+}</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih info"><span class="badge info">Mobile UX</span>
+<div><div class="it">Card hover effect (translateY -4px) fires on touch — every tap makes cards flicker/jump</div>
+<div class="id">On touchscreen devices, briefly touching a card triggers :hover which moves it up 4px then snaps back. This creates a distracting flicker on every tap across all card types (program cards, event cards, gallery items, donate cards).</div></div></div>
+<div class="ib">
+<div class="fl">✅ Add to css/responsive.css — disable hover animations on touch devices:</div>
+<pre><code>@media (hover: none) and (pointer: coarse) {
+  .card:hover,
+  .value-card:hover,
+  .donate-card:hover { transform: none; box-shadow: var(--shadow-sm); }
+
+  .btn:hover { transform: none; }
+
+  .gallery-item:hover img { transform: none; }
+  .gallery-item:hover .gallery-overlay { opacity: 0; }
+
+  <span class="cm">/* Show gallery overlay on actual tap instead */</span>
+  .gallery-item:active .gallery-overlay { opacity: 1; }
+}</code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S10 ====== -->
+<div class="sec" id="s10">
+<div class="sec-hdr md">🔵 SECTION 10 — MEDIUM: Gallery &amp; Events Mobile</div>
+<div class="sec-body">
+
+<div class="issue">
+<div class="ih info"><span class="badge info">Performance</span>
+<div><div class="it">Gallery: 7 images have no loading="lazy" and no aspect-ratio — causes layout shift (bad CLS score)</div>
+<div class="id">All gallery images load eagerly with no reserved space. On mobile, the CSS column masonry layout jumps dramatically as each image loads at different times, causing visual instability and a high Cumulative Layout Shift score.</div></div></div>
+<div class="ib">
+<span class="ft">gallery.html</span>
+<div class="fl">✅ Fix every gallery image:</div>
+<pre><code>&lt;img
+  src="https://images.unsplash.com/..."
+  alt="Masjid Interior Architecture"
+  loading="lazy"
+  width="600" height="400"
+&gt;
+
+<span class="cm">/* Add to gallery.html style block */</span>
+.gallery-item img {
+  aspect-ratio: 4 / 3;  <span class="cm">/* Reserves space before image loads */</span>
+  object-fit: cover;
+  width: 100%;
+}</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih info"><span class="badge info">Mobile Layout</span>
+<div><div class="it">Event cards in list view: date block stays full-width strip on mobile — visually heavy</div>
+<div class="id">When event cards stack vertically below 768px, the date block (primary-colored panel) spans the full card width. It's taller than necessary and the day/month numbers look oversized compared to the compact mobile card below it.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Add to events.html style block:</div>
+<pre><code>@media (max-width: 768px) {
+  .event-list-view .event-card { flex-direction: column; }
+
+  .event-date-block {
+    flex-direction: row;
+    gap: 8px;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 16px;
+    min-width: unset;  <span class="cm">/* Remove the 100px min-width */</span>
+  }
+  .event-day   { font-size: 1.4rem; }
+  .event-month { font-size: 1rem; }
+  .event-actions { padding: var(--space-sm) var(--space-md); padding-top: 0; }
+}</code></pre>
+</div></div>
+
+<div class="issue">
+<div class="ih info"><span class="badge info">Mobile</span>
+<div><div class="it">About.html timeline: padding-right: 40px on odd items causes rightward overflow on mobile</div>
+<div class="id">The timeline has an inline @media fix but .timeline-item:nth-child(odd) still has padding-right: 40px that pushes content beyond the viewport on narrow screens. Horizontal scrollbar appears.</div></div></div>
+<div class="ib">
+<div class="fl">✅ Fix in about.html style block @media (max-width: 768px):</div>
+<pre><code>@media (max-width: 768px) {
+  .timeline-item {
+    width: 100%;
+    padding-left: 56px;
+    padding-right: 0;    <span class="cm">/* Remove the right padding causing overflow */</span>
+    left: 0 !important;
+    text-align: left !important;
+  }
+}</code></pre>
+</div></div>
+
+</div></div>
+
+<!-- ====== S11 ====== -->
+<div class="sec" id="s11">
+<div class="sec-hdr lo">🟢 SECTION 11 — LOW: Accessibility &amp; Polish</div>
+<div class="sec-body">
+
+<h3>1. Add loading="lazy" + explicit dimensions to all non-hero images</h3>
+<pre><code><span class="cm">&lt;!-- Every img below the fold (cards, about photo, program images): --&gt;</span>
+&lt;img src="..." alt="..." loading="lazy" width="800" height="600"&gt;
+<span class="cm">&lt;!-- Affected: index.html 3 community cards, about.html Masjid photo, programs.html card images --&gt;</span></code></pre>
+
+<hr>
+<h3>2. Add lang="ar" dir="rtl" to all Arabic inline strings</h3>
+<pre><code><span class="cm">&lt;!-- Many Arabic strings are missing language attributes (affects screen readers) --&gt;</span>
+<span class="cm">&lt;!-- Current (incorrect): --&gt;</span>
+&lt;span class="bismillah"&gt;بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ&lt;/span&gt;
+
+<span class="cm">&lt;!-- Correct: --&gt;</span>
+&lt;span class="bismillah" lang="ar" dir="rtl"&gt;بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ&lt;/span&gt;
+
+<span class="cm">&lt;!-- Also add to all Quran verses in index.html and about.html --&gt;</span></code></pre>
+
+<hr>
+<h3>3. Add theme-color meta tag — colors Android Chrome browser bar to match brand</h3>
+<pre><code><span class="cm">&lt;!-- Add to &lt;head&gt; of every HTML page --&gt;</span>
+&lt;meta name="theme-color" content="#2C4C3B"&gt;</code></pre>
+
+<hr>
+<h3>4. Add Open Graph tags to all inner pages — WhatsApp/social previews currently blank</h3>
+<pre><code><span class="cm">&lt;!-- Only index.html has OG tags. All 6 inner pages need: --&gt;</span>
+&lt;meta property="og:title" content="Prayer Times | Masjid Sunnah Helsinki"&gt;
+&lt;meta property="og:description" content="Accurate daily prayer times for Helsinki, Finland."&gt;
+&lt;meta property="og:image" content="images/og-masjid.jpg"&gt;
+&lt;meta property="og:type" content="website"&gt;</code></pre>
+
+</div></div>
+
+<!-- ====== S12 ====== -->
+<div class="sec" id="s12">
+<div class="sec-hdr cr" style="background:#EAFAF1;border-color:var(--green);color:var(--green);">📊 SECTION 12 — Full Priority Summary (25 Issues)</div>
+<div class="sec-body">
+
+<table>
+<thead><tr><th style="width:110px">Priority</th><th>Issue</th><th style="width:170px">Files</th><th style="width:150px">Impact</th></tr></thead>
+<tbody>
+<tr><td><span class="dot r"></span>Critical</td><td>.progress-bar / .progress-fill CSS undefined</td><td>components.css</td><td>Campaign bar invisible</td></tr>
+<tr><td><span class="dot r"></span>Critical</td><td>section-dark h1 stays dark green on inner page heroes</td><td>style.css</td><td>Unreadable headings</td></tr>
+<tr><td><span class="dot r"></span>Critical</td><td>background-attachment:fixed — hero blank on iOS</td><td>components.css, index.html</td><td>Broken on all iPhones</td></tr>
+<tr><td><span class="dot r"></span>Critical</td><td>grid-2 collapses at 480px instead of 768px</td><td>responsive.css</td><td>Cramped tablet layouts</td></tr>
+<tr><td><span class="dot r"></span>Critical</td><td>Donate cards stay 2-col at 375px — IBANs unreadable</td><td>responsive.css, donate.html</td><td>Donation UX broken on phone</td></tr>
+<tr><td><span class="dot o"></span>High</td><td>h1/h2 fixed rem — overflow on mobile</td><td>style.css</td><td>Text too large, containers overflow</td></tr>
+<tr><td><span class="dot o"></span>High</td><td>Arabic text not using clamp() — section height blowout</td><td>style.css</td><td>Layout pushed unexpectedly</td></tr>
+<tr><td><span class="dot o"></span>High</td><td>setInterval never cleared — memory leak</td><td>prayer-times.js</td><td>CPU drain on long sessions</td></tr>
+<tr><td><span class="dot o"></span>High</td><td>No prayer times skeleton — raw loading text</td><td>prayer-times.js</td><td>Unpolished first impression</td></tr>
+<tr><td><span class="dot o"></span>High</td><td>Iqamah times shown as fact, not estimates</td><td>prayer-times.js</td><td>Community could miss prayer</td></tr>
+<tr><td><span class="dot o"></span>High</td><td>Back-to-top button entirely missing</td><td>main.js + all HTML</td><td>Poor UX on long mobile pages</td></tr>
+<tr><td><span class="dot o"></span>High</td><td>FAQ accordion absent from contact.html</td><td>contact.html</td><td>Key community resource missing</td></tr>
+<tr><td><span class="dot o"></span>High</td><td>Anchor links don't offset for 80px navbar</td><td>style.css</td><td>Target content hidden under nav</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>Mobile menu fixed 300px — breaks at 320px screens</td><td>components.css</td><td>Menu cuts off on small phones</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>Menu doesn't close when nav link is tapped</td><td>main.js</td><td>Requires extra tap on mobile</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>Hamburger touch target under 48px (WCAG 2.5.5)</td><td>components.css</td><td>Hard to tap reliably</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>No :focus-visible styles anywhere (WCAG 2.4.7)</td><td>style.css</td><td>Keyboard nav invisible</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>Islamic divider shows cream artifact on white sections</td><td>style.css</td><td>Visible visual glitch</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>Card hover fires on touch — flickering tap effect</td><td>responsive.css</td><td>Jarring mobile interaction</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>Gallery: no lazy load, no aspect-ratio — layout shift</td><td>gallery.html</td><td>Slow load + CLS penalty</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>Event date block oversized when stacked on mobile</td><td>events.html</td><td>Awkward card appearance</td></tr>
+<tr><td><span class="dot b"></span>Medium</td><td>About timeline padding-right causes horizontal overflow</td><td>about.html</td><td>Horizontal scrollbar on mobile</td></tr>
+<tr><td><span class="dot g"></span>Low</td><td>Non-hero images missing loading="lazy"</td><td>index, programs, about</td><td>Slow page load, CLS</td></tr>
+<tr><td><span class="dot g"></span>Low</td><td>Arabic strings missing lang="ar" dir="rtl"</td><td>Multiple HTML files</td><td>Screen reader mispronunciation</td></tr>
+<tr><td><span class="dot g"></span>Low</td><td>Missing theme-color + OG tags on inner pages</td><td>All inner HTML heads</td><td>No Android chrome color, no WhatsApp preview</td></tr>
+</tbody>
+</table>
+
+<div class="callout t" style="margin-top:22px;">
+<span class="ci">✅</span>
+<div><strong>Recommended fix order:</strong> Start with the 5 Critical CSS/HTML fixes (~30 min total). Then tackle the iOS fix and grid collapse fixes (~20 min). These 7 changes alone will dramatically improve mobile experience for 80% of users. The JS fixes and missing features can follow in a second session.</div>
+</div>
+<div class="callout n" style="margin-top:10px;">
+<span class="ci">📱</span>
+<div><strong>Test on real devices after fixes:</strong> iPhone SE (375px), iPhone 14 (390px), iPad (768px), Android budget phone (360px). Use Chrome DevTools + Safari iOS Simulator specifically to verify the background-attachment fix.</div>
+</div>
+
+</div></div>
+
+</div>
+
+<div class="ftr">
+<p class="ar">وَمَا أَرْسَلْنَاكَ إِلَّا رَحْمَةً لِّلْعَالَمِينَ</p>
+<p>Masjid Sunnah Helsinki — Deep Code Audit | 25 Issues | February 2026</p>
+</div>
+
+</body>
+</html>

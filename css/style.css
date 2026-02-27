@@ -3,49 +3,65 @@
 
 :root {
   /* Colors */
-  --color-primary: #2C4C3B; /* Deep Sage Green */
-  --color-secondary: #D4AF37; /* Warm Gold */
-  --color-accent: #3A6B52; /* Lighter shade of primary */
-  --color-bg: #FDFBF7; /* Soft Cream */
-  --color-bg-alt: #FFFFFF; /* White */
-  --color-bg-dark: #1F2937; /* Dark slate for footer/accents */
-  --color-text: #2D3748; /* Dark Charcoal Main text */
-  --color-text-muted: #4A5568; /* Secondary text */
-  --color-text-light: #FDFBF7; /* On dark backgrounds */
-  --color-border: #E2E8F0; /* Subtle borders */
+  --color-primary: #2C4C3B;
+  /* Deep Sage Green */
+  --color-secondary: #D4AF37;
+  /* Warm Gold */
+  --color-accent: #3A6B52;
+  /* Lighter shade of primary */
+  --color-bg: #FDFBF7;
+  /* Soft Cream */
+  --color-bg-alt: #FFFFFF;
+  /* White */
+  --color-bg-dark: #1F2937;
+  /* Dark slate for footer/accents */
+  --color-text: #2D3748;
+  /* Dark Charcoal Main text */
+  --color-text-muted: #4A5568;
+  /* Secondary text */
+  --color-text-light: #FDFBF7;
+  /* On dark backgrounds */
+  --color-border: #E2E8F0;
+  /* Subtle borders */
   --color-success: #2e7d32;
-  --color-overlay: rgba(44, 76, 59, 0.85); /* Deep green overlay */
+  --color-overlay: rgba(44, 76, 59, 0.85);
+  /* Deep green overlay */
 
   /* Typography */
-  --font-display: 'Cormorant Garamond', serif; /* English heading font */
-  --font-arabic: 'Amiri', serif; /* Arabic font */
-  --font-body: 'Nunito', sans-serif; /* Body font */
+  --font-display: 'Cormorant Garamond', serif;
+  /* English heading font */
+  --font-arabic: 'Amiri', serif;
+  /* Arabic font */
+  --font-body: 'Nunito', sans-serif;
+  /* Body font */
 
   /* Spacing */
   --space-xs: 8px;
   --space-sm: 16px;
   --space-md: 24px;
-  --space-lg: 48px;
-  --space-xl: 96px;
+  --space-lg: clamp(28px, 5vw, 48px);
+  --space-xl: clamp(48px, 8vw, 96px);
 
   /* Shadows */
-  --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
-  --shadow-md: 0 8px 24px rgba(0,0,0,0.10);
-  --shadow-lg: 0 20px 60px rgba(0,0,0,0.15);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 8px 24px rgba(0, 0, 0, 0.10);
+  --shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.15);
 
   /* Radius */
   --radius-sm: 6px;
   --radius-md: 12px;
   --radius-lg: 24px;
   --radius-pill: 9999px;
-  
+
   /* Layout */
   --max-width: 1280px;
   --header-height: 80px;
 }
 
 /* Base Reset & Box Sizing */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -66,23 +82,67 @@ body {
 }
 
 /* Typography Base Elements */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-display);
   color: var(--color-primary);
   font-weight: 700;
   line-height: 1.2;
 }
 
-h1 { font-size: 3.5rem; margin-bottom: var(--space-md); }
-h2 { font-size: 2.5rem; margin-bottom: var(--space-md); }
-h3 { font-size: 1.75rem; margin-bottom: var(--space-sm); }
-h4 { font-size: 1.25rem; margin-bottom: var(--space-xs); }
-p { margin-bottom: var(--space-sm); }
-a { color: var(--color-primary); text-decoration: none; transition: all 0.3s ease; }
-a:hover { color: var(--color-secondary); }
-ul, ol { padding-left: var(--space-md); margin-bottom: var(--space-sm); }
-li { margin-bottom: 4px; }
-img { max-width: 100%; height: auto; display: block; }
+h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  margin-bottom: var(--space-md);
+}
+
+h2 {
+  font-size: clamp(1.6rem, 4vw, 2.5rem);
+  margin-bottom: var(--space-md);
+}
+
+h3 {
+  font-size: clamp(1.25rem, 3vw, 1.75rem);
+  margin-bottom: var(--space-sm);
+}
+
+h4 {
+  font-size: 1.25rem;
+  margin-bottom: var(--space-xs);
+}
+
+p {
+  margin-bottom: var(--space-sm);
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-secondary);
+}
+
+ul,
+ol {
+  padding-left: var(--space-md);
+  margin-bottom: var(--space-sm);
+}
+
+li {
+  margin-bottom: 4px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
 
 /* Arabic Text Typography */
 .arabic-text {
@@ -90,13 +150,13 @@ img { max-width: 100%; height: auto; display: block; }
   direction: rtl;
   text-align: right;
   line-height: 2.2;
-  font-size: 1.4em;
+  font-size: clamp(1.1rem, 3vw, 1.4em);
   color: var(--color-primary);
 }
 
 .bismillah {
   font-family: var(--font-arabic);
-  font-size: 2rem;
+  font-size: clamp(1.4rem, 5vw, 2rem);
   text-align: center;
   color: var(--color-primary);
   margin-bottom: var(--space-md);
@@ -123,12 +183,23 @@ img { max-width: 100%; height: auto; display: block; }
   color: var(--color-text-light);
 }
 
-.section-dark h2, .section-dark h3 {
+.section-dark h1,
+.section-dark h2,
+.section-dark h3 {
   color: var(--color-secondary);
 }
 
-.text-center { text-align: center; }
-.text-muted { color: var(--color-text-muted); }
+.inner-hero h1 {
+  color: white;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
 
 /* Accessible hidden content */
 .sr-only {
@@ -143,14 +214,52 @@ img { max-width: 100%; height: auto; display: block; }
   border-width: 0;
 }
 
+/* Make the skip-to-content link visible on focus */
+.sr-only:focus {
+  position: fixed;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  clip: auto;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  background: var(--color-primary);
+  color: white;
+  padding: 12px 24px;
+  border-radius: var(--radius-pill);
+  z-index: 9999;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+:focus-visible {
+  outline: 3px solid var(--color-secondary);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Offsets ALL anchor targets by navbar height — no JS required */
+[id] {
+  scroll-margin-top: calc(var(--header-height) + 16px);
+}
+
 /* Islamic Patterns & Accents */
 .islamic-pattern-bg {
   position: relative;
 }
+
 .islamic-pattern-bg::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   /* Placeholder for an actual SVG pattern if needed */
   background-image: radial-gradient(var(--color-primary) 1px, transparent 1px);
   background-size: 20px 20px;
@@ -173,6 +282,7 @@ img { max-width: 100%; height: auto; display: block; }
   background: var(--color-secondary);
   position: relative;
 }
+
 .islamic-divider::before {
   content: '♦';
   position: absolute;
@@ -181,9 +291,12 @@ img { max-width: 100%; height: auto; display: block; }
   transform: translate(-50%, -50%);
   color: var(--color-secondary);
   font-size: 12px;
-  background-color: var(--color-bg);
+  background-color: inherit;
   padding: 0 4px;
 }
-.section-alt .islamic-divider::before {
-  background-color: var(--color-bg-alt);
+
+@media (max-width: 480px) {
+  .arabic-text {
+    line-height: 1.9;
+  }
 }

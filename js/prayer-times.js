@@ -13,6 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!tableContainer) return; // Exit if not on a page that needs this
 
+    // Render skeleton loaders initially
+    tableContainer.innerHTML = Array(5).fill('<div class="skeleton"></div>').join('');
+
     // Configuration for Helsinki
     const config = {
         city: 'Helsinki',
@@ -89,7 +92,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr style="border-bottom: 2px solid var(--color-primary); color: var(--color-primary);">
                     <th style="padding: 10px; font-family: var(--font-display);">Prayer / الصلاة</th>
                     <th style="padding: 10px; font-family: var(--font-display);">Adhan</th>
-                    <th style="padding: 10px; font-family: var(--font-display);">Iqamah</th>
+                    <th style="padding: 10px; font-family: var(--font-display);">Iqamah *</th>
                 </tr>
             </thead>
             <tbody>
@@ -136,13 +139,30 @@ document.addEventListener('DOMContentLoaded', () => {
             `;
         });
 
-        html += `</tbody></table>`;
+        html += `</tbody></table>
+        <p style="font-size:0.8rem;color:var(--color-text-muted);margin-top:8px;">
+            * Iqamah times are approximate. Please confirm with the Masjid for exact times.
+        </p>`;
         tableContainer.innerHTML = html;
     }
 
+    let countdownInterval = null;
+
     function startCountdownTracker(timings) {
-        setInterval(() => {
+        if (countdownInterval) clearInterval(countdownInterval);
+
+        countdownInterval = setInterval(() => {
             const now = new Date();
+
+            // Auto-reset if day has changed
+            const todayStr = now.toISOString().split('T')[0];
+            if (localStorage.getItem('prayer_date') && localStorage.getItem('prayer_date') !== todayStr) {
+                clearInterval(countdownInterval);
+                fetchPrayerTimes();  // Re-fetch for new day
+                return;
+            }
+            localStorage.setItem('prayer_date', todayStr);
+
             const currentHours = now.getHours();
             const currentMinutes = now.getMinutes();
             const currentSeconds = now.getSeconds();
@@ -214,4 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize
     fetchPrayerTimes();
+
+    window.addEventListener('beforeunload', () => {
+        if (countdownInterval) clearInterval(countdownInterval);
+    });
 });

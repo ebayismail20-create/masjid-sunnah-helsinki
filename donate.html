@@ -216,6 +216,61 @@
             <div class="container">
                 <div class="grid grid-3 donate-cards" style="gap: var(--space-lg);">
 
+                    <!-- MobilePay Card -->
+                    <div class="donate-card" data-aos="fade-up" data-aos-delay="0"
+                        style="border: 2px solid var(--color-primary); position: relative; overflow: hidden;">
+                        <!-- Optional subtle background icon -->
+                        <i class="fas fa-qrcode"
+                            style="position: absolute; right: -20px; top: -20px; font-size: 150px; color: rgba(26, 54, 38, 0.03); transform: rotate(15deg);"></i>
+
+                        <div style="display: flex; align-items: center; gap: 15px; margin-bottom: var(--space-md);">
+                            <div
+                                style="background: var(--color-primary); color: #fff; width: 60px; height: 60px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.8rem; flex-shrink: 0;">
+                                <i class="fas fa-mobile-alt"></i>
+                            </div>
+                            <div>
+                                <h3 style="margin-bottom: 5px; font-size: 1.6rem; color: var(--color-primary);">
+                                    MobilePay</h3>
+                                <div
+                                    style="font-size: 1.8rem; font-weight: 700; color: var(--color-secondary); letter-spacing: 2px; line-height: 1;">
+                                    33822</div>
+                            </div>
+                        </div>
+
+                        <p class="text-muted" style="margin-bottom: var(--space-md);">Quick and easy donation directly
+                            from your phone. Scan the QR code or enter the number above.</p>
+
+                        <div
+                            style="background: #fff; padding: 15px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08); display: flex; justify-content: center; margin-bottom: var(--space-md);">
+                            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=33822"
+                                alt="MobilePay QR Code" width="120" height="120"
+                                style="display: block; border-radius: 4px;">
+                        </div>
+
+                        <div class="bank-details"
+                            style="background: var(--color-bg-alt); padding: 15px; border-radius: 8px;">
+                            <div class="detail-row"
+                                style="border-bottom: 1px solid rgba(0,0,0,0.05); padding-bottom: 10px; margin-bottom: 10px;">
+                                <span class="detail-label" style="font-size: 0.85rem;">Tilinumero / IBAN</span>
+                                <span class="detail-value" style="font-size: 0.95rem; font-weight: 600;">FI74 5780 0720
+                                    7636 01</span>
+                            </div>
+                            <div class="detail-row" style="border: none;">
+                                <span class="detail-label" style="font-size: 0.85rem;">Saaja / Recipient</span>
+                                <span class="detail-value" style="font-size: 0.95rem;">Somda Ry</span>
+                            </div>
+                        </div>
+
+                        <div style="margin-top: var(--space-md); text-align: center;">
+                            <p style="font-family: 'Amiri', serif; font-size: 1.2rem; color: var(--color-primary); margin-bottom: 5px; line-height: 1.4;"
+                                lang="ar" dir="rtl">
+                                قال الله ﷻ : أنفق يا ابن آدم أنفق عليك
+                            </p>
+                            <p style="font-family: 'Amiri', serif; font-size: 0.9rem; color: var(--color-text-muted);"
+                                lang="ar" dir="rtl">رواه البخاري ومسلم</p>
+                        </div>
+                    </div>
+
                     <!-- General Sadaqah -->
                     <div class="donate-card" data-aos="fade-up" data-aos-delay="0">
                         <i class="fas fa-hand-holding-heart donate-icon"></i>
@@ -284,39 +339,7 @@
                         </div>
                     </div>
 
-                    <!-- Expansion Fund -->
-                    <div class="donate-card" data-aos="fade-up" data-aos-delay="200">
-                        <i class="fas fa-building donate-icon"></i>
-                        <h3>Expansion Fund</h3>
-                        <p class="text-muted" style="margin-bottom: var(--space-md);">Dedicated fund for buying adjacent
-                            property to expand the men's and women's prayer halls.</p>
 
-                        <div class="bank-details">
-                            <div class="detail-row">
-                                <span class="detail-label">Bank</span>
-                                <span>Nordea Bank</span>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">IBAN</span>
-                                <span class="detail-value" id="iban-expansion">FI11 2222 3333 4444 55</span>
-                                <button class="copy-btn" onclick="copyToClipboard('iban-expansion')"
-                                    title="Copy IBAN"><i class="far fa-copy"></i></button>
-                            </div>
-                            <div class="detail-row">
-                                <span class="detail-label">Swift/BIC</span>
-                                <span class="detail-value" id="bic-expansion">NDEAFIIH</span>
-                                <button class="copy-btn" onclick="copyToClipboard('bic-expansion')" title="Copy BIC"><i
-                                        class="far fa-copy"></i></button>
-                            </div>
-                            <div class="detail-row"
-                                style="margin-top: 10px; border: none; align-items: flex-start; flex-direction: column;">
-                                <span class="detail-label" style="display:flex; align-items:center; gap:5px;"><i
-                                        class="fas fa-mobile-alt"></i> MobilePay</span>
-                                <span class="detail-value"
-                                    style="color: #5a5ae6; font-size: 1.5rem; letter-spacing: 2px;">67890</span>
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
 
@@ -405,7 +428,8 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
-                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">
+                    سُبْحَانَ اللهِ
                     وَبِحَمْدِهِ</p>
             </div>
         </div>
@@ -445,8 +469,7 @@
         }
     </script>
 
-    <button id="back-to-top" aria-label="Back to top"
-        style="position:fixed;bottom:28px;right:22px;z-index:999;
+    <button id="back-to-top" aria-label="Back to top" style="position:fixed;bottom:28px;right:22px;z-index:999;
         width:48px;height:48px;border-radius:50%;border:none;
         background:var(--color-primary);color:var(--color-secondary);
         font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;

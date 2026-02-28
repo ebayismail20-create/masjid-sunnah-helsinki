@@ -398,10 +398,16 @@
         </div>
     </div>
 
+    <!-- Scripts -->
+    <!-- Supabase SDK & Client Initialization -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+
     <script>
         const fiMonths = ["Tammikuu", "Helmikuu", "Maaliskuu", "Huhtikuu", "Toukokuu", "Kesäkuu", "Heinäkuu", "Elokuu", "Syyskuu", "Lokakuu", "Marraskuu", "Joulukuu"];
+        let iqamahTimes = null;
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const date = new Date();
             const year = date.getFullYear();
             const month = date.getMonth() + 1; // 1-12
@@ -413,6 +419,18 @@
             const lat = 60.1699;
             const lng = 24.9384;
             const method = 3; // Muslim World League
+
+            // Fetch Subapase Iqamah Times first
+            try {
+                const { data, error } = await window.supabaseClient
+                    .from('settings')
+                    .select('value')
+                    .eq('key', 'iqamah_times')
+                    .single();
+                if (!error && data) iqamahTimes = data.value;
+            } catch (e) {
+                console.error("Supabase fetch error", e);
+            }
 
             // Fetch the entire month
             const apiUrl = `https://api.aladhan.com/v1/calendar/${year}/${month}?latitude=${lat}&longitude=${lng}&method=${method}`;
@@ -451,12 +469,12 @@
                         <tr>
                             <th colspan="2" class="th-left">${monthNameFi.toUpperCase()}</th>
                             <th>Hijri</th>
-                            <th>Fajr</th>
+                            <th>Fajr / Iq</th>
                             <th>Sunrise</th>
-                            <th>Dhuhr</th>
-                            <th>Asr</th>
-                            <th>Maghrib</th>
-                            <th>Isha</th>
+                            <th>Dhuhr / Iq</th>
+                            <th>Asr / Iq</th>
+                            <th>Maghrib / Iq</th>
+                            <th>Isha / Iq</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -489,12 +507,12 @@
                                 <td class="td-left" style="width: 80px;">${weekdayStr}</td>
                                 <td class="td-bold" style="width: 100px;">${formattedDate}</td>
                                 <td class="td-hijri">${hijriFormatted}</td>
-                                <td>${formatTime(dayData.timings.Fajr)}</td>
+                                <td>${formatTime(dayData.timings.Fajr)} <br><span style="font-size:0.75rem; opacity:0.7; color:var(--color-secondary); font-weight:600;">${iqamahTimes ? iqamahTimes.fajr : '-'}</span></td>
                                 <td>${formatTime(dayData.timings.Sunrise)}</td>
-                                <td>${formatTime(dayData.timings.Dhuhr)}</td>
-                                <td>${formatTime(dayData.timings.Asr)}</td>
-                                <td>${formatTime(dayData.timings.Maghrib)}</td>
-                                <td>${formatTime(dayData.timings.Isha)}</td>
+                                <td>${formatTime(dayData.timings.Dhuhr)} <br><span style="font-size:0.75rem; opacity:0.7; color:var(--color-secondary); font-weight:600;">${iqamahTimes ? iqamahTimes.dhuhr : '-'}</span></td>
+                                <td>${formatTime(dayData.timings.Asr)} <br><span style="font-size:0.75rem; opacity:0.7; color:var(--color-secondary); font-weight:600;">${iqamahTimes ? iqamahTimes.asr : '-'}</span></td>
+                                <td>${formatTime(dayData.timings.Maghrib)} <br><span style="font-size:0.75rem; opacity:0.7; color:var(--color-secondary); font-weight:600;">${iqamahTimes ? iqamahTimes.maghrib : '-'}</span></td>
+                                <td>${formatTime(dayData.timings.Isha)} <br><span style="font-size:0.75rem; opacity:0.7; color:var(--color-secondary); font-weight:600;">${iqamahTimes ? iqamahTimes.isha : '-'}</span></td>
                             </tr>
                             `;
             }).join('')}
@@ -508,4 +526,3 @@
 </body>
 
 </html>
-

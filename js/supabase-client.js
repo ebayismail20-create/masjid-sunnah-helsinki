@@ -7,7 +7,14 @@ const supabaseUrl = 'https://zwksurtgjdlptkguitei.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inp3a3N1cnRnamRscHRrZ3VpdGVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIzMDk5OTIsImV4cCI6MjA4Nzg4NTk5Mn0.9dVnN3jZOd5qg6djKK_kY7Gbckb7p9dtRb2rhAgMKRg';
 
 // Initialize the Supabase client
-const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+const initSupabase = () => {
+    const supabaseLib = window.supabase;
+    if (!supabaseLib) {
+        console.error("Supabase SDK not loaded properly.");
+        return null;
+    }
+    return supabaseLib.createClient(supabaseUrl, supabaseKey);
+};
 
 // Make it globally available
-window.supabaseClient = supabase;
+window.supabaseClient = initSupabase();

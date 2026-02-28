@@ -65,7 +65,7 @@ const DataService = {
         }
 
         const html = `
-            <div class="announcement-banner" style="display: flex; align-items: center; justify-content: center; padding: 10px 20px; text-align: center; font-family: var(--font-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative; z-index: 1000; ${badgeStyle}">
+            <div class="announcement-banner" style="display: flex; align-items: center; justify-content: center; padding: 10px 20px; text-align: center; font-family: var(--font-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative; z-index: 998; margin-top: var(--header-height, 80px); ${badgeStyle}">
                 <div style="max-width: 1200px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
                     <span style="font-weight: bold; background: rgba(0,0,0,0.1); padding: 3px 10px; border-radius: 20px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">
                         <i class="fas ${icon}"></i> ${activeAnnouncement.type}
@@ -157,6 +157,98 @@ const DataService = {
                         <span><i class="fas fa-tag"></i> ${event.category}</span>
                     </div>
                     <p class="event-desc">${event.description}</p>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    },
+
+    /**
+     * Renders all events for the events.html page.
+     * Expects an element with ID passed as parameter.
+     */
+    renderAllEvents: function (containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const events = this.getEvents();
+
+        if (events.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color:#666; width:100%;">There are no upcoming events at this time. Please check back later.</p>`;
+            return;
+        }
+
+        // Sort by date 
+        events.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+        let html = '';
+
+        events.forEach(event => {
+            const dateObj = new Date(event.date);
+            const displayDate = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+            html += `
+                <div class="event-card" data-category="${event.category}">
+                    <div class="event-image">
+                        <img src="https://images.unsplash.com/photo-1590076215667-83ee42ff7594?auto=format&fit=crop&q=80&w=800" alt="Event Placeholder">
+                    </div>
+                    <div class="event-content">
+                        <div class="event-category">${event.category}</div>
+                        <h3>${event.title}</h3>
+                        <div class="event-info-line">
+                            <i class="far fa-calendar-alt"></i> ${displayDate}
+                        </div>
+                        <div class="event-info-line">
+                            <i class="far fa-clock"></i> ${event.time}
+                        </div>
+                        <div class="event-info-line">
+                            <i class="fas fa-map-marker-alt"></i> ${event.location}
+                        </div>
+                        <p>${event.description}</p>
+                    </div>
+                </div>
+            `;
+        });
+
+        container.innerHTML = html;
+    },
+
+    /**
+     * Renders all programs for the programs.html page.
+     */
+    renderAllPrograms: function (containerId) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+
+        const programs = this.getPrograms();
+
+        if (programs.length === 0) {
+            container.innerHTML = `<p style="text-align:center; color:#666; width:100%;">There are no active programs at this time.</p>`;
+            return;
+        }
+
+        let html = '';
+
+        programs.forEach(prog => {
+            // Pick an icon based on audience
+            let icon = 'fa-book-open';
+            if (prog.audience.includes('Children')) icon = 'fa-child';
+            else if (prog.audience.includes('Youth')) icon = 'fa-user-graduate';
+            else if (prog.audience.includes('Adults')) icon = 'fa-users';
+
+            html += `
+                <div class="program-card">
+                    <div class="program-icon">
+                        <i class="fas ${icon}"></i>
+                    </div>
+                    <h3>${prog.name}</h3>
+                    <p>${prog.description}</p>
+                    <ul class="program-details">
+                        <li><i class="fas fa-clock"></i> <strong>Schedule:</strong> ${prog.schedule}</li>
+                        <li><i class="fas fa-users"></i> <strong>Audience:</strong> ${prog.audience}</li>
+                        ${prog.instructor ? `<li><i class="fas fa-chalkboard-teacher"></i> <strong>Instructor:</strong> ${prog.instructor}</li>` : ''}
+                    </ul>
                 </div>
             `;
         });

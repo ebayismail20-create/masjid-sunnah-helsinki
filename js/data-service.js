@@ -3,29 +3,85 @@
 /**
  * Masjid Sunnah Helsinki - Frontend Data Integration Service
  * 
- * This file acts as the bridge between the data saved in localStorage (from admin.html)
+ * This file acts as the bridge between the Supabase Backend
  * and the public-facing HTML pages.
  */
 
 const DataService = {
     // --- Data Retrieval ---
-    getAnnouncements: function () {
-        return JSON.parse(localStorage.getItem('ms_announcements')) || [];
+    getAnnouncements: async function () {
+        const { data, error } = await window.supabaseClient
+            .from('announcements')
+            .select('*')
+            .order('created_at', { ascending: true });
+
+        if (error) {
+            console.error('Error fetching announcements:', error);
+            return [];
+        }
+        return data || [];
     },
-    getEvents: function () {
-        return JSON.parse(localStorage.getItem('ms_events')) || [];
+    getEvents: async function () {
+        const { data, error } = await window.supabaseClient
+            .from('events')
+            .select('*')
+            .order('date', { ascending: true });
+
+        if (error) {
+            console.error('Error fetching events:', error);
+            return [];
+        }
+        return data || [];
     },
-    getPrograms: function () {
-        return JSON.parse(localStorage.getItem('ms_programs')) || [];
+    getPrograms: async function () {
+        const { data, error } = await window.supabaseClient
+            .from('programs')
+            .select('*');
+
+        if (error) {
+            console.error('Error fetching programs:', error);
+            return [];
+        }
+        return data || [];
     },
-    getIqamahTimes: function () {
-        return JSON.parse(localStorage.getItem('ms_iqamah')) || null;
+    getIqamahTimes: async function () {
+        const { data, error } = await window.supabaseClient
+            .from('settings')
+            .select('value')
+            .eq('key', 'iqamah_times')
+            .single();
+
+        if (error) {
+            console.error('Error fetching iqamah times:', error);
+            return null;
+        }
+        return data ? data.value : null;
     },
-    getContactInfo: function () {
-        return JSON.parse(localStorage.getItem('ms_contact')) || null;
+    getContactInfo: async function () {
+        const { data, error } = await window.supabaseClient
+            .from('settings')
+            .select('value')
+            .eq('key', 'contact_info')
+            .single();
+
+        if (error) {
+            console.error('Error fetching contact info:', error);
+            return null;
+        }
+        return data ? data.value : null;
     },
-    getJummahInfo: function () {
-        return JSON.parse(localStorage.getItem('ms_jummah')) || null;
+    getJummahInfo: async function () {
+        const { data, error } = await window.supabaseClient
+            .from('settings')
+            .select('value')
+            .eq('key', 'jummah_info')
+            .single();
+
+        if (error) {
+            console.error('Error fetching jummah info:', error);
+            return null;
+        }
+        return data ? data.value : null;
     },
 
     // --- DOM Injection Methods ---
@@ -34,25 +90,19 @@ const DataService = {
      * Injects the latest active announcement into the top banner slot.
      * Expects an element with ID 'announcement-banner-container'.
      */
-    renderBannerAnnouncement: function () {
+    renderBannerAnnouncement: async function () {
         const container = document.getElementById('announcement-banner-container');
         if (!container) return;
 
-        const announcements = this.getAnnouncements();
+        const announcements = await this.getAnnouncements();
 
-        // Find the most recent announcement 
-        // Assuming they are sorted or we just take the last inserted (newest)
         if (announcements.length === 0) {
             container.style.display = 'none';
             return;
         }
 
-        // Taking the last item assuming chronological append. 
-        // If they are date sorted, we might want the closest date.
-        // For simplicity, we just use the last item in the array for now.
         const activeAnnouncement = announcements[announcements.length - 1];
 
-        // Format the banner type
         let badgeStyle = "background-color: var(--color-secondary); color: var(--color-bg-dark);";
         let icon = "fa-bullhorn";
 
@@ -80,7 +130,6 @@ const DataService = {
         container.innerHTML = html;
         container.style.display = 'block';
 
-        // Force navbar to solid state so white links don't disappear against the cream background
         const navbar = document.querySelector('.navbar');
         if (navbar) {
             navbar.classList.add('scrolled');
@@ -89,10 +138,9 @@ const DataService = {
 
     /**
      * Injects Iqamah times into the specified elements.
-     * Expects IDs: fajr-iqamah, dhuhr-iqamah, asr-iqamah, maghrib-iqamah, isha-iqamah
      */
-    renderIqamahTimes: function () {
-        const iqamah = this.getIqamahTimes();
+    renderIqamahTimes: async function () {
+        const iqamah = await this.getIqamahTimes();
         if (!iqamah) return;
 
         const populate = (id, val) => {
@@ -109,10 +157,9 @@ const DataService = {
 
     /**
      * Injects Jumu'ah information.
-     * Expects IDs: jummah-time, jummah-khateeb, jummah-topic
      */
-    renderJummahInfo: function () {
-        const jummah = this.getJummahInfo();
+    renderJummahInfo: async function () {
+        const jummah = await this.getJummahInfo();
         if (!jummah) return;
 
         const populate = (id, val) => {
@@ -126,29 +173,23 @@ const DataService = {
     },
 
     /**
-     * Renders a preview of upcoming events (e.g. for the homepage).
-     * Expects an element with ID 'events-preview-grid'.
+     * Renders a preview of upcoming events.
      */
-    renderEventsPreview: function (limit = 3) {
+    renderEventsPreview: async function (limit = 3) {
         const container = document.getElementById('events-preview-grid');
         if (!container) return;
 
-        const events = this.getEvents();
+        const events = await this.getEvents();
 
         if (events.length === 0) {
             container.innerHTML = `<p style="text-align:center; color:#666; width:100%;">No upcoming events scheduled at this time.</p>`;
-            // Optionally, we could still show the placeholder cards here if we preferred.
             return;
         }
-
-        // Sort by date (assuming YYYY-MM-DD strings)
-        events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
         const previewEvents = events.slice(0, limit);
         let html = '';
 
         previewEvents.forEach(event => {
-            // Format date string for display
             const dateObj = new Date(event.date);
             const displayDate = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
@@ -172,21 +213,17 @@ const DataService = {
 
     /**
      * Renders all events for the events.html page.
-     * Expects an element with ID passed as parameter.
      */
-    renderAllEvents: function (containerId) {
+    renderAllEvents: async function (containerId) {
         const container = document.getElementById(containerId);
         if (!container) return;
 
-        const events = this.getEvents();
+        const events = await this.getEvents();
 
         if (events.length === 0) {
             container.innerHTML = `<p style="text-align:center; color:#666; width:100%;">There are no upcoming events at this time. Please check back later.</p>`;
             return;
         }
-
-        // Sort by date 
-        events.sort((a, b) => new Date(a.date) - new Date(b.date));
 
         let html = '';
 
@@ -197,7 +234,7 @@ const DataService = {
             html += `
                 <div class="event-card" data-category="${event.category}">
                     <div class="event-image">
-                        <img src="https://images.unsplash.com/photo-1590076215667-83ee42ff7594?auto=format&fit=crop&q=80&w=800" alt="Event Placeholder">
+                        <img src="${event.image_url || 'https://images.unsplash.com/photo-1590076215667-83ee42ff7594?auto=format&fit=crop&q=80&w=800'}" alt="Event Image">
                     </div>
                     <div class="event-content">
                         <div class="event-category">${event.category}</div>
@@ -223,11 +260,11 @@ const DataService = {
     /**
      * Renders all programs for the programs.html page.
      */
-    renderAllPrograms: function (containerId) {
+    renderAllPrograms: async function (containerId) {
         const container = document.getElementById(containerId);
         if (!container) return;
 
-        const programs = this.getPrograms();
+        const programs = await this.getPrograms();
 
         if (programs.length === 0) {
             container.innerHTML = `<p style="text-align:center; color:#666; width:100%;">There are no active programs at this time.</p>`;
@@ -237,23 +274,19 @@ const DataService = {
         let html = '';
 
         programs.forEach(prog => {
-            // Pick an icon based on audience
-            let icon = 'fa-book-open';
-            if (prog.audience.includes('Children')) icon = 'fa-child';
-            else if (prog.audience.includes('Youth')) icon = 'fa-user-graduate';
-            else if (prog.audience.includes('Adults')) icon = 'fa-users';
+            let icon = prog.icon || 'fa-book-open';
 
             html += `
-                <div class="program-card">
+                <div class="program-card" data-category="${prog.type}">
                     <div class="program-icon">
                         <i class="fas ${icon}"></i>
                     </div>
-                    <h3>${prog.name}</h3>
+                    <h3>${prog.title}</h3>
                     <p>${prog.description}</p>
                     <ul class="program-details">
                         <li><i class="fas fa-clock"></i> <strong>Schedule:</strong> ${prog.schedule}</li>
-                        <li><i class="fas fa-users"></i> <strong>Audience:</strong> ${prog.audience}</li>
-                        ${prog.instructor ? `<li><i class="fas fa-chalkboard-teacher"></i> <strong>Instructor:</strong> ${prog.instructor}</li>` : ''}
+                        <li><i class="fas fa-users"></i> <strong>Type/Audience:</strong> ${prog.type}</li>
+                        <li><i class="fas fa-info-circle"></i> <strong>Status:</strong> ${prog.status}</li>
                     </ul>
                 </div>
             `;
@@ -268,5 +301,4 @@ document.addEventListener('DOMContentLoaded', () => {
     DataService.renderBannerAnnouncement();
     DataService.renderIqamahTimes();
     DataService.renderJummahInfo();
-    // Specific page calls can be triggered via inline scripts or logic
 });

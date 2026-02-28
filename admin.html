@@ -989,30 +989,50 @@
         let currentModalTarget = '';
         let currentEditIndex = -1;
 
-        // Initialize App Data
-        function initData() {
+        // Initialize App Data from Supabase
+        async function initData() {
             try {
-                // Arrays
-                appData.announcements = JSON.parse(localStorage.getItem('ms_announcements')) || [];
-                appData.events = JSON.parse(localStorage.getItem('ms_events')) || [];
-                appData.programs = JSON.parse(localStorage.getItem('ms_programs')) || [];
+                const [annPayload, evPayload, progPayload, settingsPayload] = await Promise.all([
+                    window.supabaseClient.from('announcements').select('*').order('created_at', { ascending: true }),
+                    window.supabaseClient.from('events').select('*').order('date', { ascending: true }),
+                    window.supabaseClient.from('programs').select('*'),
+                    window.supabaseClient.from('settings').select('*')
+                ]);
 
-                // Objects
-                appData.iqamah = JSON.parse(localStorage.getItem('ms_iqamah')) || { fajr: '', dhuhr: '', asr: '', maghrib: '', isha: '' };
-                appData.contact = JSON.parse(localStorage.getItem('ms_contact')) || { address: '', phone: '', email: '' };
-                appData.jummah = JSON.parse(localStorage.getItem('ms_jummah')) || { time: '', khateeb: '', topic: '' };
+                if (annPayload.error) throw annPayload.error;
+                if (evPayload.error) throw evPayload.error;
+                if (progPayload.error) throw progPayload.error;
+                if (settingsPayload.error) throw settingsPayload.error;
 
-                // Populate scalar forms forms
+                appData.announcements = annPayload.data || [];
+                appData.events = evPayload.data || [];
+                appData.programs = progPayload.data || [];
+
+                // Settings
+                const iqamahSet = settingsPayload.data.find(s => s.key === 'iqamah_times');
+                appData.iqamah = iqamahSet ? iqamahSet.value : { fajr: '', dhuhr: '', asr: '', maghrib: '', isha: '' };
+
+                const contactSet = settingsPayload.data.find(s => s.key === 'contact_info');
+                appData.contact = contactSet ? contactSet.value : { address: '', phone: '', email: '' };
+
+                const jummahSet = settingsPayload.data.find(s => s.key === 'jummah_info');
+                appData.jummah = jummahSet ? jummahSet.value : { time: '', khateeb: '', topic: '' };
+
+                // Populate scalar forms
                 populateForm('iqamah', appData.iqamah);
                 populateForm('contact', appData.contact);
                 populateForm('jummah', appData.jummah);
+
+                renderAll();
             } catch (e) {
-                console.error("Error loading local data", e);
+                console.error("Error loading Supabase data", e);
+                showToast("Error loading data from server", true);
             }
         }
 
-        function saveData(type) {
-            localStorage.setItem(`ms_${type}`, JSON.stringify(appData[type]));
+        async function saveData(type) {
+            // This function is now mostly a fallback, as we do atomic updates
+            // but for settings, we use single-config save logic.
         }
 
         // Populate inputs from object
@@ -1027,14 +1047,24 @@
         }
 
         // Save singular object config (not arrays)
-        function saveSingleConfig(type) {
+        async function saveSingleConfig(type) {
             const form = document.getElementById(`form-${type}`);
             const formData = new FormData(form);
             const dataObj = Object.fromEntries(formData.entries());
 
             appData[type] = dataObj;
-            saveData(type);
-            showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} info saved successfully!`);
+            try {
+                const key = type === 'iqamah' ? 'iqamah_times' : (type === 'jummah' ? 'jummah_info' : 'contact_info');
+                const { error } = await window.supabaseClient
+                    .from('settings')
+                    .upsert({ key: key, value: dataObj }, { onConflict: 'key' });
+
+                if (error) throw error;
+                showToast(`${type.charAt(0).toUpperCase() + type.slice(1)} info saved successfully!`);
+            } catch (e) {
+                console.error("Save config error", e);
+                showToast("Failed to save config to server", true);
+            }
         }
 
         // --- Authentication & Configuration ---
@@ -1082,14 +1112,13 @@
             document.getElementById('login-error-msg').style.display = 'none';
         }
 
-        function showMainApp(email) {
+        async function showMainApp(email) {
             document.getElementById('login-overlay').style.display = 'none';
             document.getElementById('app-wrapper').style.display = 'block';
             if (email) {
                 document.getElementById('user-info').innerText = email;
             }
-            initData();
-            renderAll();
+            await initData();
         }
 
         window.onload = function () {
@@ -1306,36 +1335,49 @@
             return html;
         }
 
-        function handleFormSubmit(e) {
+        async function handleFormSubmit(e) {
             e.preventDefault();
             const form = e.target;
             const formData = new FormData(form);
             const dataObj = Object.fromEntries(formData.entries());
 
-            if (currentEditIndex === -1) {
-                appData[currentModalTarget].push(dataObj);
-                showToast(`New item added successfully!`);
-            } else {
-                appData[currentModalTarget][currentEditIndex] = dataObj;
-                showToast(`Item updated successfully!`);
-            }
+            try {
+                if (currentEditIndex === -1) {
+                    // Create new
+                    const { data, error } = await window.supabaseClient.from(currentModalTarget).insert(dataObj).select();
+                    if (error) throw error;
+                    appData[currentModalTarget].push(data[0]);
+                    showToast(`New item added successfully!`);
+                } else {
+                    // Update existing
+                    const item = appData[currentModalTarget][currentEditIndex];
+                    const { error } = await window.supabaseClient.from(currentModalTarget).update(dataObj).eq('id', item.id);
+                    if (error) throw error;
+                    appData[currentModalTarget][currentEditIndex] = { ...item, ...dataObj };
+                    showToast(`Item updated successfully!`);
+                }
 
-            // Sort by date if applicable
-            if (appData[currentModalTarget][0] && appData[currentModalTarget][0].date) {
-                appData[currentModalTarget].sort((a, b) => new Date(a.date) - new Date(b.date));
+                closeModal();
+                renderAll();
+            } catch (e) {
+                console.error("Submit error", e);
+                showToast("Failed to save changes to server", true);
             }
-
-            saveData(currentModalTarget);
-            closeModal();
-            renderAll();
         }
 
-        function deleteItem(type, index) {
+        async function deleteItem(type, index) {
             if (confirm("Are you sure you want to delete this item? This cannot be undone.")) {
-                appData[type].splice(index, 1);
-                saveData(type);
-                renderAll();
-                showToast("Item deleted", true);
+                const item = appData[type][index];
+                try {
+                    const { error } = await window.supabaseClient.from(type).delete().eq('id', item.id);
+                    if (error) throw error;
+                    appData[type].splice(index, 1);
+                    renderAll();
+                    showToast("Item deleted", true);
+                } catch (e) {
+                    console.error("Delete error", e);
+                    showToast("Failed to delete item from server", true);
+                }
             }
         }
 
@@ -1370,27 +1412,45 @@
             downloadAnchorNode.remove();
         }
 
-        function importData(event) {
+        async function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function (e) {
+            reader.onload = async function (e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
                     if (typeof importedData !== 'object') {
                         throw new Error("Invalid format");
                     }
-                    appData = Object.assign(appData, importedData);
-                    Object.keys(appData).forEach(key => saveData(key));
 
-                    showToast("Database restored successfully!");
-                    renderAll();
-                    populateForm('iqamah', appData.iqamah);
-                    populateForm('contact', appData.contact);
-                    populateForm('jummah', appData.jummah);
+                    // Upsert each category
+                    // Note: This assumes the JSON has the expected keys
+                    if (importedData.announcements) {
+                        await window.supabaseClient.from('announcements').upsert(importedData.announcements);
+                    }
+                    if (importedData.events) {
+                        await window.supabaseClient.from('events').upsert(importedData.events);
+                    }
+                    if (importedData.programs) {
+                        await window.supabaseClient.from('programs').upsert(importedData.programs);
+                    }
+
+                    // Settings
+                    if (importedData.iqamah) {
+                        await window.supabaseClient.from('settings').upsert({ key: 'iqamah_times', value: importedData.iqamah }, { onConflict: 'key' });
+                    }
+                    if (importedData.contact) {
+                        await window.supabaseClient.from('settings').upsert({ key: 'contact_info', value: importedData.contact }, { onConflict: 'key' });
+                    }
+                    if (importedData.jummah) {
+                        await window.supabaseClient.from('settings').upsert({ key: 'jummah_info', value: importedData.jummah }, { onConflict: 'key' });
+                    }
+
+                    showToast("Database restored to server successfully!");
+                    await initData();
                 } catch (error) {
-                    showToast("Error importing file. Invalid format.", true);
+                    showToast("Error importing file. Invalid format or server error.", true);
                     console.error("Import error:", error);
                 }
                 event.target.value = ''; // Reset file input
@@ -1398,24 +1458,29 @@
             reader.readAsText(file);
         }
 
-        function wipeDatabase() {
-            if (confirm("WARNING: This will delete ALL data (events, programs, configs) from your local browser storage. Are you absolutely sure?")) {
+        async function wipeDatabase() {
+            if (confirm("WARNING: This will delete ALL data (events, programs, configs) from the LIVE SERVER. Are you absolutely sure?")) {
                 if (confirm("Second WARNING: If you haven't downloaded a backup, your data is gone forever. Confirm wipe?")) {
-                    localStorage.removeItem('ms_announcements');
-                    localStorage.removeItem('ms_events');
-                    localStorage.removeItem('ms_programs');
-                    localStorage.removeItem('ms_iqamah');
-                    localStorage.removeItem('ms_contact');
-                    localStorage.removeItem('ms_jummah');
+                    try {
+                        const { error: err1 } = await window.supabaseClient.from('announcements').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                        const { error: err2 } = await window.supabaseClient.from('events').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                        const { error: err3 } = await window.supabaseClient.from('programs').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+                        const { error: err4 } = await window.supabaseClient.from('settings').delete().neq('id', '00000000-0000-0000-0000-000000000000');
 
-                    initData(); // Re-initialize with defaults
-                    renderAll();
-                    showToast("Database wiped clean.", true);
+                        await initData(); // Re-initialize with defaults (or empty)
+                        showToast("Server database wiped clean.", true);
+                    } catch (e) {
+                        console.error("Wipe error", e);
+                        showToast("Failed to wipe server data", true);
+                    }
                 }
             }
         }
 
     </script>
+    <!-- Supabase SDK & Client Initialization -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
 </body>
 
 </html>

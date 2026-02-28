@@ -258,80 +258,9 @@
                 <div id="events-container" class="grid event-list-view" style="gap: var(--space-md);"
                     data-aos="fade-up">
 
-                    <!-- Event 1 -->
-                    <div class="event-card" data-category="educational upcoming">
-                        <div class="event-date-block">
-                            <span class="event-day">12</span>
-                            <span class="event-month">April</span>
-                        </div>
-                        <div class="event-body">
-                            <span class="badge"
-                                style="background-color: var(--color-border); color: var(--color-text); margin-bottom: 5px;">Educational</span>
-                            <h4 style="margin-bottom: 5px; color: var(--color-primary);">Seminar: Journey of the Soul
-                            </h4>
-                            <p class="text-muted" style="margin-bottom: 10px; font-size: 0.95rem;">A comprehensive
-                                seminar covering the reality of the soul, what happens after death, and the minor signs
-                                of the Day of Judgment.</p>
-                            <div style="display: flex; gap: 15px; color: var(--color-text-muted); font-size: 0.85rem;">
-                                <span><i class="fas fa-map-marker-alt"></i> Main Prayer Hall</span>
-                                <span><i class="far fa-clock"></i> 2:00 PM - 5:00 PM</span>
-                            </div>
-                        </div>
-                        <div class="event-actions" style="padding: var(--space-md);">
-                            <a href="#" class="btn btn-outline" style="white-space: nowrap;"><i
-                                    class="far fa-calendar-plus"></i> Add to Calendar</a>
-                        </div>
-                    </div>
-
-                    <!-- Event 2 -->
-                    <div class="event-card" data-category="community upcoming">
-                        <div class="event-date-block"
-                            style="background-color: var(--color-secondary); color: var(--color-bg-dark);">
-                            <span class="event-day">19</span>
-                            <span class="event-month">April</span>
-                        </div>
-                        <div class="event-body">
-                            <span class="badge"
-                                style="background-color: var(--color-border); color: var(--color-text); margin-bottom: 5px;">Community</span>
-                            <h4 style="margin-bottom: 5px; color: var(--color-primary);">Neighborhood Clean-up Drive
-                            </h4>
-                            <p class="text-muted" style="margin-bottom: 10px; font-size: 0.95rem;">Volunteering activity
-                                organized by the youth group to clean up the local parks around Ylä-Malmi. Supplies
-                                provided.</p>
-                            <div style="display: flex; gap: 15px; color: var(--color-text-muted); font-size: 0.85rem;">
-                                <span><i class="fas fa-map-marker-alt"></i> Meet at Masjid Entrance</span>
-                                <span><i class="far fa-clock"></i> 10:00 AM - 12:00 PM</span>
-                            </div>
-                        </div>
-                        <div class="event-actions" style="padding: var(--space-md);">
-                            <a href="#" class="btn btn-outline" style="white-space: nowrap;"><i
-                                    class="far fa-calendar-plus"></i> Add to Calendar</a>
-                        </div>
-                    </div>
-
-                    <!-- Event 3 -->
-                    <div class="event-card" data-category="educational">
-                        <div class="event-date-block" style="background-color: var(--color-accent);">
-                            <span class="event-day">26</span>
-                            <span class="event-month">April</span>
-                        </div>
-                        <div class="event-body">
-                            <span class="badge"
-                                style="background-color: var(--color-border); color: var(--color-text); margin-bottom: 5px;">Educational</span>
-                            <h4 style="margin-bottom: 5px; color: var(--color-primary);">Fiqh of Zakat Workshop</h4>
-                            <p class="text-muted" style="margin-bottom: 10px; font-size: 0.95rem;">Learn how to
-                                accurately calculate your Zakat on wealth, gold, and business inventory before Ramadan.
-                            </p>
-                            <div style="display: flex; gap: 15px; color: var(--color-text-muted); font-size: 0.85rem;">
-                                <span><i class="fas fa-map-marker-alt"></i> Classroom 2</span>
-                                <span><i class="far fa-clock"></i> After Maghrib</span>
-                            </div>
-                        </div>
-                        <div class="event-actions" style="padding: var(--space-md);">
-                            <a href="#" class="btn btn-outline" style="white-space: nowrap;"><i
-                                    class="far fa-calendar-plus"></i> Add to Calendar</a>
-                        </div>
-                    </div>
+                    <!-- Dynamic Events will be injected here via data-service.js -->
+                    <div class="skeleton" style="height: 150px; width: 100%; border-radius: var(--radius-md);"></div>
+                    <div class="skeleton" style="height: 150px; width: 100%; border-radius: var(--radius-md);"></div>
 
                 </div>
 
@@ -459,10 +388,14 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="js/data-service.js"></script>
     <script src="js/main.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ once: true, duration: 800 });
+        document.addEventListener('DOMContentLoaded', () => {
+            AOS.init({ once: true, duration: 800 });
+            DataService.renderAllEvents('events-container');
+        });
 
         // Filter Logic
         function filterEvents(category) {

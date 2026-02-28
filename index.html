@@ -104,6 +104,9 @@
     </div>
 
     <main id="main-content">
+        <!-- Dynamic Announcement Banner -->
+        <div id="announcement-banner-container" style="display: none;"></div>
+
         <!-- Hero Section -->
         <section class="hero" style="background-image: url('images/hero-masjid.png');">
             <div class="hero-overlay"></div>
@@ -165,6 +168,20 @@
                             <li><i class="fas fa-check-circle" style="color: var(--color-secondary);"></i> Youth
                                 Programs</li>
                         </ul>
+
+                        <!-- Dynamic Jumu'ah Info -->
+                        <div
+                            style="margin-top: var(--space-md); padding: var(--space-sm) var(--space-md); background: rgba(212, 175, 55, 0.1); border-left: 4px solid var(--color-secondary); border-radius: var(--radius-sm);">
+                            <h4 style="margin-bottom: 5px; color: var(--color-primary);"><i class="fas fa-mosque"></i>
+                                Next Jumu'ah Service</h4>
+                            <p style="margin-bottom: 2px;"><strong>Khutbah Time:</strong> <span
+                                    id="jummah-time">Loading...</span></p>
+                            <p style="margin-bottom: 2px;"><strong>Khateeb:</strong> <span
+                                    id="jummah-khateeb">Loading...</span></p>
+                            <p style="margin-bottom: 0;"><strong>Topic:</strong> <span
+                                    id="jummah-topic">Loading...</span></p>
+                        </div>
+
                         <a href="about.html" class="btn btn-outline"
                             style="align-self: flex-start; margin-top: var(--space-md);">Learn Our Story &rarr;</a>
                     </div>
@@ -182,7 +199,8 @@
                 <p class="text-muted">Join our ongoing programs and upcoming gatherings.</p>
             </div>
 
-            <div class="grid grid-3" style="margin-top: var(--space-lg);" data-aos="fade-up" data-aos-delay="100">
+            <div id="events-preview-grid" class="grid grid-3" style="margin-top: var(--space-lg);" data-aos="fade-up"
+                data-aos-delay="100">
 
                 <!-- Event 1 -->
                 <div class="card">
@@ -463,8 +481,15 @@
     </footer>
 
     <!-- Scripts -->
+    <script src="js/data-service.js"></script>
     <script src="js/main.js"></script>
     <script src="js/prayer-times.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Additional homepage specific data integrations
+            DataService.renderEventsPreview(3);
+        });
+    </script>
 
     <button id="back-to-top" aria-label="Back to top" style="position:fixed;bottom:28px;right:22px;z-index:999;
         width:48px;height:48px;border-radius:50%;border:none;

@@ -98,13 +98,21 @@ document.addEventListener('DOMContentLoaded', () => {
             <tbody>
         `;
 
-        PRAYERS.forEach(prayer => {
-            // Note: Sunrise has no Iqamah
-            let time = timings[prayer];
+        const iqamahData = JSON.parse(localStorage.getItem('ms_iqamah')) || null;
 
-            // Format time: add slightly offset iqamah +15/+20 mins (mocking unless real schedule provided)
+        PRAYERS.forEach(prayer => {
+            let time = timings[prayer];
             let iqamahDisplay = '-';
-            if (prayer !== 'Sunrise') {
+
+            // Override with admin data if available
+            if (iqamahData) {
+                if (prayer === 'Fajr' && iqamahData.fajr) iqamahDisplay = iqamahData.fajr;
+                if (prayer === 'Dhuhr' && iqamahData.dhuhr) iqamahDisplay = iqamahData.dhuhr;
+                if (prayer === 'Asr' && iqamahData.asr) iqamahDisplay = iqamahData.asr;
+                if (prayer === 'Maghrib' && iqamahData.maghrib) iqamahDisplay = iqamahData.maghrib;
+                if (prayer === 'Isha' && iqamahData.isha) iqamahDisplay = iqamahData.isha;
+            } else if (prayer !== 'Sunrise') {
+                // Fallback mock logic if no admin data
                 const parts = time.split(':');
                 let h = parseInt(parts[0], 10);
                 let m = parseInt(parts[1], 10) + (prayer === 'Maghrib' ? 5 : 20); // Maghrib usually +5, others +20
@@ -123,8 +131,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isFriday && prayer === 'Dhuhr') {
                 prayerNameEn = "Jumu'ah";
                 prayerNameAr = "الجمعة";
-                // Fixed generic Jumuah time for Finland usually around 13:00 / 14:00 depending on DST
-                iqamahDisplay = "See Schedule";
+
+                // Try fetching jumpah specifically
+                const jummahData = JSON.parse(localStorage.getItem('ms_jummah')) || null;
+                if (jummahData && jummahData.time) {
+                    iqamahDisplay = jummahData.time;
+                } else {
+                    iqamahDisplay = "See Schedule";
+                }
             }
 
             html += `
@@ -141,7 +155,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += `</tbody></table>
         <p style="font-size:0.8rem;color:var(--color-text-muted);margin-top:8px;">
-            * Iqamah times are approximate. Please confirm with the Masjid for exact times.
+            * Iqamah times are managed by the Masjid Admin.
         </p>`;
         tableContainer.innerHTML = html;
     }

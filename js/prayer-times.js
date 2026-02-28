@@ -182,42 +182,57 @@ document.addEventListener('DOMContentLoaded', () => {
             const currentSeconds = now.getSeconds();
             const currentTotalSeconds = (currentHours * 3600) + (currentMinutes * 60) + currentSeconds;
 
-            let nextPrayer = null;
-            let minDiff = Infinity;
+            let nextPrayerIndex = -1;
 
-            PRAYERS.forEach(prayer => {
-                const timeStrs = timings[prayer].split(':');
+            for (let i = 0; i < PRAYERS.length; i++) {
+                const timeStrs = timings[PRAYERS[i]].split(':');
                 const tH = parseInt(timeStrs[0], 10);
                 const tM = parseInt(timeStrs[1], 10);
                 const tTotalSeconds = (tH * 3600) + (tM * 60);
 
-                // Assuming prayer is today and hasn't happened yet
                 if (tTotalSeconds > currentTotalSeconds) {
-                    const diff = tTotalSeconds - currentTotalSeconds;
-                    if (diff < minDiff) {
-                        minDiff = diff;
-                        nextPrayer = prayer;
-                    }
+                    nextPrayerIndex = i;
+                    break;
                 }
-            });
+            }
 
-            // If no next prayer today, Next is tomorrow's Fajr
-            if (!nextPrayer) {
-                nextPrayer = 'Fajr';
+            let currentPrayerIndex = -1;
+            let minDiff = 0; // for countdown to next prayer
+
+            if (nextPrayerIndex === -1) {
+                // All prayers today have passed
+                currentPrayerIndex = PRAYERS.length - 1; // Isha
+                nextPrayerIndex = 0; // Tomorrow's Fajr
                 const fTimeStrs = timings['Fajr'].split(':');
                 const fH = parseInt(fTimeStrs[0], 10);
                 const fM = parseInt(fTimeStrs[1], 10);
                 const fTotalSeconds = (fH * 3600) + (fM * 60);
                 minDiff = ((24 * 3600) - currentTotalSeconds) + fTotalSeconds;
+            } else if (nextPrayerIndex === 0) {
+                // Currently before Fajr, so current is yesterday's Isha
+                currentPrayerIndex = PRAYERS.length - 1;
+                const fTimeStrs = timings['Fajr'].split(':');
+                const fH = parseInt(fTimeStrs[0], 10);
+                const fM = parseInt(fTimeStrs[1], 10);
+                minDiff = ((fH * 3600) + (fM * 60)) - currentTotalSeconds;
+            } else {
+                currentPrayerIndex = nextPrayerIndex - 1;
+                const nTimeStrs = timings[PRAYERS[nextPrayerIndex]].split(':');
+                const nH = parseInt(nTimeStrs[0], 10);
+                const nM = parseInt(nTimeStrs[1], 10);
+                minDiff = ((nH * 3600) + (nM * 60)) - currentTotalSeconds;
             }
 
-            // Highlight Row
+            const nextPrayer = PRAYERS[nextPrayerIndex];
+            const currentPrayer = PRAYERS[currentPrayerIndex];
+
+            // Highlight Row - User requested "soft color yellow" as a "slide bar" for the CURRENT prayer
             PRAYERS.forEach(p => {
                 const r = document.getElementById(`row-${p}`);
                 if (r) {
-                    if (p === nextPrayer) {
-                        r.style.backgroundColor = "rgba(212, 175, 55, 0.1)"; // Gold highlight
-                        r.style.borderLeft = "4px solid var(--color-secondary)";
+                    if (p === currentPrayer) {
+                        r.style.backgroundColor = "#FFFDE7"; // Soft yellow
+                        r.style.borderLeft = "6px solid #FBC02D"; // Slightly stronger yellow sidebar
                     } else {
                         r.style.backgroundColor = "";
                         r.style.borderLeft = "";

@@ -6,7 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Contact & Services | Masjid Sunnah Helsinki</title>
     <meta name="description"
-        content="Get in touch with Masjid Sunnah Helsinki. Information on marriage services, Janazah, and new Muslim support.">
+        content="Get in touch with Masjid Sunnah Helsinki. Information on marriage services (Nikah), Janazah, and new Muslim support. Visit us in Malmi.">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕌</text></svg>">
+
+    <!-- Open Graph / SEO -->
+    <meta property="og:title" content="Contact & Services | Masjid Sunnah Helsinki">
+    <meta property="og:description" content="Get in touch for marriage, janazah, and support.">
+    <meta property="og:image" content="images/hero-masjid.png">
+    <meta property="og:url" content="https://masjidsunnah.fi/contact.html">
 
     <!-- Fonts -->
     <link
@@ -144,6 +152,9 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html" style="color: var(--color-secondary);">Contact</a></li>
                 <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+                <li>
+                    <div id="google_translate_element" style="display: inline-block;"></div>
+                </li>
             </ul>
             <button class="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
         </div>
@@ -208,7 +219,7 @@
                         <i class="fas fa-phone-alt"></i>
                         <div>
                             <h4>Phone</h4>
-                            <p><a href="tel:+358000000000">+358 (0) 00 000 0000</a></p>
+                            <p><a href="tel:+358401234567">+358 (0) 40 123 4567</a></p>
                             <p style="font-size: 0.85rem; color: rgba(255,255,255,0.6);">Available during office hours
                                 (Mon-Thu 10-14)</p>
                         </div>
@@ -219,21 +230,21 @@
                 <div class="card" data-aos="fade-left">
                     <div class="card-body">
                         <h3 style="margin-bottom: var(--space-md);">Send a Message</h3>
-                        <form
-                            onsubmit="event.preventDefault(); alert('Message sent successfully! Insha\'Allah we will reply soon.'); this.reset();">
+                        <form action="https://formspree.io/f/mqakvjnd" method="POST">
                             <div class="form-row" style="margin-bottom: var(--space-sm);">
                                 <div>
-                                    <label class="form-label">Full Name</label>
-                                    <input type="text" class="form-control" required>
+                                    <label class="form-label" for="full-name">Full Name</label>
+                                    <input type="text" id="full-name" name="name" class="form-control" required>
                                 </div>
                                 <div>
-                                    <label class="form-label">Email Address</label>
-                                    <input type="email" class="form-control" required>
+                                    <label class="form-label" for="email">Email Address</label>
+                                    <input type="email" id="email" name="_replyto" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Subject</label>
-                                <select class="form-control" required style="cursor: pointer;">
+                                <label class="form-label" for="subject">Subject</label>
+                                <select id="subject" name="subject" class="form-control" required
+                                    style="cursor: pointer;">
                                     <option value="">Select a topic</option>
                                     <option value="general">General Inquiry</option>
                                     <option value="marriage">Marriage (Nikah) Request</option>
@@ -244,8 +255,8 @@
                                 </select>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Message</label>
-                                <textarea class="form-control" rows="5" required></textarea>
+                                <label class="form-label" for="message">Message</label>
+                                <textarea id="message" name="message" class="form-control" rows="5" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary" style="width: 100%;">Send Message</button>
                         </form>
@@ -504,9 +515,12 @@
                     <p style="color: #94A3B8; margin-bottom: var(--space-md);">A place of worship, learning, and
                         community operating upon the methodology of Ahl Al-Sunnah Wal-Jama`ah in Helsinki.</p>
                     <div class="social-links">
-                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://facebook.com/masjidsunnahhelsinki" class="social-icon" target="_blank"
+                            aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/masjidsunnahhelsinki" class="social-icon" target="_blank"
+                            aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/@masjidsunnahhelsinki" class="social-icon" target="_blank"
+                            aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
                 <div>
@@ -542,7 +556,8 @@
             </div>
             <div class="footer-bottom">
                 <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
-                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">
+                    سُبْحَانَ اللهِ
                     وَبِحَمْدِهِ</p>
             </div>
         </div>
@@ -550,6 +565,17 @@
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>AOS.init({ once: true, duration: 800 });</script>
 
@@ -564,4 +590,3 @@
 </body>
 
 </html>
-

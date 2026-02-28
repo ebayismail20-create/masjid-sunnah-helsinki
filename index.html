@@ -4,11 +4,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Masjid Sunnah Helsinki | Islamic Center</title>
+    <title>Masjid Sunnah Helsinki | Mosque & Islamic Centre Malmi</title>
     <meta name="description"
-        content="Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة) — Islamic center serving Helsinki, Finland. Prayer times, programs, events, and community services.">
+        content="Masjid Sunnah Helsinki – Islamic mosque in Malmi, Finland. Prayer times, Friday khutbah, Islamic education, Zakat, marriage &amp; community services. Open to all.">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🕌</text></svg>">
+
+    <!-- Open Graph / SEO -->
     <meta property="og:title" content="Masjid Sunnah Helsinki">
-    <meta property="og:image" content="images/og-masjid.jpg">
+    <meta property="og:description" content="Mosque & Islamic Centre in Malmi, Helsinki.">
+    <meta property="og:image" content="images/hero-masjid.png">
+    <meta property="og:url" content="https://masjidsunnah.fi/">
 
     <!-- Fonts -->
     <link
@@ -72,6 +78,9 @@
                 <li><a href="about.html">About</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+                <li>
+                    <div id="google_translate_element" style="display: inline-block;"></div>
+                </li>
             </ul>
 
             <button class="hamburger" aria-label="Toggle Navigation">
@@ -99,8 +108,7 @@
 
     <main id="main-content">
         <!-- Hero Section -->
-        <section class="hero"
-            style="background-image: url('https://images.unsplash.com/photo-1542816417-0983c9c9ad53?w=1200&auto=format&q=80');">
+        <section class="hero" style="background-image: url('images/hero-masjid.png');">
             <div class="hero-overlay"></div>
             <div class="container hero-content fade-in">
                 <span class="hero-greeting"><span lang="ar" dir="rtl">السَّلَامُ عَلَيْكُمْ</span></span>
@@ -181,7 +189,8 @@
 
                 <!-- Event 1 -->
                 <div class="card">
-                    <img loading="lazy" src="https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800&auto=format&q=80"
+                    <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1564769625905-50e93615e769?w=800&auto=format&q=80"
                         alt="Islamic Study Session" class="card-image">
                     <div class="card-body">
                         <span class="badge" style="margin-bottom: var(--space-xs);">Weekly</span>
@@ -214,7 +223,8 @@
 
                 <!-- Event 3 -->
                 <div class="card">
-                    <img loading="lazy" src="https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?w=800&auto=format&q=80"
+                    <img loading="lazy"
+                        src="https://images.unsplash.com/photo-1608889825103-eb5ed706fc64?w=800&auto=format&q=80"
                         alt="Arabic Class" class="card-image">
                     <div class="card-body">
                         <span class="badge" style="margin-bottom: var(--space-xs);">Registration Open</span>
@@ -314,26 +324,76 @@
             </div>
         </section>
 
+        <!-- Visitor Guide Section -->
+        <section class="section" style="background: var(--color-bg-alt); border-top: 1px solid var(--color-border);">
+            <div class="container" data-aos="fade-up">
+                <div class="text-center" style="margin-bottom: var(--space-lg);">
+                    <span class="section-label">FIRST TIME VISITING?</span>
+                    <h2>Visitor Guide</h2>
+                    <span class="islamic-divider"></span>
+                </div>
+                <div class="grid grid-4" style="gap: var(--space-md);">
+                    <div style="text-align: center; padding: var(--space-md);">
+                        <div
+                            style="background: rgba(44,76,59,0.08); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-sm);">
+                            <i class="fas fa-user-plus" style="font-size: 1.8rem; color: var(--color-primary);"></i>
+                        </div>
+                        <h4>How to Join</h4>
+                        <p class="text-muted" style="font-size: 0.95rem;">Walk in for any prayer — no registration
+                            needed. All are welcome to attend Jumu'ah on Fridays at 13:15.</p>
+                    </div>
+                    <div style="text-align: center; padding: var(--space-md);">
+                        <div
+                            style="background: rgba(44,76,59,0.08); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-sm);">
+                            <i class="fas fa-tshirt" style="font-size: 1.8rem; color: var(--color-primary);"></i>
+                        </div>
+                        <h4>Dress Code</h4>
+                        <p class="text-muted" style="font-size: 0.95rem;">Please dress modestly. Sisters are asked to
+                            wear hijab inside. Shoes are removed at the entrance.</p>
+                    </div>
+                    <div style="text-align: center; padding: var(--space-md);">
+                        <div
+                            style="background: rgba(44,76,59,0.08); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-sm);">
+                            <i class="fas fa-car" style="font-size: 1.8rem; color: var(--color-primary);"></i>
+                        </div>
+                        <h4>Parking</h4>
+                        <p class="text-muted" style="font-size: 0.95rem;">Free parking available around Ylä-Malmin tori.
+                            Bus routes 67, 69 &amp; 68 stop directly in front.</p>
+                    </div>
+                    <div style="text-align: center; padding: var(--space-md);">
+                        <div
+                            style="background: rgba(44,76,59,0.08); width: 70px; height: 70px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto var(--space-sm);">
+                            <i class="fas fa-female" style="font-size: 1.8rem; color: var(--color-primary);"></i>
+                        </div>
+                        <h4>Sisters' Section</h4>
+                        <p class="text-muted" style="font-size: 0.95rem;">A dedicated sisters' prayer room with wudu
+                            facilities is available on the upper floor with a separate entrance.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- Location & Contact Ribbon -->
         <section
-            style="background-color: var(--color-bg-alt); border-top: 1px solid var(--color-border); padding: var(--space-md) 0;">
+            style="background-color: var(--color-primary); border-top: 1px solid var(--color-border); padding: var(--space-md) 0;">
             <div class="container"
                 style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-md);">
                 <div style="display: flex; gap: var(--space-md); align-items: center;">
                     <i class="fas fa-map-marker-alt fa-2x" style="color: var(--color-secondary);"></i>
                     <div>
-                        <strong>Ylä-Malmin tori 6b</strong>
-                        <div class="text-muted">00700 Helsinki, Finland</div>
+                        <strong style="color: #fff;">Ylä-Malmin tori 6b</strong>
+                        <div style="color: rgba(255,255,255,0.7);">00700 Helsinki, Finland</div>
                     </div>
                 </div>
                 <div style="display: flex; gap: var(--space-md); align-items: center;">
                     <i class="fas fa-envelope fa-2x" style="color: var(--color-secondary);"></i>
                     <div>
-                        <strong>Contact Us</strong>
-                        <div class="text-muted">info@masjidsunnah.fi (Placeholder)</div>
+                        <strong style="color: #fff;">Contact Us</strong>
+                        <div style="color: rgba(255,255,255,0.7);"><a href="mailto:info@masjidsunnah.fi"
+                                style="color: var(--color-secondary);">info@masjidsunnah.fi</a></div>
                     </div>
                 </div>
-                <a href="contact.html" class="btn btn-outline">Directions & Contact</a>
+                <a href="contact.html" class="btn btn-secondary">Directions &amp; Contact</a>
             </div>
         </section>
     </main>
@@ -353,9 +413,12 @@
                         Wal-Jama`ah in Helsinki.
                     </p>
                     <div class="social-links">
-                        <a href="#" class="social-icon" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="#" class="social-icon" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                        <a href="https://facebook.com/masjidsunnahhelsinki" class="social-icon" target="_blank"
+                            aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://instagram.com/masjidsunnahhelsinki" class="social-icon" target="_blank"
+                            aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/@masjidsunnahhelsinki" class="social-icon" target="_blank"
+                            aria-label="YouTube"><i class="fab fa-youtube"></i></a>
                     </div>
                 </div>
 
@@ -395,7 +458,8 @@
 
             <div class="footer-bottom">
                 <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
-                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">سُبْحَانَ اللهِ
+                <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">
+                    سُبْحَانَ اللهِ
                     وَبِحَمْدِهِ</p>
             </div>
         </div>
@@ -403,15 +467,20 @@
 
     <!-- Scripts -->
     <script src="js/main.js"></script>
-    <script>
-        // Inline code to hook up the prayer logic to the specific elements on the homepage
-        // Note: The heavy lifting is done in js/prayer-times.js; we just need to ensure the variables align.
-        // We will include prayer-times.js specifically 
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
     </script>
+    <script type="text/javascript"
+        src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
     <script src="js/prayer-times.js"></script>
 
-    <button id="back-to-top" aria-label="Back to top"
-        style="position:fixed;bottom:28px;right:22px;z-index:999;
+    <button id="back-to-top" aria-label="Back to top" style="position:fixed;bottom:28px;right:22px;z-index:999;
         width:48px;height:48px;border-radius:50%;border:none;
         background:var(--color-primary);color:var(--color-secondary);
         font-size:1.2rem;cursor:pointer;opacity:0;pointer-events:none;
@@ -422,4 +491,3 @@
 </body>
 
 </html>
-

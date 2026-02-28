@@ -53,14 +53,14 @@ const DataService = {
         const activeAnnouncement = announcements[announcements.length - 1];
 
         // Format the banner type
-        let badgeStyle = "background-color: var(--color-gold); color: var(--color-dark);";
+        let badgeStyle = "background-color: var(--color-secondary); color: var(--color-bg-dark);";
         let icon = "fa-bullhorn";
 
         if (activeAnnouncement.type === 'Urgent') {
-            badgeStyle = "background-color: var(--color-danger); color: white;";
+            badgeStyle = "background-color: #e53e3e; color: white;";
             icon = "fa-exclamation-triangle";
         } else if (activeAnnouncement.type === 'Ramadan' || activeAnnouncement.type === 'Eid') {
-            badgeStyle = "background-color: var(--color-green); color: white;";
+            badgeStyle = "background-color: var(--color-primary); color: white;";
             icon = "fa-moon";
         }
 

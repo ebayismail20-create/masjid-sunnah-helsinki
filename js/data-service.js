@@ -79,6 +79,12 @@ const DataService = {
 
         container.innerHTML = html;
         container.style.display = 'block';
+
+        // Force navbar to solid state so white links don't disappear against the cream background
+        const navbar = document.querySelector('.navbar');
+        if (navbar) {
+            navbar.classList.add('scrolled');
+        }
     },
 
     /**

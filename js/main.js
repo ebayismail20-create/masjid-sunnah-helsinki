@@ -34,7 +34,9 @@ document.addEventListener('DOMContentLoaded', () => {
   if (navbar) {
     if (isHomePage) {
       window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
+        const hasBanner = document.getElementById('announcement-banner-container') &&
+          document.getElementById('announcement-banner-container').style.display === 'block';
+        if (window.scrollY > 50 || hasBanner) {
           navbar.classList.add('scrolled');
         } else {
           navbar.classList.remove('scrolled');

@@ -235,29 +235,33 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            let currentPrayerIndex = -1;
-            let minDiff = 0; // for countdown to next prayer
+            let currentPrayerIndex;
+            let minDiff = 0;
+            let crossesMidnight = false;
 
             if (nextPrayerIndex === -1) {
-                // All prayers today have passed
+                // If we've passed Isha, current is Isha, next is Fajr tomorrow
                 currentPrayerIndex = PRAYERS.length - 1; // Isha
                 nextPrayerIndex = 0; // Tomorrow's Fajr
-                const fTime = parseTimeStr(timings['Fajr']);
-                const fTotalSeconds = (fTime.h * 3600) + (fTime.m * 60);
-                minDiff = ((24 * 3600) - currentTotalSeconds) + fTotalSeconds;
+                crossesMidnight = true;
             } else if (nextPrayerIndex === 0) {
-                // Currently before Fajr, so current is yesterday's Isha
+                // If we are before Fajr today, current is Isha yesterday, next is Fajr today
                 currentPrayerIndex = PRAYERS.length - 1;
-                const fTime = parseTimeStr(timings['Fajr']);
-                minDiff = ((fTime.h * 3600) + (fTime.m * 60)) - currentTotalSeconds;
             } else {
                 currentPrayerIndex = nextPrayerIndex - 1;
-                const nTime = parseTimeStr(timings[PRAYERS[nextPrayerIndex]]);
-                minDiff = ((nTime.h * 3600) + (nTime.m * 60)) - currentTotalSeconds;
             }
 
             const nextPrayer = PRAYERS[nextPrayerIndex];
             const currentPrayer = PRAYERS[currentPrayerIndex];
+
+            const nTime = parseTimeStr(timings[nextPrayer]);
+            let nTotalSeconds = (nTime.h * 3600) + (nTime.m * 60);
+
+            if (crossesMidnight) {
+                // Crosses midnight, add 24 hours to next prayer
+                nTotalSeconds += 24 * 3600;
+            }
+            minDiff = nTotalSeconds - currentTotalSeconds;
 
             // Highlight Row - User requested "soft color yellow" as a "slide bar" for the CURRENT prayer
             PRAYERS.forEach(p => {

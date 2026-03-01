@@ -173,6 +173,32 @@ const DataService = {
     },
 
     /**
+     * Injects Contact Info globally across all pages where classes are present
+     */
+    renderContactInfo: async function () {
+        const contact = await this.getContactInfo();
+        if (!contact) return;
+
+        // Populate elements by class name so we can inject them in multiple places dynamically
+        const setByClass = (className, value, prefix = '') => {
+            if (!value) return;
+            const elements = document.querySelectorAll('.' + className);
+            elements.forEach(el => {
+                if (el.tagName === 'A') {
+                    el.href = prefix + value;
+                    el.innerText = value;
+                } else {
+                    el.innerText = value;
+                }
+            });
+        };
+
+        setByClass('ms-contact-email', contact.email, 'mailto:');
+        setByClass('ms-contact-phone', contact.phone, 'tel:');
+        setByClass('ms-contact-address', contact.address);
+    },
+
+    /**
      * Renders a preview of upcoming events.
      */
     renderEventsPreview: async function (limit = 3) {
@@ -299,6 +325,7 @@ const DataService = {
 // Auto-run common integrations on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
     DataService.renderBannerAnnouncement();
+    DataService.renderContactInfo();
     DataService.renderIqamahTimes();
     DataService.renderJummahInfo();
 });

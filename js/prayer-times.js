@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cache) {
             try {
                 const data = JSON.parse(cache);
-                processPrayerData(data);
+                await processPrayerData(data);
                 return;
             } catch (e) {
                 console.warn("Prayer cache corrupted, fetching fresh data...");
@@ -58,7 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (payload.code === 200 && payload.data) {
                 // Cache successfully fetched data
                 localStorage.setItem(cacheKey, JSON.stringify(payload.data));
-                processPrayerData(payload.data);
+                await processPrayerData(payload.data);
             }
         } catch (error) {
             console.error("Failed to fetch prayer times:", error);
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    function processPrayerData(data) {
+    async function processPrayerData(data) {
         const timings = data.timings;
         const dateInfo = data.date;
 
@@ -78,11 +78,11 @@ document.addEventListener('DOMContentLoaded', () => {
             gregorianDateEl.textContent = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year}`;
         }
 
-        renderTable(timings);
+        await renderTable(timings);
         startCountdownTracker(timings);
     }
 
-    function renderTable(timings) {
+    async function renderTable(timings) {
         const arabicNames = {
             'Fajr': 'الفجر',
             'Sunrise': 'الشروق',
@@ -107,7 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
             <tbody>
         `;
 
-        const iqamahData = JSON.parse(localStorage.getItem('ms_iqamah')) || null;
+        const iqamahData = await window.DataService.getIqamahTimes() || null;
+        const jummahData = await window.DataService.getJummahInfo() || null;
 
         PRAYERS.forEach(prayer => {
             let time = timings[prayer];
@@ -143,7 +144,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 prayerNameAr = "الجمعة";
 
                 // Try fetching jumpah specifically
-                const jummahData = JSON.parse(localStorage.getItem('ms_jummah')) || null;
                 if (jummahData && jummahData.time) {
                     iqamahDisplay = jummahData.time;
                 } else {

@@ -45,6 +45,7 @@ const DataService = {
         return data || [];
     },
     getIqamahTimes: async function () {
+        console.log("Fetching Iqamah times from Supabase DataService...");
         const { data, error } = await window.supabaseClient
             .from('settings')
             .select('value')
@@ -55,6 +56,7 @@ const DataService = {
             console.error('Error fetching iqamah times:', error);
             return null;
         }
+        console.log("Returned Iqamah:", data ? data.value : null);
         return data ? data.value : null;
     },
     getContactInfo: async function () {
@@ -321,6 +323,9 @@ const DataService = {
         container.innerHTML = html;
     }
 };
+
+// Make DataService globally available for other scripts like prayer-times.js
+window.DataService = DataService;
 
 // Auto-run common integrations on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {

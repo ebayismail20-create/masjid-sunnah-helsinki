@@ -114,25 +114,27 @@ document.addEventListener('DOMContentLoaded', () => {
             let time = timings[prayer];
             let iqamahDisplay = '-';
 
-            // Override with admin data if available
+            // 1. First, apply the fallback mock logic as a baseline
+            if (prayer !== 'Sunrise') {
+                const cleanStr = time.split(' ')[0];
+                const parts = cleanStr.split(':');
+                let h = parseInt(parts[0], 10);
+                let m = parseInt(parts[1], 10) + (prayer === 'Maghrib' ? 5 : 20);
+                if (m >= 60) {
+                    m -= 60;
+                    h++;
+                }
+                if (h >= 24) h -= 24; // Ensure hour wraps around if it goes past 23
+                iqamahDisplay = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
+            }
+
+            // 2. Then, strongly override IF the admin explicitly saved a string
             if (iqamahData) {
                 if (prayer === 'Fajr' && iqamahData.fajr) iqamahDisplay = iqamahData.fajr;
                 if (prayer === 'Dhuhr' && iqamahData.dhuhr) iqamahDisplay = iqamahData.dhuhr;
                 if (prayer === 'Asr' && iqamahData.asr) iqamahDisplay = iqamahData.asr;
                 if (prayer === 'Maghrib' && iqamahData.maghrib) iqamahDisplay = iqamahData.maghrib;
                 if (prayer === 'Isha' && iqamahData.isha) iqamahDisplay = iqamahData.isha;
-            } else if (prayer !== 'Sunrise') {
-                // Fallback mock logic if no admin data
-                const cleanStr = time.split(' ')[0]; // Safely strip timezone markers like (EEST)
-                const parts = cleanStr.split(':');
-                let h = parseInt(parts[0], 10);
-                let m = parseInt(parts[1], 10) + (prayer === 'Maghrib' ? 5 : 20); // Maghrib usually +5, others +20
-                if (m >= 60) {
-                    m -= 60;
-                    h += 1;
-                }
-                if (h >= 24) h -= 24;
-                iqamahDisplay = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
             }
 
             // On Fridays, replace Dhuhr with Jumu'ah logic

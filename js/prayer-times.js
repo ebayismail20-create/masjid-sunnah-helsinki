@@ -24,8 +24,17 @@ document.addEventListener('DOMContentLoaded', () => {
         school: 1  // 0 Shafii, 1 Hanafi. Helsinki often has varied communities, standard MWL uses Shafii by default, but let's stick to API default unless specified
     };
 
-    // Cache key for today's date
-    const todayStr = new Date().toISOString().split('T')[0];
+    // Helper for Helsinki current date
+    const getHelsinkiDateStr = () => {
+        try {
+            return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Helsinki' }).format(new Date());
+        } catch (e) {
+            return new Date().toISOString().split('T')[0]; // Fallback
+        }
+    };
+
+    // Cache key for today's date in Helsinki
+    const todayStr = getHelsinkiDateStr();
     const cacheKey = `prayer_times_${config.city}_${todayStr}`;
 
     async function fetchPrayerTimes() {
@@ -113,14 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (prayer === 'Isha' && iqamahData.isha) iqamahDisplay = iqamahData.isha;
             } else if (prayer !== 'Sunrise') {
                 // Fallback mock logic if no admin data
-                const parts = time.split(':');
+                const cleanStr = time.split(' ')[0]; // Safely strip timezone markers like (EEST)
+                const parts = cleanStr.split(':');
                 let h = parseInt(parts[0], 10);
                 let m = parseInt(parts[1], 10) + (prayer === 'Maghrib' ? 5 : 20); // Maghrib usually +5, others +20
                 if (m >= 60) {
                     m -= 60;
                     h += 1;
                 }
-                if (h === 24) h = 0;
+                if (h >= 24) h -= 24;
                 iqamahDisplay = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
             }
 
@@ -162,33 +172,62 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let countdownInterval = null;
 
+    // Helper to get exact current time in Helsinki
+    const getHelsinkiTimeParts = () => {
+        try {
+            const parts = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'Europe/Helsinki',
+                hour: 'numeric',
+                minute: 'numeric',
+                second: 'numeric',
+                hour12: false
+            }).formatToParts(new Date());
+
+            let h = 0, m = 0, s = 0;
+            parts.forEach(p => {
+                if (p.type === 'hour') h = parseInt(p.value, 10);
+                if (p.type === 'minute') m = parseInt(p.value, 10);
+                if (p.type === 'second') s = parseInt(p.value, 10);
+            });
+            if (h === 24) h = 0;
+            return { h, m, s };
+        } catch (e) {
+            const now = new Date();
+            return { h: now.getHours(), m: now.getMinutes(), s: now.getSeconds() };
+        }
+    };
+
+    // Helper to safely parse API time strings like "05:30 (EET)"
+    const parseTimeStr = (tStr) => {
+        const cleanStr = tStr.split(' ')[0];
+        const parts = cleanStr.split(':');
+        return {
+            h: parseInt(parts[0], 10),
+            m: parseInt(parts[1], 10)
+        };
+    };
+
     function startCountdownTracker(timings) {
         if (countdownInterval) clearInterval(countdownInterval);
 
         countdownInterval = setInterval(() => {
-            const now = new Date();
-
-            // Auto-reset if day has changed
-            const todayStr = now.toISOString().split('T')[0];
-            if (localStorage.getItem('prayer_date') && localStorage.getItem('prayer_date') !== todayStr) {
+            // Auto-reset if day has changed (in local browser terms, sufficient for reload trigger)
+            const currentHelsinkiDate = getHelsinkiDateStr();
+            if (localStorage.getItem('prayer_date') && localStorage.getItem('prayer_date') !== currentHelsinkiDate) {
                 clearInterval(countdownInterval);
                 fetchPrayerTimes();  // Re-fetch for new day
                 return;
             }
-            localStorage.setItem('prayer_date', todayStr);
+            localStorage.setItem('prayer_date', currentHelsinkiDate);
 
-            const currentHours = now.getHours();
-            const currentMinutes = now.getMinutes();
-            const currentSeconds = now.getSeconds();
-            const currentTotalSeconds = (currentHours * 3600) + (currentMinutes * 60) + currentSeconds;
+            const hTime = getHelsinkiTimeParts();
+            const currentTotalSeconds = (hTime.h * 3600) + (hTime.m * 60) + hTime.s;
 
             let nextPrayerIndex = -1;
 
             for (let i = 0; i < PRAYERS.length; i++) {
-                const timeStrs = timings[PRAYERS[i]].split(':');
-                const tH = parseInt(timeStrs[0], 10);
-                const tM = parseInt(timeStrs[1], 10);
-                const tTotalSeconds = (tH * 3600) + (tM * 60);
+                const pTime = parseTimeStr(timings[PRAYERS[i]]);
+                const tTotalSeconds = (pTime.h * 3600) + (pTime.m * 60);
 
                 if (tTotalSeconds > currentTotalSeconds) {
                     nextPrayerIndex = i;
@@ -203,24 +242,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 // All prayers today have passed
                 currentPrayerIndex = PRAYERS.length - 1; // Isha
                 nextPrayerIndex = 0; // Tomorrow's Fajr
-                const fTimeStrs = timings['Fajr'].split(':');
-                const fH = parseInt(fTimeStrs[0], 10);
-                const fM = parseInt(fTimeStrs[1], 10);
-                const fTotalSeconds = (fH * 3600) + (fM * 60);
+                const fTime = parseTimeStr(timings['Fajr']);
+                const fTotalSeconds = (fTime.h * 3600) + (fTime.m * 60);
                 minDiff = ((24 * 3600) - currentTotalSeconds) + fTotalSeconds;
             } else if (nextPrayerIndex === 0) {
                 // Currently before Fajr, so current is yesterday's Isha
                 currentPrayerIndex = PRAYERS.length - 1;
-                const fTimeStrs = timings['Fajr'].split(':');
-                const fH = parseInt(fTimeStrs[0], 10);
-                const fM = parseInt(fTimeStrs[1], 10);
-                minDiff = ((fH * 3600) + (fM * 60)) - currentTotalSeconds;
+                const fTime = parseTimeStr(timings['Fajr']);
+                minDiff = ((fTime.h * 3600) + (fTime.m * 60)) - currentTotalSeconds;
             } else {
                 currentPrayerIndex = nextPrayerIndex - 1;
-                const nTimeStrs = timings[PRAYERS[nextPrayerIndex]].split(':');
-                const nH = parseInt(nTimeStrs[0], 10);
-                const nM = parseInt(nTimeStrs[1], 10);
-                minDiff = ((nH * 3600) + (nM * 60)) - currentTotalSeconds;
+                const nTime = parseTimeStr(timings[PRAYERS[nextPrayerIndex]]);
+                minDiff = ((nTime.h * 3600) + (nTime.m * 60)) - currentTotalSeconds;
             }
 
             const nextPrayer = PRAYERS[nextPrayerIndex];

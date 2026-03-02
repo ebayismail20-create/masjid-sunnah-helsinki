@@ -667,3 +667,130 @@ body {
     color: var(--color-text);
     background: var(--color-bg);
 }
+
+/* Premium Announcement Banner */
+.premium-announcement-banner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    text-align: center;
+    font-family: var(--font-main);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 998;
+    margin-top: var(--header-height, 80px);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    animation: slideDownFade 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.premium-announcement-banner.default-type {
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.95), rgba(192, 154, 48, 0.95)); /* Golden gradient */
+    color: var(--color-bg-dark);
+}
+
+.premium-announcement-banner.urgent-type {
+    background: linear-gradient(135deg, rgba(220, 38, 38, 0.95), rgba(185, 28, 28, 0.95)); /* Crimson gradient */
+    color: white;
+}
+
+.premium-announcement-banner.islamic-type {
+    background: linear-gradient(135deg, rgba(44, 76, 59, 0.95), rgba(26, 54, 40, 0.95)); /* Dark green gradient */
+    color: white;
+}
+
+.premium-announcement-content {
+    max-width: 1200px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+    justify-content: center;
+    flex: 1;
+}
+
+.premium-announcement-badge {
+    font-weight: 700;
+    background: rgba(255, 255, 255, 0.25);
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.default-type .premium-announcement-badge {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+.premium-announcement-text {
+    font-size: 1.05rem;
+    line-height: 1.4;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+}
+
+.default-type .premium-announcement-text {
+    text-shadow: none;
+}
+
+.premium-announcement-text strong {
+    font-weight: 700;
+    margin-right: 6px;
+    font-size: 1.1rem;
+}
+
+.premium-announcement-close {
+    position: absolute;
+    right: 20px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    font-size: 1.4rem;
+    cursor: pointer;
+    color: inherit;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    line-height: 0;
+}
+
+.default-type .premium-announcement-close {
+    background: rgba(0,0,0,0.05);
+    border-color: rgba(0,0,0,0.1);
+}
+
+.premium-announcement-close:hover {
+    background: rgba(255,255,255,0.25);
+    transform: scale(1.1);
+}
+
+.default-type .premium-announcement-close:hover {
+    background: rgba(0,0,0,0.15);
+}
+
+@media (max-width: 768px) {
+    .premium-announcement-banner {
+        padding: 10px 15px;
+        padding-right: 40px; /* Space for close button */
+    }
+    .premium-announcement-close {
+        right: 10px;
+        width: 30px;
+        height: 30px;
+        font-size: 1.2rem;
+    }
+    .premium-announcement-content {
+        gap: 8px;
+    }
+}

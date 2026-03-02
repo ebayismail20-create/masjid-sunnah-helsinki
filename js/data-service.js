@@ -105,27 +105,29 @@ const DataService = {
 
         const activeAnnouncement = announcements[announcements.length - 1];
 
-        let badgeStyle = "background-color: var(--color-secondary); color: var(--color-bg-dark);";
+        let themeClass = "default-type";
         let icon = "fa-bullhorn";
 
         if (activeAnnouncement.type === 'Urgent') {
-            badgeStyle = "background-color: #e53e3e; color: white;";
+            themeClass = "urgent-type";
             icon = "fa-exclamation-triangle";
         } else if (activeAnnouncement.type === 'Ramadan' || activeAnnouncement.type === 'Eid') {
-            badgeStyle = "background-color: var(--color-primary); color: white;";
+            themeClass = "islamic-type";
             icon = "fa-moon";
         }
 
         const html = `
-            <div class="announcement-banner" style="display: flex; align-items: center; justify-content: center; padding: 10px 20px; text-align: center; font-family: var(--font-main); box-shadow: 0 2px 5px rgba(0,0,0,0.1); position: relative; z-index: 998; margin-top: var(--header-height, 80px); ${badgeStyle}">
-                <div style="max-width: 1200px; display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
-                    <span style="font-weight: bold; background: rgba(0,0,0,0.1); padding: 3px 10px; border-radius: 20px; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px;">
-                        <i class="fas ${icon}"></i> ${activeAnnouncement.type}
+            <div class="premium-announcement-banner ${themeClass}">
+                <div class="premium-announcement-content">
+                    <span class="premium-announcement-badge">
+                        <i class="fas ${icon}"></i> <span>${activeAnnouncement.type}</span>
                     </span>
-                    <strong style="font-size: 1rem;">${activeAnnouncement.title}:</strong>
-                    <span style="font-size: 0.95rem;">${activeAnnouncement.message}</span>
+                    <div class="premium-announcement-text">
+                        <strong>${activeAnnouncement.title}:</strong>
+                        <span>${activeAnnouncement.message}</span>
+                    </div>
                 </div>
-                <button onclick="this.parentElement.style.display='none'" style="position: absolute; right: 15px; background: none; border: none; font-size: 1.2rem; cursor: pointer; color: inherit; opacity: 0.7;">&times;</button>
+                <button onclick="this.parentElement.style.display='none'" class="premium-announcement-close" aria-label="Close Announcement">&times;</button>
             </div>
         `;
 

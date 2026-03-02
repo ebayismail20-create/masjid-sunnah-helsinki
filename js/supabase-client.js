@@ -13,7 +13,15 @@ const initSupabase = () => {
         console.error("Supabase SDK not loaded properly.");
         return null;
     }
-    return supabaseLib.createClient(supabaseUrl, supabaseKey);
+
+    // Explicitly pass realtime configuration
+    return supabaseLib.createClient(supabaseUrl, supabaseKey, {
+        realtime: {
+            params: {
+                eventsPerSecond: 10,
+            },
+        },
+    });
 };
 
 // Make it globally available

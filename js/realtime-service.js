@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Determine which setting changed to only update what's necessary, 
                 // or safely re-render all settings blocks.
                 const key = payload.new ? payload.new.key : null;
-                
+
                 if (key === 'iqamah_times' && typeof window.DataService.renderIqamahTimes === 'function') {
                     window.DataService.renderIqamahTimes();
                 } else if (key === 'jummah_info' && typeof window.DataService.renderJummahInfo === 'function') {
@@ -97,7 +97,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (typeof triggerAdminRefresh === 'function') triggerAdminRefresh();
         }
-    );
+    )
+        .on(
+            'postgres_changes',
+            { event: '*', schema: 'public', table: 'gallery' },
+            (payload) => {
+                console.log('Gallery change detected:', payload.eventType);
+                if (typeof window.DataService !== 'undefined' && typeof window.DataService.renderGallery === 'function') {
+                    window.DataService.renderGallery();
+                }
+                if (typeof triggerAdminRefresh === 'function') triggerAdminRefresh();
+            }
+        );
 
     // Subscribe to the channel
     realtimeChannel.subscribe((status) => {

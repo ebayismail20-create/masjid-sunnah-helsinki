@@ -262,23 +262,23 @@ const DataService = {
             const displayDate = dateObj.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
 
             html += `
-                <div class="event-card" data-category="${event.category}">
-                    <div class="event-image">
-                        <img src="${event.image_url || 'https://images.unsplash.com/photo-1590076215667-83ee42ff7594?auto=format&fit=crop&q=80&w=800'}" alt="Event Image">
+                <div class="event-card card" data-category="${event.category}" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
+                    <div style="width: 100%; height: 200px; overflow: hidden; border-bottom: 2px solid var(--color-border);">
+                        <img src="${event.image_url || 'https://images.unsplash.com/photo-1590076215667-83ee42ff7594?auto=format&fit=crop&q=80&w=800'}" alt="Event Image" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
-                    <div class="event-content">
-                        <div class="event-category">${event.category}</div>
-                        <h3>${event.title}</h3>
-                        <div class="event-info-line">
-                            <i class="far fa-calendar-alt"></i> ${displayDate}
+                    <div style="padding: var(--space-md); flex-grow: 1; display: flex; flex-direction: column;">
+                        <div style="color: var(--color-secondary); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px;">${event.category}</div>
+                        <h3 style="margin-bottom: var(--space-sm); font-size: 1.4rem;">${event.title}</h3>
+                        <div style="margin-bottom: var(--space-xs); font-size: 0.95rem; color: var(--color-text-muted);">
+                            <i class="far fa-calendar-alt" style="width: 20px; color: var(--color-primary);"></i> ${displayDate}
                         </div>
-                        <div class="event-info-line">
-                            <i class="far fa-clock"></i> ${event.time}
+                        <div style="margin-bottom: var(--space-xs); font-size: 0.95rem; color: var(--color-text-muted);">
+                            <i class="far fa-clock" style="width: 20px; color: var(--color-primary);"></i> ${event.time}
                         </div>
-                        <div class="event-info-line">
-                            <i class="fas fa-map-marker-alt"></i> ${event.location}
+                        <div style="margin-bottom: var(--space-md); font-size: 0.95rem; color: var(--color-text-muted);">
+                            <i class="fas fa-map-marker-alt" style="width: 20px; color: var(--color-primary);"></i> ${event.location}
                         </div>
-                        <p>${event.description}</p>
+                        <p style="flex-grow: 1; border-top: 1px solid var(--color-border); padding-top: var(--space-sm); margin-top: auto;">${event.description}</p>
                     </div>
                 </div>
             `;
@@ -305,24 +305,57 @@ const DataService = {
 
         programs.forEach(prog => {
             let icon = prog.icon || 'fa-book-open';
+            let mediaHtml = prog.image_url
+                ? `<div style="width: 100%; height: 200px; overflow: hidden; border-bottom: 2px solid var(--color-border);"><img src="${prog.image_url}" alt="Program Image" style="width: 100%; height: 100%; object-fit: cover;"></div>`
+                : `<div style="background: var(--color-primary); color: var(--color-secondary); padding: 2rem; text-align: center; font-size: 4rem; border-bottom: 2px solid var(--color-border);"><i class="fas ${icon}"></i></div>`;
 
             html += `
-                <div class="program-card" data-category="${prog.type}">
-                    <div class="program-icon">
-                        <i class="fas ${icon}"></i>
+                <div class="program-card card" data-category="${prog.type || prog.audience}" style="display: flex; flex-direction: column; overflow: hidden; height: 100%;">
+                    ${mediaHtml}
+                    <div style="padding: var(--space-md); flex-grow: 1; display: flex; flex-direction: column;">
+                        <h3 style="margin-bottom: var(--space-xs); font-size: 1.4rem;">${prog.name || prog.title}</h3>
+                        <p style="color: var(--color-text-muted); margin-bottom: var(--space-md); flex-grow: 1;">${prog.description}</p>
+                        <ul style="list-style: none; padding: 0; font-size: 0.95rem; border-top: 1px solid var(--color-border); margin-top: auto; padding-top: var(--space-sm);">
+                            <li style="margin-bottom: 5px;"><i class="fas fa-clock" style="color: var(--color-primary); width: 20px;"></i> <strong>Schedule:</strong> ${prog.schedule}</li>
+                            <li style="margin-bottom: 5px;"><i class="fas fa-users" style="color: var(--color-primary); width: 20px;"></i> <strong>Audience:</strong> ${prog.audience || prog.type}</li>
+                            <li><i class="fas fa-user-tie" style="color: var(--color-primary); width: 20px;"></i> <strong>Instructor:</strong> ${prog.instructor || 'TBA'}</li>
+                        </ul>
+                        <button class="btn btn-outline" style="margin-top: var(--space-md); width: 100%;" onclick="openModal('${(prog.name || prog.title).replace(/'/g, "\\'")}')">Register Now</button>
                     </div>
-                    <h3>${prog.title}</h3>
-                    <p>${prog.description}</p>
-                    <ul class="program-details">
-                        <li><i class="fas fa-clock"></i> <strong>Schedule:</strong> ${prog.schedule}</li>
-                        <li><i class="fas fa-users"></i> <strong>Type/Audience:</strong> ${prog.type}</li>
-                        <li><i class="fas fa-info-circle"></i> <strong>Status:</strong> ${prog.status}</li>
-                    </ul>
                 </div>
             `;
         });
 
         container.innerHTML = html;
+    },
+
+    // -------- Gallery Rendering --------
+    async renderGallery() {
+        const container = document.getElementById('gallery-grid') || document.querySelector('.gallery-grid');
+        if (!container) return;
+
+        try {
+            const { data, error } = await window.supabaseClient
+                .from('gallery')
+                .select('*')
+                .order('created_at', { ascending: false });
+
+            if (error) throw error;
+
+            if (!data || data.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#888; grid-column: 1/-1; padding: 2rem;">No gallery images available yet.</p>';
+                return;
+            }
+
+            container.innerHTML = data.map(img => `
+                <div class="gallery-item" data-aos="fade-up">
+                    <img src="${img.image_url}" alt="${img.caption || 'Gallery image'}" loading="lazy" onerror="this.src='https://via.placeholder.com/400x300?text=Image+Error'">
+                    ${img.caption ? `<div class="gallery-caption">${img.caption}</div>` : ''}
+                </div>
+            `).join('');
+        } catch (e) {
+            console.error('Error rendering gallery:', e);
+        }
     }
 };
 
@@ -335,4 +368,9 @@ document.addEventListener('DOMContentLoaded', () => {
     DataService.renderContactInfo();
     DataService.renderIqamahTimes();
     DataService.renderJummahInfo();
+
+    // Page-specific auto-renders
+    if (document.getElementById('gallery-grid') || document.querySelector('.gallery-grid')) {
+        DataService.renderGallery();
+    }
 });

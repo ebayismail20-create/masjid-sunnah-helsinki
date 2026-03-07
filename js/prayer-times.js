@@ -212,13 +212,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function startCountdownTracker(timings) {
         if (countdownInterval) clearInterval(countdownInterval);
 
-        countdownInterval = setInterval(() => {
+        function updateCountdown() {
             // Auto-reset if day has changed (in local browser terms, sufficient for reload trigger)
             const currentHelsinkiDate = getHelsinkiDateStr();
             if (localStorage.getItem('prayer_date') && localStorage.getItem('prayer_date') !== currentHelsinkiDate) {
-                clearInterval(countdownInterval);
+                if (countdownInterval) clearInterval(countdownInterval);
                 fetchPrayerTimes();  // Re-fetch for new day
-                return;
+                return false;
             }
             localStorage.setItem('prayer_date', currentHelsinkiDate);
 
@@ -265,11 +265,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             minDiff = nTotalSeconds - currentTotalSeconds;
 
-            // Highlight Row - User requested "soft color yellow" as a "slide bar" for the CURRENT prayer
+            // Highlight Row - User requested next prayer mark with soft color
             PRAYERS.forEach(p => {
                 const r = document.getElementById(`row-${p}`);
                 if (r) {
-                    if (p === currentPrayer) {
+                    if (p === nextPrayer) {
                         r.style.backgroundColor = "#FFFDE7"; // Soft yellow
                         r.style.borderLeft = "6px solid #FBC02D"; // Slightly stronger yellow sidebar
                     } else {
@@ -297,7 +297,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 countdownEl.textContent = `-${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
             }
 
-        }, 1000);
+            return true;
+        }
+
+        // Call immediately to prevent --:--:-- flashing. If it doesn't trigger re-fetch, start interval.
+        if (updateCountdown() !== false) {
+            countdownInterval = setInterval(updateCountdown, 1000);
+        }
     }
 
     // Initialize

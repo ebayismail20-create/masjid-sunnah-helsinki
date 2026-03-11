@@ -157,9 +157,9 @@ document.addEventListener('DOMContentLoaded', () => {
         <table class="prayer-table" style="width: 100%; border-collapse: collapse; text-align: left; margin-bottom: 20px;">
             <thead>
                 <tr style="border-bottom: 2px solid var(--color-primary); color: var(--color-primary);">
-                    <th style="padding: 10px; font-family: var(--font-display);">Prayer / الصلاة</th>
-                    <th style="padding: 10px; font-family: var(--font-display);">Adhan</th>
-                    <th style="padding: 10px; font-family: var(--font-display);">Iqamah</th>
+                    <th style="padding: 10px; font-family: var(--font-display);"><span data-i18n="pt_prayer_col">Prayer / الصلاة</span></th>
+                    <th style="padding: 10px; font-family: var(--font-display);"><span data-i18n="pt_adhan">Adhan</span></th>
+                    <th style="padding: 10px; font-family: var(--font-display);"><span data-i18n="pt_iqamah">Iqamah</span></th>
                 </tr>
             </thead>
             <tbody>
@@ -178,10 +178,12 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             // On Fridays, replace Dhuhr with Jumu'ah logic
+            let prayerKey = 'pt_' + prayer.toLowerCase();
             let prayerNameEn = prayer;
             let prayerNameAr = arabicNames[prayer];
 
             if (isFriday && prayer === 'Dhuhr') {
+                prayerKey = 'pt_jumuah_name';
                 prayerNameEn = "Jumu'ah";
                 prayerNameAr = "الجمعة";
                 if (jumuahTime) time = jumuahTime;
@@ -191,7 +193,7 @@ document.addEventListener('DOMContentLoaded', () => {
             html += `
                 <tr id="row-${prayer}" style="border-bottom: 1px solid var(--color-border);">
                     <td style="padding: 12px 10px;">
-                        <strong>${prayerNameEn}</strong><br>
+                        <strong data-i18n="${prayerKey}">${prayerNameEn}</strong><br>
                         <span class="arabic-text" style="font-size:1.1em; color: var(--color-text-muted);">${prayerNameAr}</span>
                     </td>
                     <td style="padding: 12px 10px; font-weight: bold; font-size: 1.1rem; color: var(--color-primary);">${time}</td>
@@ -202,9 +204,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += `</tbody></table>
         <p style="font-size:0.8rem;color:var(--color-text-muted);margin-top:8px;">
-            Prayer times powered by <a href="https://masjidbox.com/prayer-times/masjid-sunnag" target="_blank" style="color:var(--color-secondary);">MasjidBox</a>
+            <span data-i18n="pt_powered">Prayer times powered by</span> <a href="https://masjidbox.com/prayer-times/masjid-sunnag" target="_blank" style="color:var(--color-secondary);">MasjidBox</a>
         </p>`;
         tableContainer.innerHTML = html;
+        
+        // Re-apply translations for the newly injected HTML
+        if (window.i18n && typeof window.i18n.getCurrentLang === 'function') {
+            const currentLang = window.i18n.getCurrentLang();
+            if (window.i18n.t) {
+                document.querySelectorAll('#prayer-times-container [data-i18n]').forEach(el => {
+                    const key = el.getAttribute('data-i18n');
+                    el.textContent = window.i18n.t(key);
+                });
+            }
+        }
     }
 
     let countdownInterval = null;
@@ -313,18 +326,25 @@ document.addEventListener('DOMContentLoaded', () => {
             if (nextPrayerEl) {
                 const today = new Date();
                 const isFriday = today.getDay() === 5;
-                if (isFriday && nextPrayer === 'Dhuhr') {
-                    nextPrayerEl.textContent = "Jumu'ah";
-                } else {
-                    nextPrayerEl.textContent = nextPrayer;
+                const pKey = (isFriday && nextPrayer === 'Dhuhr') ? 'pt_jumuah_name' : 'pt_' + nextPrayer.toLowerCase();
+                let pNameText = (isFriday && nextPrayer === 'Dhuhr') ? "Jumu'ah" : nextPrayer;
+                
+                if (window.i18n && window.i18n.t) {
+                    pNameText = window.i18n.t(pKey);
                 }
+                
+                nextPrayerEl.innerHTML = `<span data-i18n="${pKey}">${pNameText}</span>`;
             }
 
             if (countdownEl) {
                 const h = Math.floor(minDiff / 3600);
                 const m = Math.floor((minDiff % 3600) / 60);
                 const s = minDiff % 60;
-                countdownEl.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                let inWord = window.i18n && window.i18n.t ? window.i18n.t('pt_in') : "in";
+                countdownEl.innerHTML = `
+                    <span style="font-size:0.9rem; opacity:0.8;" data-i18n="pt_in">${inWord}</span><br>
+                    <span dir="ltr" style="display:inline-block;">- ${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}</span>
+                `;
             }
 
             return true;

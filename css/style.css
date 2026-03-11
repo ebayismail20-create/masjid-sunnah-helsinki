@@ -452,6 +452,56 @@ body.rtl {
   transition: opacity 0.2s ease;
 }
 
+/* === Mobile Dropdown Tweaks === */
+@media (max-width: 480px) {
+  .lang-dropdown-menu {
+    position: fixed;
+    top: auto;
+    bottom: -100%;
+    left: 0;
+    right: 0;
+    width: 100%;
+    border-radius: 20px 20px 0 0;
+    padding: var(--space-md) var(--space-sm) calc(var(--space-md) + env(safe-area-inset-bottom));
+    box-shadow: 0 -4px 25px rgba(0,0,0,0.15);
+    margin-top: 0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 9999;
+  }
+  
+  .lang-dropdown-wrapper.open .lang-dropdown-menu {
+    bottom: 0;
+    transform: translateY(0);
+  }
+  
+  .lang-btn {
+    padding: 14px 20px;
+    font-size: 1rem;
+    border-radius: var(--radius-md);
+    margin-bottom: 4px;
+  }
+  
+  /* Mobile Backdrop */
+  .lang-dropdown-wrapper::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    z-index: 9998;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s;
+  }
+  
+  .lang-dropdown-wrapper.open::before {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
 /* === Prayer Table Mobile Responsiveness === */
 @media (max-width: 600px) {
   .prayer-table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }

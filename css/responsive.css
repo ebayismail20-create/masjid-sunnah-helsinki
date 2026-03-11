@@ -131,6 +131,16 @@
     .navbar {
         padding: 0 var(--space-md);
     }
+    
+    .lang-dropdown-wrapper {
+        margin-left: 0;
+        margin-right: var(--space-sm);
+    }
+    
+    [dir="rtl"] .lang-dropdown-wrapper {
+        margin-right: 0;
+        margin-left: var(--space-sm);
+    }
 
     /* Announcement banner */
     .announcement-banner {

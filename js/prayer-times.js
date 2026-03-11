@@ -324,7 +324,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const h = Math.floor(minDiff / 3600);
                 const m = Math.floor((minDiff % 3600) / 60);
                 const s = minDiff % 60;
-                countdownEl.textContent = `-${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+                countdownEl.textContent = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
             }
 
             return true;

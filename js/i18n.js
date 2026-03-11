@@ -1,7 +1,7 @@
 /* i18n.js - Language switching engine */
 (function () {
   const STORAGE_KEY = 'masjid_lang';
-  const DEFAULT_LANG = 'en';
+  const DEFAULT_LANG = 'fi';
   const SUPPORTED = ['en', 'fi', 'ar'];
 
   function getCurrentLang() {

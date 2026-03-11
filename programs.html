@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -128,13 +128,13 @@
                 </a>
             </div>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="prayer-times.html">Prayer Times</a></li>
-                <li><a href="programs.html" style="color: var(--color-secondary);">Programs</a></li>
-                <li><a href="events.html">Events</a></li>
-                <li><a href="about.html">About</a></li>
-                <li><a href="contact.html">Contact</a></li>
-                <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+                <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+                <li><a href="prayer-times.html" data-i18n="nav_prayer">Prayer Times</a></li>
+                <li><a href="programs.html" data-i18n="nav_programs">Programs</a></li>
+                <li><a href="events.html" data-i18n="nav_events">Events</a></li>
+                <li><a href="about.html" data-i18n="nav_about">About</a></li>
+                <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
+                <li><a href="donate.html" class="btn btn-primary" data-i18n="nav_donate">Donate</a></li>
             </ul>
             <button class="hamburger" aria-label="Toggle Navigation"><i class="fas fa-bars"></i></button>
         </div>
@@ -145,13 +145,13 @@
     <div class="mobile-menu">
         <button class="mobile-menu-close" aria-label="Close Navigation"><i class="fas fa-times"></i></button>
         <ul class="nav-links">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="prayer-times.html">Prayer Times</a></li>
-            <li><a href="programs.html">Programs</a></li>
-            <li><a href="events.html">Events</a></li>
-            <li><a href="about.html">About</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="donate.html" class="btn btn-primary">Donate</a></li>
+            <li><a href="index.html" data-i18n="nav_home">Home</a></li>
+            <li><a href="prayer-times.html" data-i18n="nav_prayer">Prayer Times</a></li>
+            <li><a href="programs.html" data-i18n="nav_programs">Programs</a></li>
+            <li><a href="events.html" data-i18n="nav_events">Events</a></li>
+            <li><a href="about.html" data-i18n="nav_about">About</a></li>
+            <li><a href="contact.html" data-i18n="nav_contact">Contact</a></li>
+            <li><a href="donate.html" class="btn btn-primary" data-i18n="nav_donate">Donate</a></li>
         </ul>
     </div>
 
@@ -243,7 +243,7 @@
                         <a href="index.html" style="color: var(--color-bg);"><i class="fas fa-mosque"></i> Masjid
                             Sunnah</a>
                     </div>
-                    <p style="color: #94A3B8; margin-bottom: var(--space-md);">A place of worship, learning, and
+                    <p style="color: #94A3B8; margin-bottom: var(--space-md);" data-i18n="footer_desc">A place of worship, learning, and
                         community operating upon the methodology of Ahl Al-Sunnah Wal-Jama`ah in Helsinki.</p>
                     <div class="social-links">
                         <a href="https://facebook.com/masjidsunnahhelsinki" class="social-icon" target="_blank"
@@ -255,30 +255,30 @@
                     </div>
                 </div>
                 <div>
-                    <h4 class="footer-title">Quick Links</h4>
+                    <h4 class="footer-title" data-i18n="footer_quick">Quick Links</h4>
                     <ul class="footer-links">
-                        <li><a href="about.html">About Us</a></li>
-                        <li><a href="prayer-times.html">Prayer Times</a></li>
+                        <li><a href="about.html" data-i18n="footer_about">About Us</a></li>
+                        <li><a href="prayer-times.html" data-i18n="nav_prayer">Prayer Times</a></li>
                         <li><a href="programs.html">Library & Programs</a></li>
                         <li><a href="events.html">Events & News</a></li>
-                        <li><a href="contact.html">Contact Us</a></li>
+                        <li><a href="contact.html" data-i18n="footer_contact">Contact Us</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-title">Services</h4>
+                    <h4 class="footer-title" data-i18n="footer_services">Services</h4>
                     <ul class="footer-links">
                         <li><a href="donate.html">Zakat & Sadaqah</a></li>
-                        <li><a href="contact.html#marriage">Marriage Services</a></li>
-                        <li><a href="contact.html#funeral">Janazah Services</a></li>
-                        <li><a href="contact.html#new-muslim">New Muslim Support</a></li>
+                        <li><a href="contact.html#marriage" data-i18n="footer_marriage">Marriage Services</a></li>
+                        <li><a href="contact.html#funeral" data-i18n="footer_janazah">Janazah Services</a></li>
+                        <li><a href="contact.html#new-muslim" data-i18n="footer_newmuslim">New Muslim Support</a></li>
                     </ul>
                 </div>
                 <div>
-                    <h4 class="footer-title">Newsletter</h4>
-                    <p style="color: #94A3B8; font-size: 0.9rem; margin-bottom: var(--space-sm);">Stay updated with the
+                    <h4 class="footer-title" data-i18n="footer_newsletter">Newsletter</h4>
+                    <p style="color: #94A3B8; font-size: 0.9rem; margin-bottom: var(--space-sm);"><span data-i18n="footer_newsletter_desc">Stay updated with the
                         latest events and classes.</p>
                     <form style="display: flex; gap: 5px;">
-                        <input type="email" placeholder="Your email address"
+                        <input type="email" data-i18n-placeholder="email_placeholder" placeholder="Your email address"
                             style="padding: 10px; border-radius: var(--radius-sm); border: none; width: 100%;" required>
                         <button type="submit" class="btn btn-secondary" style="padding: 10px 15px;"><i
                                 class="fas fa-paper-plane"></i></button>
@@ -286,7 +286,7 @@
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
+                <p data-i18n="footer_copy">&copy; 2026 Masjid Sunnah Helsinki (مسجد أهل السنّة والجماعة). All rights reserved.</p>
                 <p class="arabic-text" lang="ar" dir="rtl" style="font-size: 1rem; color: var(--color-secondary);">
                     سُبْحَانَ اللهِ
                     وَبِحَمْدِهِ</p>
@@ -302,6 +302,8 @@
     <!-- Global Data Service -->
     <script src="js/data-service.js?v=1000"></script>
     <script src="js/realtime-service.js?v=1000"></script>
+    <script src="js/translations.js?v=1"></script>
+    <script src="js/i18n.js?v=1"></script>
     <script src="js/main.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>

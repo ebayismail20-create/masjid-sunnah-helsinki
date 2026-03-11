@@ -240,10 +240,10 @@
                 <div
                     style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: var(--space-md);">
                     <div class="filter-tabs" style="margin-bottom: 0;">
-                        <button class="filter-btn active" onclick="filterEvents('all')">All Events</button>
-                        <button class="filter-btn" onclick="filterEvents('upcoming')">Upcoming</button>
-                        <button class="filter-btn" onclick="filterEvents('educational')">Educational</button>
-                        <button class="filter-btn" onclick="filterEvents('community')">Community</button>
+                        <button class="filter-btn active" onclick="filterEvents('all')" data-i18n="ev_all">All Events</button>
+                        <button class="filter-btn" onclick="filterEvents('upcoming')" data-i18n="ev_upcoming">Upcoming</button>
+                        <button class="filter-btn" onclick="filterEvents('educational')" data-i18n="ev_educational">Educational</button>
+                        <button class="filter-btn" onclick="filterEvents('community')" data-i18n="ev_community">Community</button>
                     </div>
 
                     <div class="layout-toggle">
@@ -301,21 +301,21 @@
                         <form
                             onsubmit="event.preventDefault(); alert('Request submitted! Administration will review it soon.'); this.reset();">
                             <div class="form-group">
-                                <label class="form-label">Organization / Group Name</label>
+                                <label class="form-label" data-i18n="ev_org">Organization / Group Name</label>
                                 <input type="text" class="form-control" required>
                             </div>
                             <div class="form-row" style="margin-bottom: var(--space-sm);">
                                 <div>
-                                    <label class="form-label">Contact Email</label>
+                                    <label class="form-label" data-i18n="ev_cemail">Contact Email</label>
                                     <input type="email" class="form-control" required>
                                 </div>
                                 <div>
-                                    <label class="form-label">Proposed Date</label>
+                                    <label class="form-label" data-i18n="ev_date">Proposed Date</label>
                                     <input type="date" class="form-control" required>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Event Description & Requirements</label>
+                                <label class="form-label" data-i18n="ev_desc">Event Description & Requirements</label>
                                 <textarea class="form-control" rows="4" required></textarea>
                             </div>
                             <button type="submit" class="btn btn-primary" style="width: 100%;" data-i18n="ev_submit">Submit Request</button>

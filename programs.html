@@ -167,27 +167,27 @@
             <form id="reg-form"
                 onsubmit="event.preventDefault(); alert('Registration sent. Jazakallahu Khairan!'); closeModal();">
                 <div class="form-group">
-                    <label class="form-label">Full Name</label>
+                    <label class="form-label" data-i18n="co_name" data-i18n="pr_name">Full Name</label>
                     <input type="text" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Email Address</label>
+                    <label class="form-label" data-i18n="co_email_label" data-i18n="pr_email">Email Address</label>
                     <input type="email" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Phone Number</label>
+                    <label class="form-label" data-i18n="pr_phone">Phone Number</label>
                     <input type="tel" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Participant Age Bracket</label>
+                    <label class="form-label" data-i18n="pr_age">Participant Age Bracket</label>
                     <select class="form-control">
-                        <option>Child (5-12)</option>
-                        <option>Teen (13-18)</option>
-                        <option>Adult (19+)</option>
+                        <option data-i18n="pr_child">Child (5-12)</option>
+                        <option data-i18n="pr_teen">Teen (13-18)</option>
+                        <option data-i18n="pr_adult">Adult (19+)</option>
                     </select>
                 </div>
                 <div class="form-group">
-                    <label class="form-label">Any notes or questions?</label>
+                    <label class="form-label" data-i18n="pr_notes">Any notes or questions?</label>
                     <textarea class="form-control" rows="3"></textarea>
                 </div>
                 <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;">Submit
@@ -213,11 +213,11 @@
 
                 <!-- Filters -->
                 <div class="filter-tabs" data-aos="fade-up">
-                    <button class="filter-btn active" onclick="filterPrograms('all')">All</button>
-                    <button class="filter-btn" onclick="filterPrograms('youth')">Youth & Kids</button>
-                    <button class="filter-btn" onclick="filterPrograms('adults')">Adults</button>
-                    <button class="filter-btn" onclick="filterPrograms('sisters')">Sisters</button>
-                    <button class="filter-btn" onclick="filterPrograms('new-muslims')">New Muslims</button>
+                    <button class="filter-btn active" onclick="filterPrograms('all')" data-i18n="ga_all" data-i18n="pr_all">All</button>
+                    <button class="filter-btn" onclick="filterPrograms('youth')" data-i18n="pr_youth">Youth & Kids</button>
+                    <button class="filter-btn" onclick="filterPrograms('adults')" data-i18n="pr_adults">Adults</button>
+                    <button class="filter-btn" onclick="filterPrograms('sisters')" data-i18n="pr_sisters">Sisters</button>
+                    <button class="filter-btn" onclick="filterPrograms('new-muslims')" data-i18n="pr_newmuslims">New Muslims</button>
                 </div>
 
                 <!-- Programs Grid -->

@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         try {
             const response = await fetch(MASJIDBOX_API, {
-                headers: { 'x-api-key': MASJIDBOX_KEY }
+                headers: { 'apikey': MASJIDBOX_KEY }
             });
             if (!response.ok) throw new Error("MasjidBox API response was not ok: " + response.status);
             const payload = await response.json();

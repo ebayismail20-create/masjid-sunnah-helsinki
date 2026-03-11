@@ -1,8 +1,7 @@
-/* prayer-times.js - Fetch and Display Prayer Times using AlAdhan API */
+/* prayer-times.js - Fetch and Display Prayer Times from MasjidBox API */
 
 document.addEventListener('DOMContentLoaded', () => {
     const PRAYERS = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-    // Adding Hijri Month names for better local representation if available.
 
     // Elements
     const tableContainer = document.getElementById('prayer-times-container');
@@ -16,15 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // Render skeleton loaders initially
     tableContainer.innerHTML = Array(5).fill('<div class="skeleton"></div>').join('');
 
-    // Configuration for Helsinki
-    const config = {
-        city: 'Helsinki',
-        country: 'Finland',
-        method: 3, // Muslim World League (often standard for Europe)
-        school: 1  // 0 Shafii, 1 Hanafi. Helsinki often has varied communities, standard MWL uses Shafii by default, but let's stick to API default unless specified
-    };
+    // MasjidBox API Configuration
+    const MASJIDBOX_API = 'https://api.masjidbox.com/1.0/masjidbox/landing/athany/masjid-sunnag?get=at&days=7';
+    const MASJIDBOX_KEY = 'JejYcMS7hsOsZTPDk2ZhKOAlW9IyQ6Px';
 
-    // Helper for Helsinki current date
+    // Helper for Helsinki current date string (YYYY-MM-DD)
     const getHelsinkiDateStr = () => {
         try {
             return new Intl.DateTimeFormat('en-CA', { timeZone: 'Europe/Helsinki' }).format(new Date());
@@ -33,9 +28,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Cache key for today's date in Helsinki
+    // Cache key for today's date
     const todayStr = getHelsinkiDateStr();
-    const cacheKey = `prayer_times_${config.city}_${todayStr}`;
+    const cacheKey = `prayer_times_masjidbox_${todayStr}`;
+
+    // Extract HH:MM from ISO date string like "2026-03-11T04:28:00+02:00"
+    const extractTime = (isoStr) => {
+        if (!isoStr) return '--:--';
+        const d = new Date(isoStr);
+        const h = d.getHours().toString().padStart(2, '0');
+        const m = d.getMinutes().toString().padStart(2, '0');
+        return `${h}:${m}`;
+    };
+
+    // Extract hour/minute parts from ISO string for countdown math
+    const parseISOTimeParts = (isoStr) => {
+        const d = new Date(isoStr);
+        return { h: d.getHours(), m: d.getMinutes() };
+    };
 
     async function fetchPrayerTimes() {
         // Check cache first
@@ -43,7 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (cache) {
             try {
                 const data = JSON.parse(cache);
-                await processPrayerData(data);
+                await processMasjidBoxData(data);
                 return;
             } catch (e) {
                 console.warn("Prayer cache corrupted, fetching fresh data...");
@@ -51,38 +61,86 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch(`https://api.aladhan.com/v1/timingsByCity?city=${config.city}&country=${config.country}&method=${config.method}`);
-            if (!response.ok) throw new Error("API Network response was not ok");
+            const response = await fetch(MASJIDBOX_API, {
+                headers: { 'x-api-key': MASJIDBOX_KEY }
+            });
+            if (!response.ok) throw new Error("MasjidBox API response was not ok: " + response.status);
             const payload = await response.json();
 
-            if (payload.code === 200 && payload.data) {
+            if (payload && payload.timetable && payload.timetable.length > 0) {
                 // Cache successfully fetched data
-                localStorage.setItem(cacheKey, JSON.stringify(payload.data));
-                await processPrayerData(payload.data);
+                localStorage.setItem(cacheKey, JSON.stringify(payload));
+                await processMasjidBoxData(payload);
             }
         } catch (error) {
-            console.error("Failed to fetch prayer times:", error);
+            console.error("Failed to fetch prayer times from MasjidBox:", error);
             if (tableContainer) tableContainer.innerHTML = '<p class="text-center">Could not load prayer times. Please try again later.</p>';
         }
     }
 
-    async function processPrayerData(data) {
-        const timings = data.timings;
-        const dateInfo = data.date;
+    async function processMasjidBoxData(payload) {
+        // Find today's entry from the timetable array
+        const todayEntry = payload.timetable.find(entry => {
+            const entryDate = entry.date.split('T')[0];
+            return entryDate === todayStr;
+        });
+
+        if (!todayEntry) {
+            // Fallback to first entry if today not found
+            console.warn("Today's date not found in MasjidBox timetable, using first entry");
+            await renderFromEntry(payload.timetable[0], payload);
+            return;
+        }
+
+        await renderFromEntry(todayEntry, payload);
+    }
+
+    async function renderFromEntry(entry, payload) {
+        // Build timings object (HH:MM format) for countdown compatibility
+        const timings = {
+            Fajr: extractTime(entry.fajr),
+            Sunrise: extractTime(entry.sunrise),
+            Dhuhr: extractTime(entry.dhuhr),
+            Asr: extractTime(entry.asr),
+            Maghrib: extractTime(entry.maghrib),
+            Isha: extractTime(entry.isha)
+        };
+
+        // Build iqamah object from MasjidBox data
+        const iqamahTimes = {};
+        if (entry.iqamah) {
+            iqamahTimes.fajr = extractTime(entry.iqamah.fajr);
+            iqamahTimes.dhuhr = extractTime(entry.iqamah.dhuhr);
+            iqamahTimes.asr = extractTime(entry.iqamah.asr);
+            iqamahTimes.maghrib = extractTime(entry.iqamah.maghrib);
+            iqamahTimes.isha = extractTime(entry.iqamah.isha);
+        }
+
+        // Jumuah from MasjidBox
+        let jumuahTime = null;
+        let jumuahIqamah = null;
+        if (entry.jumuah && entry.jumuah.length > 0) {
+            jumuahTime = extractTime(entry.jumuah[0]);
+        }
+        if (entry.iqamah && entry.iqamah.jumuah && entry.iqamah.jumuah.length > 0) {
+            jumuahIqamah = extractTime(entry.iqamah.jumuah[0]);
+        }
 
         // Display Dates
-        if (hijriDateEl) {
-            hijriDateEl.textContent = `${dateInfo.hijri.day} ${dateInfo.hijri.month.en} ${dateInfo.hijri.year} AH`;
+        if (hijriDateEl && entry.hijri) {
+            hijriDateEl.textContent = entry.hijri.formatted;
         }
         if (gregorianDateEl) {
-            gregorianDateEl.textContent = `${dateInfo.gregorian.day} ${dateInfo.gregorian.month.en} ${dateInfo.gregorian.year}`;
+            const gDate = new Date(entry.date);
+            const options = { day: 'numeric', month: 'long', year: 'numeric' };
+            gregorianDateEl.textContent = gDate.toLocaleDateString('en-GB', options);
         }
 
-        await renderTable(timings);
+        await renderTable(timings, iqamahTimes, jumuahTime, jumuahIqamah, entry);
         startCountdownTracker(timings);
     }
 
-    async function renderTable(timings) {
+    async function renderTable(timings, iqamahTimes, jumuahTime, jumuahIqamah, entry) {
         const arabicNames = {
             'Fajr': 'الفجر',
             'Sunrise': 'الشروق',
@@ -101,40 +159,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 <tr style="border-bottom: 2px solid var(--color-primary); color: var(--color-primary);">
                     <th style="padding: 10px; font-family: var(--font-display);">Prayer / الصلاة</th>
                     <th style="padding: 10px; font-family: var(--font-display);">Adhan</th>
-                    <th style="padding: 10px; font-family: var(--font-display);">Iqamah *</th>
+                    <th style="padding: 10px; font-family: var(--font-display);">Iqamah</th>
                 </tr>
             </thead>
             <tbody>
         `;
 
-        const iqamahData = await window.DataService.getIqamahTimes() || null;
-        const jummahData = await window.DataService.getJummahInfo() || null;
-
         PRAYERS.forEach(prayer => {
             let time = timings[prayer];
             let iqamahDisplay = '-';
 
-            // 1. First, apply the fallback mock logic as a baseline
+            // Get iqamah from MasjidBox data
             if (prayer !== 'Sunrise') {
-                const cleanStr = time.split(' ')[0];
-                const parts = cleanStr.split(':');
-                let h = parseInt(parts[0], 10);
-                let m = parseInt(parts[1], 10) + (prayer === 'Maghrib' ? 5 : 20);
-                if (m >= 60) {
-                    m -= 60;
-                    h++;
+                const key = prayer.toLowerCase();
+                if (iqamahTimes[key]) {
+                    iqamahDisplay = iqamahTimes[key];
                 }
-                if (h >= 24) h -= 24; // Ensure hour wraps around if it goes past 23
-                iqamahDisplay = `${h.toString().padStart(2, '0')}:${m.toString().padStart(2, '0')}`;
-            }
-
-            // 2. Then, strongly override IF the admin explicitly saved a string
-            if (iqamahData) {
-                if (prayer === 'Fajr' && iqamahData.fajr) iqamahDisplay = iqamahData.fajr;
-                if (prayer === 'Dhuhr' && iqamahData.dhuhr) iqamahDisplay = iqamahData.dhuhr;
-                if (prayer === 'Asr' && iqamahData.asr) iqamahDisplay = iqamahData.asr;
-                if (prayer === 'Maghrib' && iqamahData.maghrib) iqamahDisplay = iqamahData.maghrib;
-                if (prayer === 'Isha' && iqamahData.isha) iqamahDisplay = iqamahData.isha;
             }
 
             // On Fridays, replace Dhuhr with Jumu'ah logic
@@ -144,13 +184,8 @@ document.addEventListener('DOMContentLoaded', () => {
             if (isFriday && prayer === 'Dhuhr') {
                 prayerNameEn = "Jumu'ah";
                 prayerNameAr = "الجمعة";
-
-                // Try fetching jumpah specifically
-                if (jummahData && jummahData.time) {
-                    iqamahDisplay = jummahData.time;
-                } else {
-                    iqamahDisplay = "See Schedule";
-                }
+                if (jumuahTime) time = jumuahTime;
+                if (jumuahIqamah) iqamahDisplay = jumuahIqamah;
             }
 
             html += `
@@ -167,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         html += `</tbody></table>
         <p style="font-size:0.8rem;color:var(--color-text-muted);margin-top:8px;">
-            * Iqamah times are managed by the Masjid Admin.
+            Prayer times powered by <a href="https://masjidbox.com/prayer-times/masjid-sunnag" target="_blank" style="color:var(--color-secondary);">MasjidBox</a>
         </p>`;
         tableContainer.innerHTML = html;
     }
@@ -199,10 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Helper to safely parse API time strings like "05:30 (EET)"
+    // Helper to safely parse time strings like "05:30"
     const parseTimeStr = (tStr) => {
-        const cleanStr = tStr.split(' ')[0];
-        const parts = cleanStr.split(':');
+        const parts = tStr.split(':');
         return {
             h: parseInt(parts[0], 10),
             m: parseInt(parts[1], 10)
@@ -213,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (countdownInterval) clearInterval(countdownInterval);
 
         function updateCountdown() {
-            // Auto-reset if day has changed (in local browser terms, sufficient for reload trigger)
+            // Auto-reset if day has changed
             const currentHelsinkiDate = getHelsinkiDateStr();
             if (localStorage.getItem('prayer_date') && localStorage.getItem('prayer_date') !== currentHelsinkiDate) {
                 if (countdownInterval) clearInterval(countdownInterval);
@@ -242,36 +276,32 @@ document.addEventListener('DOMContentLoaded', () => {
             let crossesMidnight = false;
 
             if (nextPrayerIndex === -1) {
-                // If we've passed Isha, current is Isha, next is Fajr tomorrow
-                currentPrayerIndex = PRAYERS.length - 1; // Isha
-                nextPrayerIndex = 0; // Tomorrow's Fajr
+                currentPrayerIndex = PRAYERS.length - 1;
+                nextPrayerIndex = 0;
                 crossesMidnight = true;
             } else if (nextPrayerIndex === 0) {
-                // If we are before Fajr today, current is Isha yesterday, next is Fajr today
                 currentPrayerIndex = PRAYERS.length - 1;
             } else {
                 currentPrayerIndex = nextPrayerIndex - 1;
             }
 
             const nextPrayer = PRAYERS[nextPrayerIndex];
-            const currentPrayer = PRAYERS[currentPrayerIndex];
 
             const nTime = parseTimeStr(timings[nextPrayer]);
             let nTotalSeconds = (nTime.h * 3600) + (nTime.m * 60);
 
             if (crossesMidnight) {
-                // Crosses midnight, add 24 hours to next prayer
                 nTotalSeconds += 24 * 3600;
             }
             minDiff = nTotalSeconds - currentTotalSeconds;
 
-            // Highlight Row - User requested next prayer mark with soft color
+            // Highlight next prayer row with soft color
             PRAYERS.forEach(p => {
                 const r = document.getElementById(`row-${p}`);
                 if (r) {
                     if (p === nextPrayer) {
-                        r.style.backgroundColor = "#FFFDE7"; // Soft yellow
-                        r.style.borderLeft = "6px solid #FBC02D"; // Slightly stronger yellow sidebar
+                        r.style.backgroundColor = "#FFFDE7";
+                        r.style.borderLeft = "6px solid #FBC02D";
                     } else {
                         r.style.backgroundColor = "";
                         r.style.borderLeft = "";
@@ -300,7 +330,7 @@ document.addEventListener('DOMContentLoaded', () => {
             return true;
         }
 
-        // Call immediately to prevent --:--:-- flashing. If it doesn't trigger re-fetch, start interval.
+        // Call immediately to prevent --:--:-- flashing
         if (updateCountdown() !== false) {
             countdownInterval = setInterval(updateCountdown, 1000);
         }

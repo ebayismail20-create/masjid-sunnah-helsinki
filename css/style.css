@@ -385,3 +385,36 @@ body.rtl {
 
 /* Keep Arabic text classes always RTL regardless of page direction */
 .arabic-text { direction: rtl; text-align: right; }
+
+/* === Smooth Language Transition === */
+[data-i18n], [data-i18n-placeholder] {
+  transition: opacity 0.2s ease;
+}
+
+/* === Prayer Table Mobile Responsiveness === */
+@media (max-width: 600px) {
+  .prayer-table-container { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  .prayer-table { min-width: 320px; font-size: 0.85rem; }
+  .prayer-table th, .prayer-table td { padding: 8px 6px; }
+  .prayer-table th:first-child, .prayer-table td:first-child { min-width: 80px; }
+  
+  /* Language switcher mobile */
+  .lang-switcher { margin-left: 6px; }
+  .lang-btn { padding: 4px 7px; font-size: 0.72rem; }
+  .lang-flag { font-size: 0.85rem; }
+  
+  /* Better card spacing on mobile */
+  .grid.grid-2, .grid.grid-3 { grid-template-columns: 1fr; gap: var(--space-sm); }
+}
+
+/* === Additional RTL Rules === */
+[dir="rtl"] .grid { direction: rtl; }
+[dir="rtl"] .hero-content { text-align: center; }
+[dir="rtl"] .card-body { text-align: right; }
+[dir="rtl"] .inner-hero { text-align: center; }
+[dir="rtl"] .value-card { text-align: right; }
+[dir="rtl"] .timeline-item { text-align: right; }
+[dir="rtl"] i.fas, [dir="rtl"] i.far, [dir="rtl"] i.fab { margin-right: 0; margin-left: 8px; }
+[dir="rtl"] .prayer-table { direction: rtl; }
+[dir="rtl"] .prayer-table th, [dir="rtl"] .prayer-table td { text-align: right; }
+[dir="rtl"] .form-control, [dir="rtl"] textarea, [dir="rtl"] select { text-align: right; direction: rtl; }
